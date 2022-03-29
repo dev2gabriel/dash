@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root{
+  --banco-sangue: #6F1A1A;
+  --hospitalar: #D75079;
+  --laboratorial-hospitalar: #DC9C3F;
+  --laboratorio-patologia: #1D5D9F;
+  --ressonancia: #828CA0;
+  --varejo: #D32F32; 
+  --azul-grupo: #202A44;
+  --verde-grupo: #00957a;
+  --azul-grupo-hover: #4c5774;
+  --verde-grupo-hover: #40ccb2;
+}
