@@ -1,5 +1,15 @@
+import Button from "../components/Button"
+
 function Home(){
-    return(<p>Hello Home</p>)
+    const btnHome = {
+        color: "red",
+        backgroundColor: "green"
+    }
+
+    return(<>
+        <p>Hello Home</p>
+        <Button style={btnHome} value="Enviar" />
+    </>)
 }
 
 export default Home
