@@ -1,0 +1,58 @@
+.login_screen{
+    width: 100%;
+    padding: 50px 300px;
+    background-image: url("../assets/bg_texture.png");
+    height: 100vh;
+}
+
+.login_left{
+    background-image: url("../assets/pf-ff84d109-bannerbg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+    border-radius: 20px 0px 0px 20px;
+    padding: 20px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.login_right{
+    padding: 150px 50px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.login_right h1{
+    margin-bottom: 20px;
+}
+
+form > div{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.left_header{
+    display: flex;
+    align-items: flex-start;
+}
+
+.left_bottom{
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.left_bottom h1{
+    margin-bottom: 20px;
+}
+
+.left_bottom p{
+    font-size: 20px;
+    max-width: 500px;
+}
