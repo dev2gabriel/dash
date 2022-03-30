@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import RegisterCollaborator from './pages/RegisterCollaborator';
 import Teste from './pages/Teste'
 
 const AppRoutes = () =>{
@@ -15,6 +16,9 @@ const AppRoutes = () =>{
             </Routes>
             <Routes>
                 <Route exact path="/login" element={<Login />} />
+            </Routes>
+            <Routes>
+                <Route exact path="/registrar-colaborador" element={<RegisterCollaborator />} />
             </Routes>
         </Router>
     )

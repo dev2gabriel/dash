@@ -45,7 +45,7 @@ form > div{
     text-align: left;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: end;
 }
 
 .left_bottom h1{
@@ -55,4 +55,20 @@ form > div{
 .left_bottom p{
     font-size: 20px;
     max-width: 500px;
+    margin-bottom: 15px;
+}
+
+.social_logos a{
+    text-decoration: none;
+    color: black;
+}
+
+.social_logos a svg{
+    font-size: 50px;
+    transition: .3s;
+}
+
+.social_logos a svg:hover{
+    color: white;
+    transition: .3s;
 }

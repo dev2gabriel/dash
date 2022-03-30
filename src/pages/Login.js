@@ -4,6 +4,9 @@ import Input from '../components/Input'
 import Form from '../containers/Form'
 import Container from '../containers/Container'
 import logoImg from '../assets/grupostra_horizontal_2_180x.png'
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import FacebookIcon from '@mui/icons-material/Facebook';
 
 function Login(){
     const styledContainer = {
@@ -38,7 +41,7 @@ function Login(){
         padding: "15px",
         borderRadius: "20px",
         border: "none",
-        cursor: "pointer"
+        cursor: "pointer",
     }
 
     const styledLegend = {
@@ -62,7 +65,9 @@ function Login(){
                         <h1>Bem Vindo(a)</h1>
                         <p>Se você não segue ainda nossas redes sociais, aproveite e acesse para conferir nossas postagens.</p>
                         <div className={styles.social_logos}>
-                            <a href="#"></a>
+                            <a href="https://www.instagram.com/grupo_stra/" target="_blank"><InstagramIcon /></a>
+                            <a href="https://www.linkedin.com/company/grupo-stra" target="_blank"><LinkedInIcon /></a>
+                            <a href="https://www.facebook.com/grupostra" target="_blank"><FacebookIcon /></a>
                         </div>
                     </div>
                 </div>
@@ -77,7 +82,7 @@ function Login(){
                             <Input type="checkbox" name="check" id="check" />
                             <Legend for="check" value="Manter conectado" style={styledCheckbox}/>
                         </div>
-                        <Input type="submit" value="Entrar" style={styledSubmit} id="hovered"/>
+                        <Input type="submit" value="Entrar" style={styledSubmit}/>
                     </Form>
                 </div>
             </Container>
