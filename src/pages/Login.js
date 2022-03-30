@@ -7,6 +7,9 @@ import logoImg from '../assets/grupostra_horizontal_2_180x.png'
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import axios from 'axios';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../Auth';
 
 function Login(){
     const styledContainer = {

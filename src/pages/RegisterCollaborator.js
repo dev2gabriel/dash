@@ -7,7 +7,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 function RegisterCollaborator(){
-
     function formPreventDefault(e){
         e.preventDefault();
     }
@@ -61,6 +60,8 @@ function RegisterCollaborator(){
         border: "0",
         cursor: "pointer"
     }
+
+    
 
     return(
         <div className={styles.register_collaborator}>
@@ -123,6 +124,16 @@ function RegisterCollaborator(){
                                 <option value="#" selected disabled>Tipo de permissão</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Colaborador">Colaborador</option>
+                                <option value="Gerencia">Gerencia</option>
+                                <option value="Supervisor">Supervisor</option>
+                            </select>
+                        </div>
+                        <div className={styles.line_flex}>
+                            <Legend value="Departamento" style={styledLegend}/>
+                            <select name="department" id="department" className={styles.select_pers}>
+                                <option value="#" selected disabled>Departamento</option>
+                                <option value="Adiministração">Admin</option>
+                                <option value="Tecnologia">Colaborador</option>
                                 <option value="Gerencia">Gerencia</option>
                                 <option value="Supervisor">Supervisor</option>
                             </select>
