@@ -1,8 +1,7 @@
-import styles from './Login.module.css'
+import './Login.css'
 import Legend from '../components/Legend'
 import Input from '../components/Input'
-import Form from '../containers/Form'
-import Container from '../containers/Container'
+import Button from '../components/Button'
 import logoImg from '../assets/grupostra_horizontal_2_180x.png'
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -12,83 +11,54 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../Auth';
 
 function Login(){
-    const styledContainer = {
-        display: "grid",
-        gridTemplateColumns: "70% 30%",
-        padding: "0px",
-        height: "88vh"
+    const [userEmail, setUserEmail] = useState();
+    const [userPassword, setUserPassword] = useState();
+    const { login } = useContext(AuthContext)
+    
+    const body = {
+        email: userEmail,
+        password: userPassword
     }
 
-    const styledForm = {
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        textAlign: "left",
-        justifyContent: "space-around",
-        height: "100%"
-    }
-
-    const styledInput = {
-        border: "0px",
-        borderBottom: "2px solid black",
-        padding: "15px 0px",
-        outline: "none",
-        fontSize: "18px",
-        marginBottom: "10px"
-    }
-
-    const styledSubmit = {
-        backgroundColor: "var(--azul-grupo)",
-        color: "white",
-        fontSize: "15px",
-        padding: "15px",
-        borderRadius: "20px",
-        border: "none",
-        cursor: "pointer",
-    }
-
-    const styledLegend = {
-        fontWeight: "bold",
-        fontSize: "14px",
-        marginBottom: "10px"
-    }
-
-    const styledCheckbox = {
-        marginLeft: "10px",
+    function submitFields(){
+        axios.post("https://pedidos.grupostra.com/api/v1/login", body)
+        .then((response) => {
+            login(response.data);
+        })
     }
 
     return(
-        <div className={styles.login_screen}>
-            <Container style={styledContainer}>
-                <div className={styles.login_left}>
-                    <div className={styles.left_header}>
-                        <img src={logoImg} />
+        <div className="login_screen">
+            <div className="container_login">
+                <div className="login_left">
+                    <div className="left_header">
+                        <img src={logoImg} alt=""/>
                     </div>
-                    <div className={styles.left_bottom}>
+                    <div className="left_bottom">
                         <h1>Bem Vindo(a)</h1>
                         <p>Se você não segue ainda nossas redes sociais, aproveite e acesse para conferir nossas postagens.</p>
-                        <div className={styles.social_logos}>
+                        <div className="social_logos">
                             <a href="https://www.instagram.com/grupo_stra/" target="_blank"><InstagramIcon /></a>
                             <a href="https://www.linkedin.com/company/grupo-stra" target="_blank"><LinkedInIcon /></a>
                             <a href="https://www.facebook.com/grupostra" target="_blank"><FacebookIcon /></a>
                         </div>
                     </div>
                 </div>
-                <div className={styles.login_right}>
+                <div className="login_right">
                     <h1>Entrar</h1>
-                    <Form style={styledForm}>
-                        <Legend value="Email" style={styledLegend}/>
-                        <Input type="email" name="email" id="email" placeholder="usuario@grupostra.com.br" style={styledInput}/>
-                        <Legend value="Senha" style={styledLegend}/>
-                        <Input type="password" name="pass" id="pass" placeholder="Sua senha" style={styledInput}/>
+                    <div className="form">
+                        <Legend value="Email"/>
+                        <Input type="email" name="email" id="email" placeholder="usuario@grupostra.com.br" onChange={(e) => setUserEmail(e.target.value)}/>
+                        <Legend value="Senha"/>
+                        <Input type="password" name="pass" id="pass" placeholder="Sua senha" onChange={(e) => setUserPassword(e.target.value)}/>
                         <div>
                             <Input type="checkbox" name="check" id="check" />
-                            <Legend for="check" value="Manter conectado" style={styledCheckbox}/>
+                            <Legend for="check" value="Manter conectado" />
                         </div>
-                        <Input type="submit" value="Entrar" style={styledSubmit}/>
-                    </Form>
+                        <Button type="submit" value="Entrar" onClick={submitFields}/>
+                    </div>
                 </div>
-            </Container>
+            </div>
         </div>
     )
 }

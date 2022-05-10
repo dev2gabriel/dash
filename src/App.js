@@ -1,12 +1,19 @@
+import { Component } from 'react';
 import './App.css';
-import AppRoutes from './AppRoutes';
+import AppRoutes from './AppRoutes'
 
-function App() {
-  return (
+class App extends Component {
+
+render(){
+  document.title = "Grupo Stra - Communication"
+
+  return(
     <div className="App">
-      <AppRoutes />
+        <AppRoutes />
     </div>
-  );
+  )
+}
+
 }
 
 export default App;

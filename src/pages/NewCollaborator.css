@@ -1,0 +1,125 @@
+.collaborator{
+    background-color:#f5f4f9;
+    margin-top:115px;
+    height:100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+}
+
+.row{
+    width: 100%;
+}
+
+.col-line{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-bottom: 2px solid #f5f4f9;
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.title-rh-news > a{
+    display: flex;
+    margin-bottom: 20px;
+    width: max-content;
+    font-size: 16px;
+    color: black;
+    border-radius: 18px;
+    align-items: center;
+    transition: .3s;
+}
+
+
+.search-name input{
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    outline: none;
+    border: 1px solid lightgray;
+    margin-left: 10px;
+}
+
+.search-name legend{
+    width: 100%;
+    max-width: max-content;
+}
+
+.title-rh-news a svg{
+    margin-left: 5px;
+}
+
+.title-rh-news > a:hover{
+    transition: .3s;
+    color: rgb(97, 97, 97);
+}
+
+.search-name{
+    padding: 0 5px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.line-opt{
+    display: flex;
+}
+
+.line-opt a{
+    margin-right: 10px;
+}
+
+.col-line a{
+    display: flex;
+    transition: .3s;
+}
+
+.col-line a svg{
+    margin-left: 10px;
+}
+
+.col-line a:hover{
+    transition: .3s;
+    transform: scale(105%);
+}
+
+.pagination-col{
+    display: flex;
+    justify-content: center;
+}
+
+.modal-on{
+    display: block!important;
+}
+
+.modal{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    background-color: rgba(0, 0, 0, 0.733);
+    z-index: 99999999999;
+}
+
+.modal-container{
+    width: 100%;
+    height: 100%;
+    padding: 50px 300px;
+}
+
+.close-modal{
+    position: absolute;
+    top: 50px;
+}
+
+.title-rh-news{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px;
+}

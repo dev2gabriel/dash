@@ -1,0 +1,23 @@
+.title-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.title-container a{
+    display: flex;
+    transition: .3s;
+    align-items: center;
+}
+
+.title-container a svg{
+    margin-left: 5px;
+}
+
+.title-container a:hover{
+    transition: .3s;
+    color: rgb(121, 121, 121);
+}
+

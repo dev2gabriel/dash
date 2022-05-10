@@ -1,0 +1,28 @@
+.birthday-photo{
+    border-radius:50%;
+    width:120px;
+    height:120px;
+    background-repeat:no-repeat;
+    background-position:center -20px;
+    background-size:100% auto;
+    margin:auto;
+}
+
+.aniversario-container{
+    text-align:center;
+    padding:10px 0 20px;
+    min-width: 340px;
+}
+
+.birthday-name{
+    font-size:14px;
+    font-weight:400;
+    max-width:300px;
+    margin:30px auto 0;
+    border-top: 2px solid #ececec;
+}
+
+.container_births{
+    display: flex;
+    overflow-x: scroll;
+}

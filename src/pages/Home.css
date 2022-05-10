@@ -1,0 +1,12 @@
+.home_board{
+    display: flex;
+}
+
+.container_home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    column-gap: 20px;
+}

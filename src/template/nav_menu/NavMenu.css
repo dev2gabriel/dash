@@ -1,0 +1,115 @@
+.bm-burger-button {
+    position: relative;
+    width: 26px;
+    height: 20px;
+    left:300px;
+  }
+  
+  .bm-burger-bars {
+    background: #aae9bf;
+    border-radius: 5px;
+  }
+  
+  .bm-burger-bars-hover {
+    background: #00BB4C;
+  }
+  
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  
+  .bm-cross {
+    background: #bdc3c7;
+  }
+  
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+    top: 0;
+    right: 0;
+  }
+  
+  .bm-menu {
+    background: #373a47;
+    padding: 2.5em 1.5em 0;
+    font-size: 1.15em;
+  }
+  
+  .bm-morph-shape {
+    fill: #373a47;
+  }
+  
+  .bm-item-list {
+    color: #b8b7ad;
+    padding: 0.8em;
+    height: calc(100% - 60px) !important;
+  }
+  
+  .bm-item {
+    display: inline-block;
+    color: #fff;
+    font-size: 20px;
+    margin: 10px 0;
+    text-decoration: none;
+  }
+  
+  .bm-item:hover {
+    color: #00BB4C;
+  }
+  
+  .bm-item::after {
+    content: '';
+    display: block;
+    width: 90%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 15px;
+  }
+  
+  #menu-list{
+    list-style:none;
+    padding:0;
+  }
+
+  #menu-list li{
+    border-bottom:solid 1px #f5f4f9;
+    padding:20px;
+    font-size:18px;
+    font-weight:400;
+    color:#cdcdcd;
+    cursor:pointer;
+    position:relative;
+  }
+
+  #menu-list li.active .item-menu-hover{
+    width:100%;
+  }
+
+  .item-menu-hover{
+    background-color:#f5f4f9;
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    right:0;
+    width:0;
+    transition:1s;
+  }
+
+  #menu-list li:hover .item-menu-hover{
+    width:100%;
+  }
+
+  #menu-list a:hover li{
+    color:#333;
+  }
+
+  #menu-list li.active{
+    color:#333;
+  }
+
+  .item-menu{
+    position:relative;
+    z-index:2;
+  }

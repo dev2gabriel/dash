@@ -1,16 +1,28 @@
-import { Link } from "react-router-dom"
-import Header from "../template/header/Header"
-import NavMenu from "../template/nav_menu/NavMenu"
-import styles from './Home.module.css'
+import { Component } from 'react';
+import Header from '../template/header/Header';
+import NavMenu from '../template/nav_menu/NavMenu';
+import Body from '../template/body/Body';
 
-function Home(){
+class Home extends Component {
 
-    return(
-        <div className={styles.home}>
+render(){
+  document.title = "Grupo Stra - Communication"
+
+  return(
+    <div className="App">
+        <Header />
+        <div className="main">
+          <div id="side-bar" className="side-bar open">
             <NavMenu />
-            <Header />
-            
-        </div>)
+          </div>
+          <div className="body">
+            <Body/>
+          </div>
+        </div>
+    </div>
+  )
 }
 
-export default Home
+}
+
+export default Home;

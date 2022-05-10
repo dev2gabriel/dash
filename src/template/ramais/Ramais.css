@@ -1,0 +1,24 @@
+.accordion__button{
+    width:auto!important;
+}
+
+.worker{
+    font-size:18px;
+}
+
+.cargo{
+    font-size:12px;
+    color:#777;
+}
+
+.email, .ramal{
+    font-weight:600;
+    font-size:12px;
+    margin:5px 0;
+    color:#142643;
+}
+
+.container-ramal{
+    border-bottom:solid 1px #cdcdcd;
+    padding:10px;
+}

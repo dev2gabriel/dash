@@ -1,0 +1,163 @@
+.full-width{
+    background-color:#fff;
+    width:100%;
+    box-shadow:0 0 5px rgba(0,0,0,0.2);
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:2;
+}
+
+.nav-container{
+    margin:auto;
+    padding:20px;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+}
+
+.nav-logo{
+    text-align:center;
+    width:70%;
+}
+
+.nav-person{
+    text-align:right;
+    width:15%;
+    display:flex;
+    flex-direction:row;
+    justify-content:flex-end;
+    align-items:center;
+}
+
+.nav-toggle{
+    text-align:left;
+    width:15%;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+
+.nav-toggle .title{
+    font-size:22px;
+    font-weight:600;
+    opacity:0;
+    left:-80px;
+    position:relative;
+    transition:0.5s;
+}
+
+.nav-toggle .title.open{
+    opacity:1;
+    left:0px;
+}
+
+.burger-container{
+    width:36px;
+    height:36px;
+    border:solid 1px #cdcdcd;
+    border-radius:5px;
+    cursor:pointer;
+    transition:1s;
+    margin-left:-50px;
+}
+
+.burger-container.open{
+    margin-left:250px;
+}
+
+.burger-container.open  .burger:nth-child(1){
+    transform:rotate(45deg);
+    position:relative;
+    top:10px;
+}
+
+.burger-container.open  .burger:nth-child(2){
+    display:none;
+}
+
+.burger-container.open  .burger:nth-child(3){
+    transform:rotate(135deg);
+}
+
+.burger-container .burger{
+    background-color:#cdcdcd;
+    height:5px;
+    margin:5px;
+    width:26px;
+    border-radius:10px;
+    display:block;
+    transition:1s;
+}
+
+.user-photo{
+    width:40px;
+    height:40px;
+    background-color:#cdcdcd;
+    background-position:center center;
+    background-size:cover;
+    border-radius:50%;
+    margin-left:10px;
+}
+
+
+.user-name{
+    font-size:14px;
+    color:#333;
+    font-weight:600;
+}
+
+.nav-person a{
+    display: flex;
+    align-items: center;
+}
+
+.on{
+    display: flex!important;
+}
+
+.user-menu{
+    position: absolute;
+    top: 75px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow:0 0 5px rgba(0,0,0,0.2);
+    width: 130px;
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: -99999999;
+}
+
+.user-menu::before{
+    position: absolute;
+    top: -15px;
+    right: 7px;
+    content: "";
+    width: 0; 
+    height: 0; 
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid rgb(226, 226, 226);
+}
+
+.user-menu a,
+.user-menu button{
+    padding: 5px 0px;
+    border-bottom: 1px solid rgb(226, 226, 226);
+    background-color: unset;
+    outline: none;
+    cursor: pointer;
+}
+
+.user-menu button{
+    border: 0;
+}
+
+.user-menu a:hover,
+.user-menu button:hover{
+    font-weight: bold;
+    transition: .2s;
+}
