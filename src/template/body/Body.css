@@ -44,8 +44,7 @@
 .aniversariantes.container{
     margin-top:20px;
     overflow: hidden;
-    max-width: 374px;
-    min-width: 374px;
+    max-width: 400px;
 }
 
 .suporte.container h3, .aniversariantes.container h3, .ramais.container h3, .rh-news.container h3{

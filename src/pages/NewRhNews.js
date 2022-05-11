@@ -11,6 +11,7 @@ import JoditEditor from "jodit-react";
 import { useContext } from 'react'; 
 import { AuthContext } from '../Auth' 
 import axios from 'axios';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 function NewRhNews(){
 
@@ -40,7 +41,6 @@ function NewRhNews(){
         photoData.append('image', document.querySelector('input[type=file]').files[0])
         photoData.append('body', textBody)
         photoData.append('subtitle', subTitle)
-        console.log(photoData)
         axios({
             method: 'post',
             url: 'https://pedidos.grupostra.com/api/v1/post/create',
@@ -49,7 +49,8 @@ function NewRhNews(){
         })
         .then((response) => {
             alert("News Cadastrado com sucesso!")
-            window.location = window.location.href;
+            console.log(photoData)
+            /* window.location = window.location.href; */
         }).catch(function(error){ 
             if (error.response) {
                 alert(error.response.data.message)
@@ -64,11 +65,14 @@ function NewRhNews(){
         })
       }, []);
 
-
       function handleEditItem(e){
         e.preventDefault()
         let id = e.target.id
-        window.location = `/editar-post/${id}`
+        axios.delete(`https://pedidos.grupostra.com/api/v1/post/delete/${id}`, configB)
+        .then((response) => {
+          alert("News deletado com sucesso")
+            window.location = window.location.href
+        })
       }
 
     return(
@@ -131,7 +135,7 @@ function NewRhNews(){
                                         <div key={i} className="line_last">
                                             <p>{index?.title}</p>
                                             <div className="date_div">
-                                                <a href="#" id={index.id} onClick={(e) => handleEditItem(e)}>Editar <EditIcon /></a>
+                                                <a href="#" id={index.id} onClick={(e) => handleEditItem(e)}>Excluir <HighlightOffIcon /></a>
                                                 <p>{index?.created_at.slice(0, 10).split('-').reverse().join('/')}</p>
                                             </div>
                                         </div>

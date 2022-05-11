@@ -1,13 +1,7 @@
 import Header from '../template/header/Header';
 import NavMenu from '../template/nav_menu/NavMenu';
-import Legend from '../components/Legend'
-import Input from '../components/Input'
-import Button from '../components/Button'
 import './UserProfile.css'
 import { useRef, useEffect, useState } from 'react'
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import EditIcon from '@mui/icons-material/Edit';
-import JoditEditor from "jodit-react";
 import { useContext } from 'react'; 
 import { AuthContext } from '../Auth' 
 import axios from 'axios';
@@ -16,6 +10,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import SectorIcon from '../assets/noun-job-2043818.svg'
 import OfficeIcon from '../assets/noun-user-name-4162838.svg' 
+import { useParams } from "react-router-dom";
 
 function UserProfile(){
 
@@ -27,6 +22,8 @@ function UserProfile(){
     const [data, setData] = useState([])
     
     const { token } = useContext(AuthContext);
+
+    const { userId } = useParams();
 
     const editor = useRef(null)
 
@@ -63,18 +60,11 @@ function UserProfile(){
     }
 
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/post", configB)
+        axios.get(`https://pedidos.grupostra.com/api/v1/user/show/${userId}`, configB)
             .then((response) => {
-              setData(response.data)  
+              setData(response.data)
         })
-      }, []);
-
-
-      function handleEditItem(e){
-        e.preventDefault()
-        let id = e.target.id
-        window.location = `/editar-post/${id}`
-      }
+    }, []);
 
     return(
         <div id="body-main" className="body-main home open">
@@ -163,7 +153,7 @@ function UserProfile(){
                             <div className="rh-news container">
                                 <div className="user-header">
                                     <div className="user-img">
-                                        <img src="https://st.depositphotos.com/1269204/1219/i/600/depositphotos_12196477-stock-photo-smiling-men-isolated-on-the.jpg" alt="" srcset="" />
+                                        <img src={data.photo_url} alt="" srcset="" />
                                     </div>
                                 </div>
                                 <div className="user-info">
@@ -171,72 +161,74 @@ function UserProfile(){
                                         <div className="line-icon">
                                             <PersonIcon />
                                         </div>
-                                        <p>João Pedro da Silva</p>
+                                        <p>{data?.name}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <object data={SectorIcon}/>
                                         </div>
-                                        <p>Tecnologia</p>
+                                        <p>{data.department?.name}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <object data={OfficeIcon}/>
                                         </div>
-                                        <p>Programador</p>
+                                        <p>{data?.position}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <EmailIcon />
                                         </div>
-                                        <p>tecnologia@grupostra.com.br</p>
+                                        <p>{data?.email}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <PhoneInTalkIcon />
                                         </div>
-                                        <p>Ramal 351</p>
+                                        <p>Ramal {data?.extension_number}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>         
-                <div className="col-1">
-                    <div className="rh-news container">
-                        <h1>Equipamentos</h1>
-                        <table className='user-equipaments'>
-                            <tr>
-                                <th>Item</th>
-                                <th>Número do Patrimônio</th>
-                                <th>Estado</th>
-                            </tr>
-                            <tr>
-                                <td>Notebook</td>
-                                <td>01010201</td>
-                                <td>Novo</td>
-                            </tr>
-                            <tr>
-                                <td>Monitor Dell 23</td>
-                                <td>01010222</td>
-                                <td>Novo</td>
-                            </tr>
-                            <tr>
-                                <td>Monitor Dell 23</td>
-                                <td>01010211</td>
-                                <td>Novo</td>
-                            </tr>
-                            <tr>
-                                <td>Teclado</td>
-                                <td></td>
-                                <td>Novo</td>
-                            </tr>
-                            <tr>
-                                <td>Mouse</td>
-                                <td></td>
-                                <td>Novo</td>
-                            </tr>
-                        </table>
+                <div className="div-adjust">
+                    <div className="col-1">
+                        <div className="rh-news container">
+                            <h1>Equipamentos</h1>
+                            <table className='user-equipaments'>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Número do Patrimônio</th>
+                                    <th>Estado</th>
+                                </tr>
+                                <tr>
+                                    <td>Notebook</td>
+                                    <td>01010201</td>
+                                    <td>Novo</td>
+                                </tr>
+                                <tr>
+                                    <td>Monitor Dell 23</td>
+                                    <td>01010222</td>
+                                    <td>Novo</td>
+                                </tr>
+                                <tr>
+                                    <td>Monitor Dell 23</td>
+                                    <td>01010211</td>
+                                    <td>Novo</td>
+                                </tr>
+                                <tr>
+                                    <td>Teclado</td>
+                                    <td></td>
+                                    <td>Novo</td>
+                                </tr>
+                                <tr>
+                                    <td>Mouse</td>
+                                    <td></td>
+                                    <td>Novo</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

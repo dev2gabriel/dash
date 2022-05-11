@@ -166,9 +166,10 @@ function EditUser(){
     const [dataDepartment, setDataDepartment] = useState([])
     const [roles, setRoles] = useState([])
     const [users, setUsers] = useState([])
+    const [userById, setUserById] = useState([])
     const [arrayPermission, setArrayPermissions] = useState([])
 
-    const { idEdit } = useParams();
+    const { userId } = useParams();
 
     function handleClearFields(e){
         window.location = window.location.href;
@@ -245,7 +246,12 @@ function EditUser(){
             setRoles(response.data)
         })
 
-        axios.get("https://pedidos.grupostra.com/api/v1/table/users", config)
+        axios.get(`https://pedidos.grupostra.com/api/v1/user/show/${userId}`, config)
+        .then((response)  => {
+            setUserById(response.data)
+        })
+
+        axios.get('https://pedidos.grupostra.com/api/v1/table/users', config)
         .then((response)  => {
             setUsers(response.data)
         })
@@ -274,7 +280,7 @@ function EditUser(){
                                 <div className="form-register">
                                     <div className="line">
                                         <Legend value="Nome Completo"/>
-                                        <Input type="text" name="name" id="name" onChange={(e) => setUserName(e.target.value)}/>
+                                        <Input type="text" name="name" id="name" placeholder={userById.name} onChange={(e) => setUserName(e.target.value)}/>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
@@ -302,17 +308,17 @@ function EditUser(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="CPF"/>  
-                                            <Input type="text" name="cpf" id="cpf" onChange={(e) => setUserCpf(e.target.value)}/>  
+                                            <Input type="text" name="cpf" id="cpf" placeholder={userById.cpf} onChange={(e) => setUserCpf(e.target.value)}/>  
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="RG"/>
-                                            <Input type="text" name="rg" id="rg" onChange={(e) => setUserRg(e.target.value)}/>
+                                            <Input type="text" name="rg" id="rg" placeholder={userById.rg} onChange={(e) => setUserRg(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Cargo"/>
-                                            <Input type="text" name="position" id="position" onChange={(e) => setUserPosition(e.target.value)}/>
+                                            <Input type="text" name="position" id="position" placeholder={userById.position} onChange={(e) => setUserPosition(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
@@ -372,7 +378,7 @@ function EditUser(){
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" id="salary" onChange={(e) => setUserSalary(e.target.value)}/>
+                                            <Input type="text" name="salary" placeholder={userById.salary} id="salary" onChange={(e) => setUserSalary(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Gestor"/>
@@ -380,7 +386,7 @@ function EditUser(){
                                                 <option value="#" selected disabled>Gestor</option>
                                                 {
                                                     users.map((user, i) =>
-                                                        <option key={i} value={user.id}>{user.name}</option>
+                                                        <option key={i} value={user?.id}>{user?.name}</option>
                                                     )
                                                 }
                                             </select>
@@ -390,26 +396,26 @@ function EditUser(){
                                         <div className="line_flex">
                                             <Legend value="CEP"/>
                                             <div className="line_icon">
-                                                <Input type="text" name="cep" id="cep" onChange={(e) => setUserZipCode(e.target.value)}/>
+                                                <Input type="text" name="cep" id="cep" placeholder={userById.zip_code} onChange={(e) => setUserZipCode(e.target.value)}/>
                                             </div>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Endereço"/>
-                                            <Input type="text" name="address" id="address" onChange={(e) => setUserStreet(e.target.value)}/>
+                                            <Input type="text" name="address" id="address" placeholder={userById.street} onChange={(e) => setUserStreet(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Número"/>
-                                            <Input type="number" name="address-number" id="address-number" onChange={(e) => setUserNumber(e.target.value)}/>
+                                            <Input type="number" name="address-number" placeholder={userById.number} id="address-number" onChange={(e) => setUserNumber(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Bairro"/>
-                                            <Input type="text" name="district" id="district" onChange={(e) => setUserCountry(e.target.value)}/>
+                                            <Input type="text" name="district" id="district" placeholder={userById.country} onChange={(e) => setUserCountry(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Cidade"/>
-                                            <Input type="text" name="city" id="city" onChange={(e) => setUserCity(e.target.value)}/>
+                                            <Input type="text" name="city" id="city" placeholder={userById.city} onChange={(e) => setUserCity(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Estado"/>
@@ -426,17 +432,17 @@ function EditUser(){
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Email Empresarial"/>
-                                            <Input type="email" name="email" id="email" onChange={(e) => setUserEmail(e.target.value)}/>
+                                            <Input type="email" name="email" id="email" placeholder={userById.email} onChange={(e) => setUserEmail(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Telefone"/>
-                                            <Input type="text" name="phone" id="phone" onChange={(e) => setUserPersonalPhone(e.target.value)}/>
+                                            <Input type="text" name="phone" id="phone" placeholder={userById.personal_phone} onChange={(e) => setUserPersonalPhone(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Ramal"/>
-                                            <Input type="number" name="ramal" id="ramal" onChange={(e) => setUserExtensionNumber(e.target.value)}/>
+                                            <Input type="number" name="ramal" id="ramal" placeholder={userById.extension_number} onChange={(e) => setUserExtensionNumber(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">

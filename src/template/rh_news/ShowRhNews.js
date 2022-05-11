@@ -28,6 +28,8 @@ const ShowRhNews = () => {
     const [pageCount, setPageCount] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(2);
     const [itemOffset, setItemOffset] = useState(0);
+
+    const [txtBody, setTxtBody] = useState();
   
     useEffect(() => {
       // Fetch items from another resources.
@@ -40,7 +42,7 @@ const ShowRhNews = () => {
     const handlePageClick = (event) => {
       const newOffset = (event.selected * itemsPerPage) % data.length;
       setItemOffset(newOffset);
-    }
+    }  
 
     function Items({ currentItems }) {
       return (
@@ -50,7 +52,11 @@ const ShowRhNews = () => {
               <div className='new-rh-container' key={i}>
                 <h1>{item.title}</h1>
                 <img src={item.image} alt="" />
-                <p>{item.body}</p>
+                <div className="text-body">
+                  {
+                    <li dangerouslySetInnerHTML={{ __html: item.body }} />
+                  }
+                </div>
               </div>
           )
         }

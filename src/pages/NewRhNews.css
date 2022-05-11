@@ -164,7 +164,12 @@ input[type="file"]{
 .date_div a{
     margin-right: 5px;
     transition: .3s;
+    display: flex;
+    align-items: center;
+}
 
+.date_div a svg{
+    margin-left: 5px;
 }
 
 .date_div a:hover{

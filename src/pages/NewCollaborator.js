@@ -16,7 +16,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import ReactPaginate from 'react-paginate';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-
+import { AuthContext } from '../Auth' 
+import { useContext } from 'react'; 
 
 function NewColaborator(){
   document.title = "Grupo Stra - Communication"
@@ -32,6 +33,8 @@ function NewColaborator(){
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const [itemOffset, setItemOffset] = useState(0);
 
+  const { token } = useContext(AuthContext);
+  
   useEffect(() =>{
     axios.get("https://pedidos.grupostra.com/api/v1/table/users")
         .then((response) => {
@@ -53,9 +56,18 @@ function NewColaborator(){
     window.location = `/editar-usuario/${id}`
   }
 
+  const configB = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+
   function handleDeleteItem(e){
     e.preventDefault()
     let id = e.target.id
+    axios.delete(`https://pedidos.grupostra.com/api/v1/user/delete/${id}`, configB)
+    .then((response) => {
+        alert("Usuário deletado com sucesso")
+        /* window.location = window.location.href */
+    })
   }
 
   useEffect(() => {

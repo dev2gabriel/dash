@@ -99,6 +99,17 @@
     background-size:cover;
     border-radius:50%;
     margin-left:10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.user-photo img{
+    width: 150px;
+    position: absolute;
+    top: -40px;
 }
 
 

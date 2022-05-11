@@ -21,11 +21,9 @@ function Births(){
         <div className='container_births'>
             {data.filter(month => parseInt(month.birth_date.slice(5, 7)) === currentMonth).map((filteredBirth, index) => (
                 <div key={index} className="aniversario-container">
-                    <div className="birthday-photo" style={
-                        {
-                        backgroundColor: "black"
-                        }
-                    }></div>
+                    <div className="birthday-photo">
+                      <img src={filteredBirth.photo_url} alt="" srcset="" />
+                    </div>
                     <div className="birthday-name">{filteredBirth.name}, nosso(a) {filteredBirth.position}, faz {2022 - filteredBirth.birth_date.slice(0, 4)} anos neste mês, no dia {filteredBirth.birth_date.slice(5, 7)}.</div>
                 </div>
             ))}

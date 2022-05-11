@@ -30,7 +30,7 @@ function EditPost(){
 
     const config = {
 		readonly: false,
-		placeholder: 'Digite seu texto'
+		placeholder: "digite o texto"
 	}
 
     const configB = {
@@ -43,16 +43,16 @@ function EditPost(){
         photoData.append('image', document.querySelector('input[type=file]').files[0])
         photoData.append('body', textBody)
         photoData.append('subtitle', subTitle)
-        console.log(photoData)
         axios({
             method: 'post',
-            url: 'https://pedidos.grupostra.com/api/v1/post/create',
+            url: `https://pedidos.grupostra.com/api/v1/post/update/${postId}`,
             data: photoData,
             headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
         })
         .then((response) => {
-            alert("News Cadastrado com sucesso!")
-            window.location = window.location.href;
+            alert("News Atualizado com sucesso!")
+            console.log(photoData)
+            /* window.location = window.location.href; */
         }).catch(function(error){ 
             if (error.response) {
                 alert(error.response.data.message)
@@ -61,18 +61,13 @@ function EditPost(){
     }
 
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/post", configB)
+        axios.get(`https://pedidos.grupostra.com/api/v1/post/${postId}`, configB)
             .then((response) => {
               setData(response.data)  
         })
       }, []);
 
-
-      function handleEditItem(e){
-        e.preventDefault()
-        let id = e.target.id
-        window.location = `/editar-post/${id}`
-      }
+    const [inputValue, setInputValue] = useState("Teste")
 
     return(
         <div id="body-main" className="body-main home open">
@@ -90,18 +85,18 @@ function EditPost(){
                                     <div className='form'>
                                         <div className="line">
                                             <Legend value="Título" />
-                                            <Input type="text" name="title" id="title" onChange={(e) => setTitle(e.target.value)}/>
+                                            <Input type="text" name="title" id="title" value={inputValue} onChange={(e) => setTitle(e.target.value)}/>
                                         </div>
                                         <div className="line">
                                             <div className="line_flex">
                                                 <Legend value="Sub Título" />
-                                                <Input type="text" name="sub-title" id="sub-title" onChange={(e) => setSubTitle(e.target.value)}/>
+                                                <Input type="text" name="sub-title" id="sub-title" placeholder={data?.subtitle} onChange={(e) => setSubTitle(e.target.value)}/>
                                                 </div>
                                         </div>
                                         <div className="line_flex">
                                             <label htmlFor="file" className="input_img">Enviar Imagem <FileUploadIcon /></label>
                                             <input type="file" name="file" id="file" onChange={(e) => setRhImage(e.target.files[0])} />
-                                            {rhImage ? <img src={URL.createObjectURL(rhImage)} /> : <img src="" />}
+                                            {rhImage ? <img src={URL.createObjectURL(rhImage)} /> : <img src={data?.image} />}
                                         </div>
                                         <div className="line_flex">
                                             <JoditEditor
@@ -115,7 +110,7 @@ function EditPost(){
                                         </div>
                                         <div className="line">
                                             <div className="line_flex">
-                                                <a onClick={() => document.location.reload(true)} >Limpar Campos</a>
+                                                <a onClick={() => window.location = "/cadastrar-rh-news"} >Limpar Campos</a>
                                             </div>
                                             <div className="line_flex">
                                                 <Button type="submit" value="Cadastrar" onClick={submitFields} />

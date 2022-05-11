@@ -6,12 +6,20 @@
     background-position:center -20px;
     background-size:100% auto;
     margin:auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.birthday-photo img{
+    width: 160px;
 }
 
 .aniversario-container{
     text-align:center;
     padding:10px 0 20px;
-    min-width: 340px;
+    min-width: 360px;
 }
 
 .birthday-name{

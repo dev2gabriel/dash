@@ -2,11 +2,11 @@ import './Header.css';
 import { useContext } from 'react'; 
 import { AuthContext } from '../../Auth' 
 import logo from '../../assets/grupostra_horizontal_2_180x.png';
-import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 
 function Header(){
-    const { user, logout, userId } = useContext(AuthContext);
+    const { user, logout, userId, userPhoto } = useContext(AuthContext);
+
     function handleUserMenu(e){
         e.preventDefault();
         let userMenu = document.querySelector('.user-menu')
@@ -21,6 +21,7 @@ function Header(){
         e.preventDefault()
         window.location = `/perfil-usuario/${userId}`
     }
+   
 
     return(
         <div className="full-width">
@@ -44,11 +45,9 @@ function Header(){
                 <div className="nav-person">
                     <a href="#" onClick={handleUserMenu}>
                         <p className="user-name">{user}</p>
-                        <div className="user-photo" style={
-                        {
-                            backgroundColor: "black"
-                        }
-                        }></div>
+                        <div className="user-photo">
+                            <img src={userPhoto} alt="" />
+                        </div>
                     </a>
                     <div className="user-menu">
                         <a onClick={userProfile}>Perfil</a>

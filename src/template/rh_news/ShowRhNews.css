@@ -21,6 +21,7 @@
 }
 .container-posts img{
     max-width: 100%;
+    margin-bottom: 20px;
 }
 
 .container-posts nav{
@@ -58,4 +59,12 @@
 .list-pagination li:hover{
     transform: scale(110%);
     transition: .3s;
+}
+
+.text-body li{
+    list-style: none;
+}
+
+.text-body{
+    margin-bottom: 20px;
 }

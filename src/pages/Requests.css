@@ -21,3 +21,28 @@
     color: rgb(121, 121, 121);
 }
 
+.holidays-container .search-name,
+.attests-container .search-name,
+.refounds-container .search-name{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+}
+
+
+.holidays-container .search-name h1,
+.attests-container .search-name h1{
+    width: 100%;
+    max-width: max-content;
+    margin-bottom: 0px!important;
+    margin-right: 250px;
+}
+
+.refounds-container .search-name h1{
+    width: 100%;
+    max-width: 430px;
+    text-align: left;
+}
+

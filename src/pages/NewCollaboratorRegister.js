@@ -1,21 +1,15 @@
 import './NewCollaborator.css'
 import Header from '../template/header/Header';
 import NavMenu from '../template/nav_menu/NavMenu';
-import { Link } from 'react-router-dom';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RegisterCollaborator from '../template/forms/RegisterCollaborator'
-import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Legend from '../components/Legend'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import '../template/forms/RegisterCollaborator.css'
-import SearchIcon from '@mui/icons-material/Search';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useContext } from 'react'; 
 import { AuthContext } from '../Auth' 
-
 
 function NewCollaboratorRegister(){
 
@@ -231,6 +225,78 @@ function NewCollaboratorRegister(){
             alert("As senhas não coincidem")
         }   
     }
+    var input_cpf = document.getElementById("cpf")
+
+    useEffect(() => {
+        input_cpf = document.getElementById("cpf")
+        input_cpf.addEventListener("focus" , function(event) {
+            input_cpf.value = "___.___.___-__"
+            setTimeout(function() {
+                input_cpf.setSelectionRange(0, 0)
+            }, 1)
+        })
+        
+        input_cpf.addEventListener("keydown", function(event) {
+            event.preventDefault()
+            if("0123456789".indexOf(event.key) !== -1
+                && this.value.indexOf("_") !== -1) {
+                    this.value = this.value.replace(/_/, event.key)
+                    const next_index = this.value.indexOf("_")
+                    this.setSelectionRange(next_index, next_index)
+            } else if (event.key === "Backspace") {
+                this.value = this.value.replace(/(\d$)|(\d(?=\D+$))/, "_")
+                const next_index = this.value.indexOf("_")
+                this.setSelectionRange(next_index, next_index)
+            }
+        })
+    }, [userCpf])
+
+    var v_obj
+    var v_fun
+
+    function mascara(o,f){
+        v_obj=o
+        v_fun=f
+        setTimeout(execmascara(),1)
+    }
+    function execmascara(){
+        v_obj.value=v_fun(v_obj.value)
+    }
+    function mtel(v){
+        v=v.replace(/\D/g,""); //Remove tudo o que não é dígito
+        v=v.replace(/^(\d{2})(\d)/g,"($1) $2"); //Coloca parênteses em volta dos dois primeiros dígitos
+        v=v.replace(/(\d)(\d{4})$/,"$1-$2"); //Coloca hífen entre o quarto e o quinto dígitos
+        return v;
+    }
+    function id( el ){
+        return document.getElementById( el );
+    }
+    window.onload = function(){
+        id('phone').onkeyup = function(){
+            mascara( this, mtel );
+        }
+    }
+
+    function formatarMoeda() {
+        var elemento = document.getElementById('salary');
+        var valor = elemento.value;
+        
+        valor = valor + '';
+        valor = parseInt(valor.replace(/[\D]+/g,''));
+        
+        valor = valor + '';
+        
+        valor = valor.replace(/([0-9]{2})$/g, ",$1");
+
+        if (valor.length > 6) {
+            valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+        }
+        
+        elemento.value = valor;
+        setUserSalary(valor)
+        console.log(valor)
+    }
+
 
     useEffect(() => {
         axios.get("https://pedidos.grupostra.com/api/v1/department", config)
@@ -370,7 +436,7 @@ function NewCollaboratorRegister(){
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" id="salary" onChange={(e) => setUserSalary(e.target.value)}/>
+                                            <Input type="text" name="salary" id="salary" onChange={formatarMoeda}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Gestor"/>

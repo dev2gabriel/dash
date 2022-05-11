@@ -13,7 +13,6 @@ render(){
             <div className="row">
                 <div className="col-2">
                     <div className="rh-news container">
-                        <h3>RH News</h3>
                         {/* <PaginatedItems itemsPerPage={1} /> */}
                          <ShowRhNews/>
                     </div>
