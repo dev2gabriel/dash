@@ -67,4 +67,18 @@
 
 .text-body{
     margin-bottom: 20px;
+    width: 100%;
+}
+
+.new-rh-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-rh-container img{
+    object-fit: cover;
+    width: 735px;
+    height: 382px;
 }

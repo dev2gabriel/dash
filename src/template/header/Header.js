@@ -3,6 +3,9 @@ import { useContext } from 'react';
 import { AuthContext } from '../../Auth' 
 import logo from '../../assets/grupostra_horizontal_2_180x.png';
 import Button from '../../components/Button';
+import SignNotification from '../../assets/icons8-lembrete-de-compromissos.gif'
+import SignNotificationStatic from '../../assets/icons8-lembrete-de-compromissos-48.png'
+import ErrorIcon from '@mui/icons-material/Error';
 
 function Header(){
     const { user, logout, userId, userPhoto } = useContext(AuthContext);
@@ -22,6 +25,11 @@ function Header(){
         window.location = `/perfil-usuario/${userId}`
     }
    
+    function openNotificationModal(e){
+        e.preventDefault()
+        let modalNotifications = document.querySelector('.modal-notifications')
+        modalNotifications.classList.toggle('notifications-on')
+    }
 
     return(
         <div className="full-width">
@@ -43,6 +51,29 @@ function Header(){
                     <img src={logo} alt="Grupo Stra"></img>
                 </div>
                 <div className="nav-person">
+                    <div className="nav-notifications">
+                        <a href="#" onClick={openNotificationModal} onMouseEnter={() => document.querySelector('.sign-notification').src = SignNotification} onMouseLeave={() => document.querySelector('.sign-notification').src = SignNotificationStatic}><img className='sign-notification' src={SignNotificationStatic} alt="" /></a>
+                    </div>
+                    <div className="modal-notifications">
+                        <div className="notifications-container">
+                            <div className="notifications-line">
+                                <div className="left-color"></div>
+                                <div className="icon-color"><ErrorIcon /></div>
+                                <div className="text-info">
+                                    <h1>Você sabia?</h1>
+                                    <p>Aqui tem alguma coisa que você gostaria de saber!</p>
+                                </div>
+                            </div>
+                            <div className="notifications-line">
+                                <div className="left-color"></div>
+                                <div className="icon-color"><ErrorIcon /></div>
+                                <div className="text-info">
+                                    <h1>Você sabia?</h1>
+                                    <p>Aqui tem alguma coisa que você gostaria de saber!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <a href="#" onClick={handleUserMenu}>
                         <p className="user-name">{user}</p>
                         <div className="user-photo">

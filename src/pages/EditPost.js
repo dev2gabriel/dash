@@ -6,7 +6,6 @@ import Button from '../components/Button'
 import './NewRhNews.css'
 import { useState, useRef, useMemo, useEffect } from 'react'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import EditIcon from '@mui/icons-material/Edit';
 import JoditEditor from "jodit-react";
 import { useContext } from 'react'; 
 import { AuthContext } from '../Auth' 
@@ -19,9 +18,11 @@ function EditPost(){
     const [rhImage, setRhImage] = useState()
     const [title, setTitle] = useState()
     const [subTitle, setSubTitle] = useState()
-    const [textBody, setTextBody] = useState(content)
+    const [textBody, setTextBody] = useState()
     const [data, setData] = useState([])
-    
+    const [newRhImage, setNewRhImage] = useState()
+    const [flag, setFlag] = useState()
+    const [renderImg, setRenderImg] = useState()
     const { postId } = useParams();
 
     const { token } = useContext(AuthContext);
@@ -40,19 +41,22 @@ function EditPost(){
     function submitFields(){
         const photoData = new FormData()
         photoData.append('title', title)
-        photoData.append('image', document.querySelector('input[type=file]').files[0])
+        photoData.append('image', newRhImage)
         photoData.append('body', textBody)
         photoData.append('subtitle', subTitle)
+        photoData.append('tag', flag)
+        photoData.append('is_published', 1)
+        photoData.append('_method', 'PUT')
+
         axios({
-            method: 'post',
+            method: 'POST',
             url: `https://pedidos.grupostra.com/api/v1/post/update/${postId}`,
             data: photoData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
         })
         .then((response) => {
             alert("News Atualizado com sucesso!")
-            console.log(photoData)
-            /* window.location = window.location.href; */
+            window.location = window.location.href;
         }).catch(function(error){ 
             if (error.response) {
                 alert(error.response.data.message)
@@ -67,7 +71,31 @@ function EditPost(){
         })
       }, []);
 
-    const [inputValue, setInputValue] = useState("Teste")
+    useEffect(() => { 
+        setTitle(data?.title)
+        setSubTitle(data?.subtitle)
+        setRhImage(data?.image)
+        setTextBody(data?.body)
+        setFlag(data?.tag)
+    }, [data])
+
+    /* function setEmptyImg(){
+        if(newRhImage === undefined){
+            setNewRhImage("")
+        }
+    } */
+    
+    useEffect(() => {
+
+    }, [])
+
+    function handleChange(e){
+        setTitle(document.querySelector('#title-text').value)
+        setSubTitle(document.querySelector('#sub-title').value)
+        setNewRhImage(document.querySelector('#file').files[0] ? rhImage : "")
+        setTextBody(document.querySelector('.jodit-wysiwyg').innerHTML)
+        setFlag(document.querySelector('#flag').value)
+    }
 
     return(
         <div id="body-main" className="body-main home open">
@@ -85,18 +113,22 @@ function EditPost(){
                                     <div className='form'>
                                         <div className="line">
                                             <Legend value="Título" />
-                                            <Input type="text" name="title" id="title" value={inputValue} onChange={(e) => setTitle(e.target.value)}/>
+                                            <Input type="text" name="title-text" id="title" value={title} onChange={handleChange}/>
                                         </div>
                                         <div className="line">
                                             <div className="line_flex">
                                                 <Legend value="Sub Título" />
-                                                <Input type="text" name="sub-title" id="sub-title" placeholder={data?.subtitle} onChange={(e) => setSubTitle(e.target.value)}/>
+                                                <Input type="text" name="sub-title" id="sub-title" value={subTitle} onChange={handleChange}/>
                                                 </div>
                                         </div>
                                         <div className="line_flex">
                                             <label htmlFor="file" className="input_img">Enviar Imagem <FileUploadIcon /></label>
-                                            <input type="file" name="file" id="file" onChange={(e) => setRhImage(e.target.files[0])} />
-                                            {rhImage ? <img src={URL.createObjectURL(rhImage)} /> : <img src={data?.image} />}
+                                            <input type="file" name="file" id="file" onChange={handleChange} />
+                                            <div className="images-show">
+                                                <Legend value="Imagem"/>
+                                                {/* {newRhImage ? <img src={URL.createObjectURL(newRhImage)} /> : <img src={rhImage} />} */}
+                                                {renderImg}
+                                            </div>
                                         </div>
                                         <div className="line_flex">
                                             <JoditEditor
@@ -104,16 +136,29 @@ function EditPost(){
                                                 value={textBody}
                                                 config={config}
                                                 tabIndex={1} // tabIndex of textarea
-                                                onBlur={newContent => setTextBody(newContent)} // preferred to use only this option to update the content for performance reasons
+                                                onBlur={handleChange} // preferred to use only this option to update the content for performance reasons
                                                 onChange={newContent => {}}
                                             />
                                         </div>
                                         <div className="line">
                                             <div className="line_flex">
-                                                <a onClick={() => window.location = "/cadastrar-rh-news"} >Limpar Campos</a>
+                                                <Legend value="Tipo de news (Flag)" />
+                                                <select name="flag" id="flag" value={flag} onChange={handleChange}>
+                                                    <option value="birthday_person">Aniversários</option>
+                                                    <option value="article">Artigos</option>
+                                                    <option value="important_notices">Avisos importantes</option>
+                                                    <option value="event">Eventos</option>
+                                                    <option value="news">News</option>
+                                                    <option value="new_collaborators">Novos colaboradores</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="line">
+                                            <div className="line_flex">
+                                                <a onClick={() => document.location.reload(true)} >Limpar Campos</a>
                                             </div>
                                             <div className="line_flex">
-                                                <Button type="submit" value="Cadastrar" onClick={submitFields} />
+                                                <Button type="submit" value="Publicar" onClick={submitFields} />
                                             </div>
                                         </div>
                                     </div>

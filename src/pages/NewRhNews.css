@@ -143,8 +143,8 @@ input[type="file"]{
 
 .last_news{
     margin-top: 15px;
-    max-height: 582px;
-    min-height: 582px;
+    max-height: 454px;
+    min-height: 454px;
     overflow: hidden;
 }
 
@@ -175,4 +175,21 @@ input[type="file"]{
 .date_div a:hover{
     transition: .3s;
     transform: scale(105%);
+}
+
+.line .line_flex select{
+    width: 100%;
+    border: 1px solid lightgray;
+    font-size: 16px;
+    padding: 8px 0px;
+    outline: none;
+    cursor: pointer;
+}
+
+#col-1-min{
+    max-width: 1000px;
+}
+
+.new-rh-news{
+    width: 530px;
 }

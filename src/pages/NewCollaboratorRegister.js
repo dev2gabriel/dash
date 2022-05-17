@@ -6,10 +6,11 @@ import axios from 'axios';
 import Legend from '../components/Legend'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import '../template/forms/RegisterCollaborator.css'
+import './NewCollaboratorRegister.css'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useContext } from 'react'; 
 import { AuthContext } from '../Auth' 
+import SearchIcon from '@mui/icons-material/Search';
 
 function NewCollaboratorRegister(){
 
@@ -137,7 +138,6 @@ function NewCollaboratorRegister(){
     const [userContract, setUserContract] = useState()
     const [userLevel, setUserLevel] = useState()
     const [userDepartment, setUserDeparment] = useState()
-    const [userPermission, setUserPermission] = useState([])
     const [userAdmissionDate, setUserAdmissionDate] = useState()
     const [userBirthDate, setUserBirthDate] = useState()
     const [userSalary, setUserSalary] = useState()
@@ -147,6 +147,8 @@ function NewCollaboratorRegister(){
     const [userNumber, setUserNumber] = useState()
     const [userCountry, setUserCountry] = useState()
     const [userCity, setUserCity] = useState()
+    const [userCbo, setUserCbo] = useState()
+    const [userRegistration, setUserRegistration] = useState()
     const [userState, setUserState] = useState()
     const [userEmail, setUserEmail] = useState()
     const [userPersonalPhone, setUserPersonalPhone] = useState()
@@ -154,6 +156,7 @@ function NewCollaboratorRegister(){
     const [userEmergencyContactName, setUserEmergencyContactName] = useState()
     const [userEmergencyContactPhone, setUserEmergencyContactPhone] = useState()
     const [userEmergencyContactKinship, setUserEmergencyContactKinship] = useState()
+    const [userSituation, setUserSituation] = useState()
     
     const { token } = useContext(AuthContext);
 
@@ -161,6 +164,8 @@ function NewCollaboratorRegister(){
     const [roles, setRoles] = useState([])
     const [users, setUsers] = useState([])
     const [arrayPermission, setArrayPermissions] = useState([])
+    const [findZipState, setFindZipState] = useState(false)
+    const [zipData, setZipData] = useState([])
 
     function handleClearFields(e){
         window.location = window.location.href;
@@ -186,9 +191,11 @@ function NewCollaboratorRegister(){
         formData.append('admission_date', userAdmissionDate)
         formData.append('department_id', userDepartment)
         formData.append('manager_id', userManager)
+        formData.append('cbo', userCbo)
+        formData.append('registration', userRegistration)
         formData.append('birth_date', userBirthDate)
         formData.append('level', userLevel)
-        formData.append('permission_id', userPermission)
+        formData.append('permission_id', arrayPermission)
         formData.append('salary', userSalary)
         formData.append('street', userStreet)
         formData.append('zip_code', userZipCode)
@@ -200,13 +207,13 @@ function NewCollaboratorRegister(){
         formData.append('emergency_contact_name', userEmergencyContactName)
         formData.append('emergency_contact_phone', userEmergencyContactPhone)
         formData.append('emergency_contact_kinship', userEmergencyContactKinship)
-        formData.append('company_phone', userPersonalPhone)
+        formData.append('personal_phone', userPersonalPhone)
         formData.append('extension_number', userExtensionNumber)
 
         if(userPassword === userPasswordConfirmation){
             axios({
-                method: 'post',
-                url: 'https://pedidos.grupostra.com/api/v1/register',
+                method: 'POST',
+                url: 'https://pedidos.grupostra.com/api/v1/user/register',
                 data: formData,
                 headers: {
                     'Authorization' : `Bearer ${token}`,
@@ -215,7 +222,7 @@ function NewCollaboratorRegister(){
             })
             .then((response) => {
                 alert("Usuário Cadastrado com sucesso!")  
-               /*  window.location = window.location.href; */
+                window.location = window.location.href;
             }).catch(function(error){ 
                 if (error.response) {
                     alert(error.response.data.message)
@@ -225,78 +232,27 @@ function NewCollaboratorRegister(){
             alert("As senhas não coincidem")
         }   
     }
-    var input_cpf = document.getElementById("cpf")
+    
+    function findZipCode(e){
+        e.preventDefault()
+        setFindZipState(true)
+    }
 
     useEffect(() => {
-        input_cpf = document.getElementById("cpf")
-        input_cpf.addEventListener("focus" , function(event) {
-            input_cpf.value = "___.___.___-__"
-            setTimeout(function() {
-                input_cpf.setSelectionRange(0, 0)
-            }, 1)
+        axios.get(`https://viacep.com.br/ws/${userZipCode}/json/`)
+        .then((response)  => {
+            setZipData(response.data)
+            document.querySelector('#address').value = zipData.logradouro
+            document.querySelector('#district').value = zipData.bairro
+            document.querySelector('#city').value = zipData.localidade
+            document.querySelector('#state').value = zipData.uf
+            setUserStreet(zipData.logradouro)
+            setUserCountry(zipData.bairro)
+            setUserCity(zipData.localidade)
+            setUserState(zipData.uf)
+            setFindZipState(false)
         })
-        
-        input_cpf.addEventListener("keydown", function(event) {
-            event.preventDefault()
-            if("0123456789".indexOf(event.key) !== -1
-                && this.value.indexOf("_") !== -1) {
-                    this.value = this.value.replace(/_/, event.key)
-                    const next_index = this.value.indexOf("_")
-                    this.setSelectionRange(next_index, next_index)
-            } else if (event.key === "Backspace") {
-                this.value = this.value.replace(/(\d$)|(\d(?=\D+$))/, "_")
-                const next_index = this.value.indexOf("_")
-                this.setSelectionRange(next_index, next_index)
-            }
-        })
-    }, [userCpf])
-
-    var v_obj
-    var v_fun
-
-    function mascara(o,f){
-        v_obj=o
-        v_fun=f
-        setTimeout(execmascara(),1)
-    }
-    function execmascara(){
-        v_obj.value=v_fun(v_obj.value)
-    }
-    function mtel(v){
-        v=v.replace(/\D/g,""); //Remove tudo o que não é dígito
-        v=v.replace(/^(\d{2})(\d)/g,"($1) $2"); //Coloca parênteses em volta dos dois primeiros dígitos
-        v=v.replace(/(\d)(\d{4})$/,"$1-$2"); //Coloca hífen entre o quarto e o quinto dígitos
-        return v;
-    }
-    function id( el ){
-        return document.getElementById( el );
-    }
-    window.onload = function(){
-        id('phone').onkeyup = function(){
-            mascara( this, mtel );
-        }
-    }
-
-    function formatarMoeda() {
-        var elemento = document.getElementById('salary');
-        var valor = elemento.value;
-        
-        valor = valor + '';
-        valor = parseInt(valor.replace(/[\D]+/g,''));
-        
-        valor = valor + '';
-        
-        valor = valor.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valor.length > 6) {
-            valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        
-        elemento.value = valor;
-        setUserSalary(valor)
-        console.log(valor)
-    }
-
+    }, [findZipState])
 
     useEffect(() => {
         axios.get("https://pedidos.grupostra.com/api/v1/department", config)
@@ -337,8 +293,17 @@ function NewCollaboratorRegister(){
                                 <form onSubmit={handleSubmit}>
                                 <div className="form-register">
                                     <div className="line">
-                                        <Legend value="Nome Completo"/>
-                                        <Input type="text" name="name" id="name" onChange={(e) => setUserName(e.target.value)}/>
+                                        <div className="line_flex">
+                                            <Legend value="Nome Completo"/>
+                                            <Input type="text" name="name" id="name" onChange={(e) => setUserName(e.target.value)}/>
+                                        </div>
+                                        <div className="line_flex">
+                                            <Legend value="Status"/>
+                                            <select name="user-status" id="user-status" className="select_pers" onChange={(e) => setUserSituation(e.target.value)}>
+                                                <option value="Ativo">Ativo</option>
+                                                <option value="Desativado">Desativado</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
@@ -368,11 +333,19 @@ function NewCollaboratorRegister(){
                                             <Legend value="CPF"/>  
                                             <Input type="text" name="cpf" id="cpf" onChange={(e) => setUserCpf(e.target.value)}/>  
                                         </div>
-                                    </div>
-                                    <div className="line">
                                         <div className="line_flex">
                                             <Legend value="RG"/>
                                             <Input type="text" name="rg" id="rg" onChange={(e) => setUserRg(e.target.value)}/>
+                                        </div>
+                                    </div>
+                                    <div className="line">
+                                        <div className="line_flex">
+                                            <Legend value="CBO"/>
+                                            <Input type="text" name="cbo" id="cbo" onChange={(e) => setUserCbo(e.target.value)}/>
+                                        </div>
+                                        <div className="line_flex">
+                                            <Legend value="Matrícula"/>
+                                            <Input type="text" name="matricula" id="matricula" onChange={(e) => setUserRegistration(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Cargo"/>
@@ -402,7 +375,7 @@ function NewCollaboratorRegister(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Permissões"/>
-                                            <select name="permissions" id="permissions" className="select_pers" onChange={(e) => {setUserPermission(setArrayPermissions(arrayPermission => [...arrayPermission, e.target.value]))}}>
+                                            <select name="permissions" id="permissions" className="select_pers" onChange={(e) => setArrayPermissions(arrayPermission => [...arrayPermission, e.target.value])}>
                                                 <option value="#" selected disabled>Permissões</option>
                                                 {
                                                     roles.map((role, i) =>
@@ -425,6 +398,17 @@ function NewCollaboratorRegister(){
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
+                                            <Legend value="Gestor"/>
+                                            <select name="manager" id="manager" className="select_pers" onChange={(e) => setUserManager(e.target.value)}>
+                                                <option value="#" selected disabled>Gestor</option>
+                                                {
+                                                    users.map((user, i) =>
+                                                        <option key={i} value={user.id}>{user.name}</option>
+                                                    )
+                                                }
+                                            </select>
+                                        </div>
+                                        <div className="line_flex">
                                             <Legend value="Data de Admissão"/>
                                             <Input type="date" name="date-admis" id="date-admis" onChange={(e) => setUserAdmissionDate(e.target.value)}/>
                                         </div>
@@ -436,18 +420,7 @@ function NewCollaboratorRegister(){
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" id="salary" onChange={formatarMoeda}/>
-                                        </div>
-                                        <div className="line_flex">
-                                            <Legend value="Gestor"/>
-                                            <select name="manager" id="manager" className="select_pers" onChange={(e) => setUserManager(e.target.value)}>
-                                                <option value="#" selected disabled>Gestor</option>
-                                                {
-                                                    users.map((user, i) =>
-                                                        <option key={i} value={user.id}>{user.name}</option>
-                                                    )
-                                                }
-                                            </select>
+                                            <Input type="text" name="salary" id="salary" onChange={(e) => setUserSalary(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
@@ -455,6 +428,7 @@ function NewCollaboratorRegister(){
                                             <Legend value="CEP"/>
                                             <div className="line_icon">
                                                 <Input type="text" name="cep" id="cep" onChange={(e) => setUserZipCode(e.target.value)}/>
+                                                <a href="#" onClick={findZipCode}><SearchIcon /></a>
                                             </div>
                                         </div>
                                         <div className="line_flex">
@@ -495,7 +469,7 @@ function NewCollaboratorRegister(){
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Telefone"/>
+                                            <Legend value="Telefone Pessoal"/>
                                             <Input type="text" name="phone" id="phone" onChange={(e) => setUserPersonalPhone(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">

@@ -2,6 +2,7 @@ import { Component } from 'react';
 import Ramais from '../ramais/Ramais';
 import ShowRhNews from '../rh_news/ShowRhNews';
 import Aniversario from '../births/Births';
+import OrgChart from '../../components/OrgChart';
 import './Body.css';
 
 class Body extends Component {
@@ -21,7 +22,7 @@ render(){
                     <div className="ramais container">
                         <h3>Ramais e E-mails</h3>
                         <div className="ramais-body">
-                             <Ramais /> 
+                             <a href="/estrutura-organizacao">Hierarquia Organizacional</a>
                         </div>
                     </div>                  
                 </div>

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Posts from '../../components/Posts';
-import Pagination from '../../components/Pagination';
 import { useContext } from 'react'; 
 import { AuthContext } from '../../Auth' 
 import './ShowRhNews.css';
@@ -67,18 +65,18 @@ const ShowRhNews = () => {
   return (
     <div className='container-posts'>
       <Items currentItems={currentItems} />
-        <div className="pagination-items">
-          <ReactPaginate
-            className='list-pagination'
-            breakLabel="..."
-            nextLabel={<NavigateNextIcon />}
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={2}
-            pageCount={pageCount}
-            previousLabel={<NavigateBeforeIcon />}
-            renderOnZeroPageCount={null}
-          />
-        </div>
+      <div className="pagination-items">
+        <ReactPaginate
+          className='list-pagination'
+          breakLabel="..."
+          nextLabel={<NavigateNextIcon />}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={2}
+          pageCount={pageCount}
+          previousLabel={<NavigateBeforeIcon />}
+          renderOnZeroPageCount={null}
+        />
+      </div>
     </div>
   );
 };

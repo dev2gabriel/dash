@@ -1,0 +1,53 @@
+.button-container legend,
+.button-container input{
+    margin-bottom: 10px;
+}
+
+.button-container button{
+    background-color: var(--azul-grupo);
+    transition: .3s;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.button-container button:hover{
+    background-color: var(--azul-grupo-hover);
+    transition: .3s;
+}
+
+.button-container-separete{
+    width: 100%;
+    height: 1px;
+    background-color: lightgray;
+    margin: 20px 0px;
+}
+
+#url-select,
+#url-option-select{
+    width: 100%;
+    border: 1px solid lightgray;
+    font-size: 16px;
+    padding: 8px 0px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.create-link{
+    width: 501px;
+}
+
+.create-link input,
+.create-link button{
+    margin-bottom: 10px;
+}
+
+.create-link button{
+    background-color: var(--azul-grupo);
+    transition: .3s;
+}
+
+.create-link button:hover{
+    background-color: var(--azul-grupo-hover);
+    transition: .3s;
+}

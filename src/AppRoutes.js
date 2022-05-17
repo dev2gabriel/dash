@@ -13,6 +13,8 @@ import LinksComercial from './pages/LinksComercial';
 import EditUser from './pages/EditUser';
 import EditPost from './pages/EditPost';
 import UserProfile from './pages/UserProfile';
+import CreateLink from './pages/CreateLink';
+import OrgStructure from './pages/OrgStructure';
 
 const AppRoutes = () =>{
 
@@ -65,6 +67,12 @@ const AppRoutes = () =>{
                 </Routes>
                 <Routes>
                     <Route exact path="/perfil-usuario/:userId" element={<Private><UserProfile /></Private>} />
+                </Routes>
+                <Routes>
+                    <Route exact path="/cadastrar-link" element={<Private><CreateLink /></Private>} />
+                </Routes>
+                <Routes>
+                    <Route exact path="/estrutura-organizacao" element={<Private><OrgStructure /></Private>} />
                 </Routes>
             </AuthProvider>
         </Router>

@@ -1,10 +1,7 @@
-import { Component } from 'react';
 import './NewCollaborator.css'
 import Header from '../template/header/Header';
 import NavMenu from '../template/nav_menu/NavMenu';
 import { Link } from 'react-router-dom';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import EditIcon from '@mui/icons-material/Edit';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import './LinksComercial.css'
 
@@ -200,7 +197,10 @@ function LinksComercial(){
                 <div className="col-2">
                     <div className="rh-news container">
                         <div className="ramais-body">
-                        <h1>Links Comercial</h1>
+                        <div className="title-rh-news">
+                          <h3>Links Comercial</h3>
+                          <Link to="/cadastrar-link">Cadastrar Link <AddCircleOutlineIcon /></Link>
+                        </div>
                             <div className="content">
                             {arrayLinks.links.map((setor, i) => (
                                 <div key={i}>

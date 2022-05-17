@@ -1,21 +1,18 @@
 import './NewCollaborator.css'
+import './EditUser.css'
 import Header from '../template/header/Header';
 import NavMenu from '../template/nav_menu/NavMenu';
-import { Link } from 'react-router-dom';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RegisterCollaborator from '../template/forms/RegisterCollaborator'
-import CloseIcon from '@mui/icons-material/Close';
+import './NewCollaboratorRegister.css'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Legend from '../components/Legend'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import '../template/forms/RegisterCollaborator.css'
-import SearchIcon from '@mui/icons-material/Search';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useContext } from 'react'; 
 import { AuthContext } from '../Auth' 
 import { useParams } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
 
 function EditUser(){
 
@@ -151,6 +148,8 @@ function EditUser(){
     const [userZipCode, setUserZipCode] = useState()
     const [userStreet, setUserStreet] = useState()
     const [userNumber, setUserNumber] = useState()
+    const [userCbo, setUserCbo] = useState()
+    const [userRegistration, setUserRegistration] = useState()
     const [userCountry, setUserCountry] = useState()
     const [userCity, setUserCity] = useState()
     const [userState, setUserState] = useState()
@@ -160,6 +159,7 @@ function EditUser(){
     const [userEmergencyContactName, setUserEmergencyContactName] = useState()
     const [userEmergencyContactPhone, setUserEmergencyContactPhone] = useState()
     const [userEmergencyContactKinship, setUserEmergencyContactKinship] = useState()
+    const [userSituation, setUserSituation] = useState()
     
     const { token } = useContext(AuthContext);
 
@@ -168,6 +168,11 @@ function EditUser(){
     const [users, setUsers] = useState([])
     const [userById, setUserById] = useState([])
     const [arrayPermission, setArrayPermissions] = useState([])
+
+    const [findZipState, setFindZipState] = useState(false)
+    const [zipData, setZipData] = useState([])
+    const [renderedPermissions, setRenderedPermissions] = useState()
+    const [isTrue, setIsTrue] = useState(false)
 
     const { userId } = useParams();
 
@@ -195,9 +200,11 @@ function EditUser(){
         formData.append('admission_date', userAdmissionDate)
         formData.append('department_id', userDepartment)
         formData.append('manager_id', userManager)
+        formData.append('cbo', userCbo)
+        formData.append('registration', userRegistration)
         formData.append('birth_date', userBirthDate)
         formData.append('level', userLevel)
-        formData.append('permission_id', userPermission)
+        formData.append('roles_id', arrayPermission)
         formData.append('salary', userSalary)
         formData.append('street', userStreet)
         formData.append('zip_code', userZipCode)
@@ -209,17 +216,19 @@ function EditUser(){
         formData.append('emergency_contact_name', userEmergencyContactName)
         formData.append('emergency_contact_phone', userEmergencyContactPhone)
         formData.append('emergency_contact_kinship', userEmergencyContactKinship)
-        formData.append('company_phone', userPersonalPhone)
+        formData.append('personal_phone', userPersonalPhone)
         formData.append('extension_number', userExtensionNumber)
+        formData.append('_method', 'PUT');
 
         if(userPassword === userPasswordConfirmation){
             axios({
-                method: 'post',
-                url: 'https://pedidos.grupostra.com/api/v1/register',
+                method: 'POST',
+                url: `https://pedidos.grupostra.com/api/v1/user/update/${userId}`,
                 data: formData,
                 headers: {
                     'Authorization' : `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    '_method': 'PUT'
                 }
             })
             .then((response) => {
@@ -235,6 +244,28 @@ function EditUser(){
         }   
     }
 
+    function findZipCode(e){
+        e.preventDefault()
+        setFindZipState(true)
+    }
+
+    useEffect(() => {
+        axios.get(`https://viacep.com.br/ws/${userZipCode}/json/`)
+        .then((response)  => {
+            setZipData(response.data)
+            document.querySelector('#address').value = zipData.logradouro
+            document.querySelector('#district').value = zipData.bairro
+            document.querySelector('#city').value = zipData.localidade
+            document.querySelector('#state').value = zipData.uf
+            setUserStreet(zipData.logradouro)
+            setUserCountry(zipData.bairro)
+            setUserCity(zipData.localidade)
+            setUserState(zipData.uf)
+            setFindZipState(false)
+        })
+    }, [findZipState])
+
+    
     useEffect(() => {
         axios.get("https://pedidos.grupostra.com/api/v1/department", config)
         .then((response)  => {
@@ -262,6 +293,89 @@ function EditUser(){
         e.preventDefault()
     }
 
+    function removePermission(e){
+        e.preventDefault();
+        let removed = arrayPermission.indexOf(e.target.text)
+        arrayPermission.splice(removed, 1)
+        setIsTrue(true)
+    }
+
+    useEffect(() => {
+        setRenderedPermissions(
+            <>{
+                arrayPermission?.map((role, i) => 
+                    <li key={i}><a href="#" onClick={removePermission}>{role}</a></li>
+                )
+            }</>
+        )
+        console.log(arrayPermission)
+        setIsTrue(false)
+
+    }, [arrayPermission, isTrue])
+
+    useEffect(() => {
+        setUserName(userById?.user?.name)
+        setUserImg(userById?.user?.photo_url)
+        setUserCompany(userById?.user?.company)
+        setUserCpf(userById?.user?.cpf)
+        setUserRg(userById?.user?.rg)
+        setUserCbo(userById?.user?.cbo)
+        setUserRegistration(userById?.user?.registration)
+        setUserPosition(userById?.user?.position)
+        setUserContract(userById?.user?.contract)
+        setUserLevel(userById?.user?.level)
+        setArrayPermissions(userById?.roles)
+        setUserDeparment(userById?.user?.department?.name)
+        setUserManager(userById?.user?.manager_id)
+        setUserAdmissionDate(userById?.user?.admission_date)
+        setUserBirthDate(userById?.user?.birth_date)
+        setUserSalary(userById?.user?.salaries?.map(index => index.salary))
+        setUserZipCode(userById?.user?.zip_code)
+        setUserStreet(userById?.user?.street)
+        setUserNumber(userById?.user?.number)
+        setUserCountry(userById?.user?.country)
+        setUserCity(userById?.user?.city)
+        setUserState(userById?.user?.state)
+        setUserEmail(userById?.user?.email)
+        setUserPersonalPhone(userById?.user?.personal_phone)
+        setUserExtensionNumber(userById?.user?.extension_number)
+        setUserEmergencyContactName(userById?.user?.emergency_contact_kinship)
+        setUserEmergencyContactPhone(userById?.user?.emergency_contact_phone)
+        setUserEmergencyContactKinship(userById?.user?.emergency_contact_kinship)
+    }, [userById])
+
+    function handleChange(e){
+        setUserName(document.querySelector('#name').value)
+        setUserImg(document.querySelector('#file').files[0])
+        setUserCompany(document.querySelector('#company').value)
+        setUserCpf(document.querySelector('#cpf').value)
+        setUserRg(document.querySelector('#rg').value)
+        setUserCbo(document.querySelector('#cbo').value)
+        setUserRegistration(document.querySelector('#registration').value)
+        setUserPosition(document.querySelector('#position').value)
+        setUserContract(document.querySelector('#contract').value)
+        setUserLevel(document.querySelector('#level').value)
+        setUserPermission(arrayPermission)
+        setUserSituation(document.querySelector('#user-status').value)
+        setUserDeparment(document.querySelector('#department').value)
+        setUserManager(document.querySelector('#manager').value)
+        setUserAdmissionDate(document.querySelector('#date-admis').value)
+        setUserBirthDate(document.querySelector('#date-birth').value)
+        setUserSalary(document.querySelector('#salary').value)
+        setUserZipCode(document.querySelector('#cep').value)
+        setUserStreet(document.querySelector('#address').value)
+        setUserNumber(document.querySelector('#address-number').value)
+        setUserCountry(document.querySelector('#district').value)
+        setUserCity(document.querySelector('#city').value)
+        setUserState(document.querySelector('#state').value)
+        setUserEmail(document.querySelector('#email').value)
+        setUserPersonalPhone(document.querySelector('#phone').value)
+        setUserExtensionNumber(document.querySelector('#ramal').value)
+        setUserEmergencyContactName(document.querySelector('#parent-name').value)
+        setUserEmergencyContactPhone(document.querySelector('#parent-wpp').value)
+        setUserEmergencyContactKinship(document.querySelector('#parent').value)
+    }
+
     return(
         <div id="body-main" className="body-main home open">
             <Header />
@@ -279,28 +393,37 @@ function EditUser(){
                                 <form onSubmit={handleSubmit}>
                                 <div className="form-register">
                                     <div className="line">
-                                        <Legend value="Nome Completo"/>
-                                        <Input type="text" name="name" id="name" placeholder={userById.name} onChange={(e) => setUserName(e.target.value)}/>
+                                        <div className="line_flex">
+                                            <Legend value="Nome Completo"/>
+                                            <Input type="text" name="name" id="name" value={userName} onChange={handleChange}/>
+                                        </div>
+                                        <div className="line_flex">
+                                            <Legend value="Status"/>
+                                            <select name="user-status" id="user-status" value={userSituation} className="select_pers" onChange={handleChange}>
+                                                <option value="Ativo">Ativo</option>
+                                                <option value="Desativado">Desativado</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Foto"/>
                                             <label htmlFor="file" className="input_img">Enviar arquivo <FileUploadIcon /></label>
-                                            <Input type="file" name="file" id="file" onChange={(e) => setUserImg(e.target.files[0])}/>
+                                            <Input type="file" name="file" id="file" onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Senha"/>
-                                            <Input type="password" name="password" id="password" onChange={(e) => setUserPassword(e.target.value)}/>
+                                            <Input type="password" name="password" id="password" onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Confirmação de senha"/>
-                                            <Input type="password" name="password_comfirmation" id="password_comfirmation" onChange={(e) => setUserPasswordConfirmation(e.target.value)}/>
+                                            <Input type="password" name="password_comfirmation" id="password_comfirmation" onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Empresa"/>
-                                            <select name="company" id="company" className="select_pers" onChange={(e) => setUserCompany(e.target.value)}>
+                                            <select name="company" id="company" value={userCompany} className="select_pers" onChange={handleChange}>
                                                 <option value="#" selected disabled>Selecione a empresa</option>
                                                 <option value="stra">stra</option>
                                                 <option value="strafer">strafer</option>
@@ -308,23 +431,31 @@ function EditUser(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="CPF"/>  
-                                            <Input type="text" name="cpf" id="cpf" placeholder={userById.cpf} onChange={(e) => setUserCpf(e.target.value)}/>  
+                                            <Input type="text" name="cpf" id="cpf" value={userCpf} onChange={handleChange}/>  
+                                        </div>
+                                        <div className="line_flex">
+                                            <Legend value="RG"/>
+                                            <Input type="text" name="rg" id="rg" value={userRg} onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="RG"/>
-                                            <Input type="text" name="rg" id="rg" placeholder={userById.rg} onChange={(e) => setUserRg(e.target.value)}/>
+                                            <Legend value="CBO"/>
+                                            <Input type="text" name="cbo" id="cbo" value={userCbo} onChange={handleChange}/>
+                                        </div>
+                                        <div className="line_flex">
+                                            <Legend value="Matrícula"/>
+                                            <Input type="text" name="registration" id="registration" value={userRegistration} onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Cargo"/>
-                                            <Input type="text" name="position" id="position" placeholder={userById.position} onChange={(e) => setUserPosition(e.target.value)}/>
+                                            <Input type="text" name="position" id="position" value={userPosition} onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Contrato"/>
-                                            <select name="contract" id="contract" className="select_pers" onChange={(e) => setUserContract(e.target.value)}>
+                                            <select name="contract" id="contract" value={userContract} className="select_pers" onChange={handleChange}>
                                                 <option value="#" selected disabled>Tipo de contrato</option>
                                                 <option value="Efetivo">Efetivo</option>
                                                 <option value="Estágio">Estágio</option>
@@ -333,7 +464,7 @@ function EditUser(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Level"/>
-                                            <select name="level" id="level" className="select_pers" onChange={(e) => setUserLevel(e.target.value)}>
+                                            <select name="level" id="level" className="select_pers" value={userLevel} onChange={handleChange}>
                                                 <option value="#" selected disabled>Posição</option>
                                                 <option value="CEO">CEO</option>
                                                 <option value="Colaborador">Colaborador</option>
@@ -343,19 +474,8 @@ function EditUser(){
                                             </select>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Permissões"/>
-                                            <select name="permissions" id="permissions" className="select_pers" onChange={(e) => {setUserPermission(setArrayPermissions(arrayPermission => [...arrayPermission, e.target.value]))}}>
-                                                <option value="#" selected disabled>Permissões</option>
-                                                {
-                                                    roles.map((role, i) =>
-                                                        <option key={i} value={role.name}>{role.name}</option>
-                                                    )
-                                                }
-                                            </select>
-                                        </div>
-                                        <div className="line_flex">
                                             <Legend value="Departamento"/>
-                                            <select name="department" id="department" className="select_pers" onChange={(e) => setUserDeparment(e.target.value)}>
+                                            <select name="department" id="department" value={userDepartment} className="select_pers" onChange={handleChange}>
                                                 <option value="#" selected disabled>Departamento</option>
                                                 {
                                                     dataDepartment.map((department, i) =>
@@ -367,63 +487,91 @@ function EditUser(){
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
+                                            <Legend value="Gestor"/>
+                                            <select name="manager" id="manager" value={userManager} className="select_pers" onChange={handleChange}>
+                                                <option value="#" selected disabled>Gestor</option>
+                                                {
+                                                    users.map((user, i) =>
+                                                        <option key={i} value={user.id}>{user.name}</option>
+                                                    )
+                                                }
+                                            </select>
+                                        </div>
+                                        <div className="line_flex">
                                             <Legend value="Data de Admissão"/>
-                                            <Input type="date" name="date-admis" id="date-admis" onChange={(e) => setUserAdmissionDate(e.target.value)}/>
+                                            <Input type="text" name="date-admis" id="date-admis" value={userAdmissionDate} onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Data de Nascimento"/>
-                                            <Input type="date" name="date-birth" id="date-birth" onChange={(e) => setUserBirthDate(e.target.value)}/>
+                                            <Input type="text" name="date-birth" id="date-birth" value={userBirthDate} onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" placeholder={userById.salary} id="salary" onChange={(e) => setUserSalary(e.target.value)}/>
-                                        </div>
-                                        <div className="line_flex">
-                                            <Legend value="Gestor"/>
-                                            <select name="manager" id="manager" className="select_pers" onChange={(e) => setUserManager(e.target.value)}>
-                                                <option value="#" selected disabled>Gestor</option>
+                                            <Legend value="Permissões"/>
+                                            <select name="permissions" id="permissions" className="select_pers" onChange={(e) => {setUserPermission(setArrayPermissions(arrayPermission => [...arrayPermission, e.target.value]))}}>
+                                                <option value="#" selected disabled>Permissões</option>
                                                 {
-                                                    users.map((user, i) =>
-                                                        <option key={i} value={user?.id}>{user?.name}</option>
+                                                    roles.map((role, i) =>
+                                                        <option key={i} value={role.name}>{role.name}</option>
                                                     )
                                                 }
                                             </select>
+                                            <div className="permissions_enabled">
+                                            <Legend value="Permissões Atribuídas" />
+                                                <ul>
+                                                    {
+                                                        renderedPermissions
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="line_flex">
+                                            <Legend value="Salário Atual"/>
+                                            <Input type="text" name="salary" id="salary" value={userSalary} onChange={handleChange}/>
+                                            <div className="last_salaries">
+                                                <Legend value="Últimos Sálarios" />
+                                                <ul>
+                                                    {userById?.user?.salaries?.map((salary, i) => 
+                                                        <li key={i}>{salary?.salary}</li>
+                                                    )}
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="CEP"/>
                                             <div className="line_icon">
-                                                <Input type="text" name="cep" id="cep" placeholder={userById.zip_code} onChange={(e) => setUserZipCode(e.target.value)}/>
+                                                <Input type="text" name="cep" id="cep" value={userZipCode} onChange={handleChange}/>
+                                                <a href="#" onClick={findZipCode}><SearchIcon /></a>
                                             </div>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Endereço"/>
-                                            <Input type="text" name="address" id="address" placeholder={userById.street} onChange={(e) => setUserStreet(e.target.value)}/>
+                                            <Input type="text" name="address" id="address" value={userStreet} onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Número"/>
-                                            <Input type="number" name="address-number" placeholder={userById.number} id="address-number" onChange={(e) => setUserNumber(e.target.value)}/>
+                                            <Input type="number" name="address-number" value={userNumber} id="address-number" onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Bairro"/>
-                                            <Input type="text" name="district" id="district" placeholder={userById.country} onChange={(e) => setUserCountry(e.target.value)}/>
+                                            <Input type="text" name="district" id="district" value={userCountry} onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Cidade"/>
-                                            <Input type="text" name="city" id="city" placeholder={userById.city} onChange={(e) => setUserCity(e.target.value)}/>
+                                            <Input type="text" name="city" id="city" value={userCity} onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Estado"/>
-                                            <select name="state" id="state" className="select_pers" onChange={(e) => setUserState(e.target.value)}>
+                                            <select name="state" id="state" className="select_pers" value={userState} onChange={handleChange}>
                                                 <option value="#" selected disabled>Estado</option>
                                                 {
                                                     states.state.map((state, i) =>
-                                                        <option key={i} value={state.sigla}>{state.name}</option>
+                                                        <option key={i} value={state.sigla}>{state.sigla}</option>
                                                     )
                                                 }
                                             </select>
@@ -432,17 +580,17 @@ function EditUser(){
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Email Empresarial"/>
-                                            <Input type="email" name="email" id="email" placeholder={userById.email} onChange={(e) => setUserEmail(e.target.value)}/>
+                                            <Input type="email" name="email" id="email" value={userEmail} onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Telefone"/>
-                                            <Input type="text" name="phone" id="phone" placeholder={userById.personal_phone} onChange={(e) => setUserPersonalPhone(e.target.value)}/>
+                                            <Legend value="Telefone Pessoal"/>
+                                            <Input type="text" name="phone" id="phone" value={userPersonalPhone} onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Ramal"/>
-                                            <Input type="number" name="ramal" id="ramal" placeholder={userById.extension_number} onChange={(e) => setUserExtensionNumber(e.target.value)}/>
+                                            <Input type="number" name="ramal" id="ramal" value={userExtensionNumber} onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
@@ -453,23 +601,23 @@ function EditUser(){
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Nome"/>
-                                            <Input type="text" name="parent-name" id="parent-name" onChange={(e) => setUserEmergencyContactName(e.target.value)}/>
+                                            <Input type="text" name="parent-name" id="parent-name" value={userEmergencyContactName} onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Whatsapp"/>
-                                            <Input type="text" name="parent-wpp" id="parent-wpp" onChange={(e) => setUserEmergencyContactPhone(e.target.value)}/>
+                                            <Input type="text" name="parent-wpp" id="parent-wpp" value={userEmergencyContactPhone} onChange={handleChange}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Parentesco"/>
-                                            <Input type="text" name="parent" id="parent" onChange={(e) => setUserEmergencyContactKinship(e.target.value)}/>
+                                            <Input type="text" name="parent" id="parent" value={userEmergencyContactKinship} onChange={handleChange}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <a className="clear-fields" onClick={handleClearFields} >Limpar Campos</a>
+                                            <a className="clear-fields" onClick={handleClearFields} >Resetar Campos</a>
                                         </div>
                                         <div className="line_flex">
-                                            <Button type="submit"  value="Cadastrar" className="submit-fields" onClick={submitFields} />
+                                            <Button type="submit"  value="Atualizar Cadastro" className="submit-fields" onClick={submitFields} />
                                         </div>
                                     </div>
                                 </div>

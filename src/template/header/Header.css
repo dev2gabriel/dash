@@ -29,6 +29,7 @@
     flex-direction:row;
     justify-content:flex-end;
     align-items:center;
+    position: relative;
 }
 
 .nav-toggle{
@@ -161,6 +162,8 @@
     background-color: unset;
     outline: none;
     cursor: pointer;
+    color: black;
+    width: max-content;
 }
 
 .user-menu button{
@@ -171,4 +174,72 @@
 .user-menu button:hover{
     font-weight: bold;
     transition: .2s;
+}
+
+.nav-notifications img{
+    width: 30px;
+    margin-right: 10px;
+}
+
+.modal-notifications{
+    position: absolute;
+    top: 50px;
+    left: -260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgb(0 0 0 / 10%);
+    transition: .3s;
+    opacity: 0;
+    transform: translateY(-100%);
+    z-index: -99999999;
+}
+
+.notifications-container{
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    justify-content: space-between
+}
+
+.notifications-line{
+    display: flex;
+    align-items: center;
+    height: 60px;
+}
+
+.left-color{
+    width: 5px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: red;
+    margin-right: 15px;
+}
+
+.icon-color{
+    margin-right: 15px;
+}
+
+.icon-color svg{
+    width: 30px;
+    height: 30px;
+    color: red;
+}
+
+.text-info h1{
+    font-size: 16px;
+}
+
+.text-info p{
+    font-size: 14px;
+    color: rgb(82, 82, 82);
+}
+
+.notifications-on{
+    opacity: 1;
+    transform: translateY(0%);
+    transition: .3s;
 }

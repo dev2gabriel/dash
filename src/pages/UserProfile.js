@@ -153,7 +153,7 @@ function UserProfile(){
                             <div className="rh-news container">
                                 <div className="user-header">
                                     <div className="user-img">
-                                        <img src={data.photo_url} alt="" srcset="" />
+                                        <img src={data?.user?.photo_url} alt="" />
                                     </div>
                                 </div>
                                 <div className="user-info">
@@ -161,31 +161,31 @@ function UserProfile(){
                                         <div className="line-icon">
                                             <PersonIcon />
                                         </div>
-                                        <p>{data?.name}</p>
+                                        <p>{data?.user?.name}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <object data={SectorIcon}/>
                                         </div>
-                                        <p>{data.department?.name}</p>
+                                        <p>{data?.user?.department?.name}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <object data={OfficeIcon}/>
                                         </div>
-                                        <p>{data?.position}</p>
+                                        <p>{data?.user?.position}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <EmailIcon />
                                         </div>
-                                        <p>{data?.email}</p>
+                                        <p>{data?.user?.email}</p>
                                     </div>
                                     <div className="line-user">
                                         <div className="line-icon">
                                             <PhoneInTalkIcon />
                                         </div>
-                                        <p>Ramal {data?.extension_number}</p>
+                                        <p>Ramal {data?.user?.extension_number}</p>
                                     </div>
                                 </div>
                             </div>

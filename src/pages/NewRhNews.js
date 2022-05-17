@@ -21,6 +21,7 @@ function NewRhNews(){
     const [subTitle, setSubTitle] = useState()
     const [textBody, setTextBody] = useState(content)
     const [data, setData] = useState([])
+    const [flag, setFlag] = useState()
     
     const { token } = useContext(AuthContext);
 
@@ -35,12 +36,38 @@ function NewRhNews(){
         headers: { Authorization: `Bearer ${token}` }
     }
 
+    function submitDraft(){
+        const photoData = new FormData()
+        photoData.append('title', title)
+        photoData.append('image', document.querySelector('input[type=file]').files[0])
+        photoData.append('body', textBody)
+        photoData.append('subtitle', subTitle)
+        photoData.append('flag', flag)
+        photoData.append('is_published', 0)
+        axios({
+            method: 'post',
+            url: 'https://pedidos.grupostra.com/api/v1/post/create',
+            data: photoData,
+            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+        })
+        .then((response) => {
+            alert("Rascunho salvo com sucesso!")
+            window.location = window.location.href;
+        }).catch(function(error){ 
+            if (error.response) {
+                alert(error.response.data.message)
+            }
+        })
+    }
+
     function submitFields(){
         const photoData = new FormData()
         photoData.append('title', title)
         photoData.append('image', document.querySelector('input[type=file]').files[0])
         photoData.append('body', textBody)
         photoData.append('subtitle', subTitle)
+        photoData.append('flag', flag)
+        photoData.append('is_published', 1)
         axios({
             method: 'post',
             url: 'https://pedidos.grupostra.com/api/v1/post/create',
@@ -49,8 +76,7 @@ function NewRhNews(){
         })
         .then((response) => {
             alert("News Cadastrado com sucesso!")
-            console.log(photoData)
-            /* window.location = window.location.href; */
+            window.location = window.location.href;
         }).catch(function(error){ 
             if (error.response) {
                 alert(error.response.data.message)
@@ -65,9 +91,13 @@ function NewRhNews(){
         })
       }, []);
 
-      function handleEditItem(e){
+      function handleEditItem(e, id){
         e.preventDefault()
-        let id = e.target.id
+        window.location = `/editar-post/${id}`
+      }
+
+      function handleDeleteItem(e, id){
+        e.preventDefault()
         axios.delete(`https://pedidos.grupostra.com/api/v1/post/delete/${id}`, configB)
         .then((response) => {
           alert("News deletado com sucesso")
@@ -84,7 +114,7 @@ function NewRhNews(){
             </div>
             <div className="body"></div>
                 <div className="row">
-                    <div className="col-2">
+                    <div className="col-1" id="col-1-min">
                         <div className="rh-news container">
                                 <div className="container_rh">
                                     <h1 className="title_register">Cadastrar Rh News</h1>
@@ -97,7 +127,7 @@ function NewRhNews(){
                                             <div className="line_flex">
                                                 <Legend value="Sub Título" />
                                                 <Input type="text" name="sub-title" id="sub-title" onChange={(e) => setSubTitle(e.target.value)}/>
-                                                </div>
+                                            </div>
                                         </div>
                                         <div className="line_flex">
                                             <label htmlFor="file" className="input_img">Enviar Imagem <FileUploadIcon /></label>
@@ -116,31 +146,51 @@ function NewRhNews(){
                                         </div>
                                         <div className="line">
                                             <div className="line_flex">
+                                                <Legend value="Tipo de news (Flag)" />
+                                                <select name="flag" id="falg" onChange={(e) => setFlag(e.target.value)}>
+                                                    <option value="0">Aniversários</option>
+                                                    <option value="1">Artigos</option>
+                                                    <option value="2">Avisos importantes</option>
+                                                    <option value="3">Eventos</option>
+                                                    <option value="4">News</option>
+                                                    <option value="5">Novos colaboradores</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="line">
+                                            <div className="line_flex">
                                                 <a onClick={() => document.location.reload(true)} >Limpar Campos</a>
                                             </div>
                                             <div className="line_flex">
-                                                <Button type="submit" value="Cadastrar" onClick={submitFields} />
+                                                <Button type="submit" value="Salvar Rascunho" onClick={submitDraft} />
+                                            </div>
+                                            <div className="line_flex">
+                                                <Button type="submit" value="Publicar" onClick={submitFields} />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-1">
-                            <div className="rh-news container">
-                                <h1>Últimos lançados</h1>
-                                <div className='last_news'> 
-                                {
-                                    data.map((index, i) => 
-                                        <div key={i} className="line_last">
-                                            <p>{index?.title}</p>
-                                            <div className="date_div">
-                                                <a href="#" id={index.id} onClick={(e) => handleEditItem(e)}>Excluir <HighlightOffIcon /></a>
-                                                <p>{index?.created_at.slice(0, 10).split('-').reverse().join('/')}</p>
+                        <div className="new-rh-news">
+                            <div className="col-1">
+                                <div className="rh-news container">
+                                    <h1>Últimos lançados</h1>
+                                    <div className='last_news'> 
+                                    {
+                                        data.map((index, i) => 
+                                            <div key={i} className="line_last">
+                                                <p>{index?.title}</p>
+                                                <p>{index?.is_published === 0 ? "Rascunho" : "Publicado"}</p>
+                                                <div className="date_div">
+                                                    <a href="#" onClick={(e) => handleEditItem(e, index.id)}> <EditIcon /></a>
+                                                    <a href="#" onClick={(e) => handleDeleteItem(e, index.id)}> <HighlightOffIcon /></a>
+                                                    <p>{index?.created_at.slice(0, 10).split('-').reverse().join('/')}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ).reverse()
-                                }
+                                        ).reverse()
+                                    }
+                                    </div>
                                 </div>
                             </div>
                         </div>

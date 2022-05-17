@@ -1,0 +1,44 @@
+.form-register .line{
+    display: flex;
+    flex-direction: unset;
+}
+
+.images-show legend{
+    margin-bottom: 20px;
+}
+
+.images-show img{
+    margin-bottom: 30px;
+}
+
+.permissions_enabled,
+.last_salaries{
+    background-color: rgb(241, 241, 241);
+    padding: 5px;
+}
+
+.permissions_enabled ul,
+.last_salaries ul{
+    list-style: none;
+    display: flex;
+}
+
+.permissions_enabled ul li,
+.last_salaries ul li{
+    margin-right: 20px;
+}
+
+.permissions_enabled legend,
+.last_salaries legend{
+    margin: 5px 0px;
+}
+
+.permissions_enabled ul li a{
+    font-size: 13px;
+}
+
+.permissions_enabled ul li a:hover{
+    color: rgb(85, 85, 85);
+    transition: .3s;
+    text-decoration: line-through;
+}

@@ -3,11 +3,8 @@ import Header from '../template/header/Header';
 import NavMenu from '../template/nav_menu/NavMenu';
 import { Link } from 'react-router-dom';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RegisterCollaborator from '../template/forms/RegisterCollaborator'
-import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Pagination from '../components/Pagination'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import EditIcon from '@mui/icons-material/Edit';
 import Legend from '../components/Legend';
@@ -44,15 +41,13 @@ function NewColaborator(){
         })
   }, [isRendered])
 
-  function userProfile(e){
+  function userProfile(e, id){
     e.preventDefault()
-    let id = e.target.id
     window.location = `/perfil-usuario/${id}`
   }
 
-  function handleEditItem(e){
+  function handleEditItem(e, id){
     e.preventDefault()
-    let id = e.target.id
     window.location = `/editar-usuario/${id}`
   }
 
@@ -60,13 +55,12 @@ function NewColaborator(){
     headers: { Authorization: `Bearer ${token}` }
   }
 
-  function handleDeleteItem(e){
+  function handleDeleteItem(e, id){
     e.preventDefault()
-    let id = e.target.id
     axios.delete(`https://pedidos.grupostra.com/api/v1/user/delete/${id}`, configB)
     .then((response) => {
         alert("Usuário deletado com sucesso")
-        /* window.location = window.location.href */
+        window.location = window.location.href
     })
   }
 
@@ -99,9 +93,9 @@ function NewColaborator(){
           <div key={i} className="col-line">
             <p>{item.name}</p> 
             <div className="line-opt">
-              <a href="#" id={item.id} onClick={(e) => userProfile(e)}>Ver Perfil <PersonIcon /></a>
-              <a href="#" id={item.id} onClick={(e) => handleEditItem(e)}>Editar <EditIcon /></a>
-              <a href="#" id={item.id} onClick={(e) => handleDeleteItem(e)}>Excluir <HighlightOffIcon /></a>
+              <a href="#" onClick={(e) => userProfile(e, item.id)}>Ver Perfil <PersonIcon /></a>
+              <a href="#" onClick={(e) => handleEditItem(e, item.id)}>Editar <EditIcon /></a>
+              <a href="#" onClick={(e) => handleDeleteItem(e, item.id)}>Excluir <HighlightOffIcon /></a>
             </div>
           </div>
         )
