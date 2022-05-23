@@ -16,6 +16,9 @@ import UserProfile from './pages/UserProfile';
 import CreateLink from './pages/CreateLink';
 import OrgStructure from './pages/OrgStructure';
 
+import TesteOpen from './pages/TesteOpen'
+import TesteClose from './pages/TesteClose'
+
 const AppRoutes = () =>{
 
     const Private = ({children}) =>{
@@ -73,6 +76,12 @@ const AppRoutes = () =>{
                 </Routes>
                 <Routes>
                     <Route exact path="/estrutura-organizacao" element={<Private><OrgStructure /></Private>} />
+                </Routes>
+                <Routes>
+                    <Route exact path="/teste-open" element={<TesteOpen />} />
+                </Routes>
+                <Routes>
+                    <Route exact path="/teste-close" element={<Private><TesteClose /></Private>} />
                 </Routes>
             </AuthProvider>
         </Router>

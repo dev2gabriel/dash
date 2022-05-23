@@ -24,6 +24,10 @@ function Login(){
         axios.post("https://pedidos.grupostra.com/api/v1/login", body)
         .then((response) => {
             login(response.data);
+        }).catch(function(error){ 
+            if (error.response) {
+                alert(error.response.data.message)
+            }
         })
     }
 
