@@ -26,6 +26,7 @@ const ShowRhNews = () => {
     const [pageCount, setPageCount] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(2);
     const [itemOffset, setItemOffset] = useState(0);
+    const [selectedFilter, setSelectedFilter] = useState("news");
 
     const [txtBody, setTxtBody] = useState();
   
@@ -46,7 +47,19 @@ const ShowRhNews = () => {
       return (
         <>
           {
-            currentItems.map((item, i) =>
+            selectedFilter ? currentItems.filter(current => current.tag === selectedFilter).filter(current => current.is_published === 1).map((item, i) =>
+              <div className='new-rh-container' key={i}>
+                <h1>{item.title}</h1>
+                <img src={item.image} alt="" />
+                <div className="text-body">
+                  {
+                    <li dangerouslySetInnerHTML={{ __html: item.body }} />
+                  }
+                </div>
+              </div>
+            )
+              :
+              currentItems.filter(current => current.is_published === 1).map((item, i) =>
               <div className='new-rh-container' key={i}>
                 <h1>{item.title}</h1>
                 <img src={item.image} alt="" />
@@ -64,6 +77,17 @@ const ShowRhNews = () => {
     
   return (
     <div className='container-posts'>
+      <div className="filter-news">
+        <p>Filtrar por </p>
+        <select name="filter-news" id="filter-news" className="select_pers" onChange={(e) => setSelectedFilter(e.target.value)} >
+          <option value="birthday_person">Aniversários</option>
+          <option value="article">Artigos</option>
+          <option value="important_notices">Avisos importantes</option>
+          <option value="event">Eventos</option>
+          <option value="news" selected>News</option>
+          <option value="new_collaborators">Novos colaboradores</option>
+        </select>
+      </div>
       <Items currentItems={currentItems} />
       <div className="pagination-items">
         <ReactPaginate

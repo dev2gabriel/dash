@@ -70,7 +70,7 @@
 }
 
 .select_pers{
-    width: 100%;
+    width: 100%!important;
     border: 1px solid lightgray;
     font-size: 16px;
     padding: 8px 0px;
@@ -114,6 +114,7 @@
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
+    transition: .3s;
 }
 
 .form-register button{
@@ -126,8 +127,19 @@
     border: 0px;
     font-size: 16px;
     cursor: pointer;
+    transition: .3s;
 }
 
 .line:last-child{
     margin-top: 30px;
+}
+
+.clear-fields:hover{
+    background-color: var(--azul-grupo-hover);
+    transition: .3s;
+}
+
+.form-register button:hover{
+    background-color: var(--verde-grupo-hover);
+    transition: .3s;
 }

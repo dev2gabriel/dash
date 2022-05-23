@@ -10,6 +10,7 @@ function Births(){
     const [data, setData] = useState([])
     const date = new Date();
     const currentMonth = date.getMonth() + 1; 
+    const arrBirthFilter = [];
 
     useEffect(() => {
         axios.get("https://pedidos.grupostra.com/api/v1/table/users")
@@ -17,6 +18,12 @@ function Births(){
             setData(response.data)  
         })
       }, []);
+
+      useEffect(() =>{
+        data.filter(month => parseInt(month.birth_date.slice(5, 7)) === currentMonth).map((filteredBirth) => (
+          arrBirthFilter.push(filteredBirth)
+        ))
+      }, [data])
       
       const [currentItems, setCurrentItems] = useState([]);
       const [pageCount, setPageCount] = useState(0);
@@ -24,27 +31,26 @@ function Births(){
       const [itemOffset, setItemOffset] = useState(0);
       
       useEffect(() => {
-        // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        setCurrentItems(data.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(data.length / itemsPerPage));
+        setCurrentItems(arrBirthFilter.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(arrBirthFilter.length / itemsPerPage));
       }, [itemOffset, itemsPerPage, data]);
     
-      // Invoke when user click to request another page.
+
       const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % data.length;
+        const newOffset = (event.selected * itemsPerPage) % arrBirthFilter.length;
         setItemOffset(newOffset);
       }  
   
       function Items({ currentItems }) {
         return (
           <>
-            {currentItems.filter(month => parseInt(month.birth_date.slice(5, 7)) === currentMonth).map((filteredBirth, index) => (
+            {currentItems.map((item, index) => (
                 <div key={index} className="aniversario-container">
                     <div className="birthday-photo">
-                      <img src={filteredBirth.photo_url} alt="" srcset="" />
+                      <img src={item?.photo_url} alt="" />
                     </div>
-                    <div className="birthday-name">{filteredBirth.name}, nosso(a) {filteredBirth.position}, faz {2022 - filteredBirth.birth_date.slice(0, 4)} anos neste mês, no dia {filteredBirth.birth_date.slice(5, 7)}.</div>
+                    <div className="birthday-name">{item?.name.split(" ", 1)}, nosso(a) {item?.position}, faz {2022 - item?.birth_date.slice(0, 4)} anos neste mês, no dia {item?.birth_date.slice(5, 7)}.</div>
                 </div>
             ))}
           </>

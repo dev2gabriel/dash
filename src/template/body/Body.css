@@ -97,3 +97,9 @@
     50%  {transform:scale(1.05)}
     100% {transform:scale(1)}
   }
+
+
+.ramais-body a:hover{
+    transition: .3s;
+    color: rgb(102, 102, 102);
+}

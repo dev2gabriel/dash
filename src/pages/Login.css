@@ -37,14 +37,6 @@
     margin-bottom: 20px;
 }
 
-.form > div{
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 20px;
-    justify-content: center;
-}
-
 .form{
     width: 100%;
     display: flex;
@@ -124,4 +116,9 @@
 .login_right button:hover{
     background-color: var(--azul-grupo-hover);
     transition: .3s;
+}
+
+.credentials-line{
+    flex-direction: column;
+    text-align: left!important;
 }

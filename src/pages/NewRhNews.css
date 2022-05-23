@@ -120,7 +120,8 @@ input[type="file"]{
     margin-top: 10px;
     outline: none;
     border: 0;
-    cursor: pointer
+    cursor: pointer;
+    transition: .3s;
 }
 
 .form .line a{
@@ -135,6 +136,7 @@ input[type="file"]{
     outline: none;
     cursor: pointer;
     text-decoration: none;
+    transition: .3s;
 }
 
 .rh-news.container h1{
@@ -161,6 +163,10 @@ input[type="file"]{
     text-align: center;
 }
 
+.date_div p{
+    margin-right: 5px;
+}
+
 .date_div a{
     margin-right: 5px;
     transition: .3s;
@@ -178,12 +184,13 @@ input[type="file"]{
 }
 
 .line .line_flex select{
-    width: 100%;
+    width: 100%!important;
     border: 1px solid lightgray;
     font-size: 16px;
     padding: 8px 0px;
     outline: none;
     cursor: pointer;
+    margin-left: 0!important;
 }
 
 #col-1-min{
@@ -192,4 +199,18 @@ input[type="file"]{
 
 .new-rh-news{
     width: 530px;
+}
+
+.title-paragrahp{
+    max-width: 200px;
+}
+
+.form .line button:hover{
+    background-color: var(--verde-grupo-hover);
+    transition: .3s;
+}
+
+.form .line a:hover{
+    background-color: var(--azul-grupo-hover);
+    transition: .3s;
 }

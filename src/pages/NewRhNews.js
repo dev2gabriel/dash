@@ -38,12 +38,20 @@ function NewRhNews(){
 
     function submitDraft(){
         const photoData = new FormData()
-        photoData.append('title', title)
-        photoData.append('image', document.querySelector('input[type=file]').files[0])
-        photoData.append('body', textBody)
-        photoData.append('subtitle', subTitle)
-        photoData.append('flag', flag)
-        photoData.append('is_published', 0)
+        if(rhImage === ""){
+            photoData.append('title', title)
+            photoData.append('body', textBody)
+            photoData.append('subtitle', subTitle)
+            photoData.append('tag', flag)
+            photoData.append('is_published', 0)
+        } else {
+            photoData.append('title', title)
+            photoData.append('body', textBody)
+            photoData.append('image', rhImage)
+            photoData.append('subtitle', subTitle)
+            photoData.append('tag', flag)
+            photoData.append('is_published', 0)
+        }
         axios({
             method: 'post',
             url: 'https://pedidos.grupostra.com/api/v1/post/create',
@@ -62,12 +70,21 @@ function NewRhNews(){
 
     function submitFields(){
         const photoData = new FormData()
-        photoData.append('title', title)
-        photoData.append('image', document.querySelector('input[type=file]').files[0])
-        photoData.append('body', textBody)
-        photoData.append('subtitle', subTitle)
-        photoData.append('flag', flag)
-        photoData.append('is_published', 1)
+        if(rhImage === ""){
+            photoData.append('title', title)
+            photoData.append('body', textBody)
+            photoData.append('subtitle', subTitle)
+            photoData.append('tag', flag)
+            photoData.append('is_published', 1)
+        } else {
+            photoData.append('title', title)
+            photoData.append('body', textBody)
+            photoData.append('image', rhImage)
+            photoData.append('subtitle', subTitle)
+            photoData.append('tag', flag)
+            photoData.append('is_published', 1)
+        }
+
         axios({
             method: 'post',
             url: 'https://pedidos.grupostra.com/api/v1/post/create',
@@ -148,12 +165,13 @@ function NewRhNews(){
                                             <div className="line_flex">
                                                 <Legend value="Tipo de news (Flag)" />
                                                 <select name="flag" id="falg" onChange={(e) => setFlag(e.target.value)}>
-                                                    <option value="0">Aniversários</option>
-                                                    <option value="1">Artigos</option>
-                                                    <option value="2">Avisos importantes</option>
-                                                    <option value="3">Eventos</option>
-                                                    <option value="4">News</option>
-                                                    <option value="5">Novos colaboradores</option>
+                                                    <option value="#" selected disabled>Selecione uma categoria</option>
+                                                    <option value="birthday_person">Aniversários</option>
+                                                    <option value="article">Artigos</option>
+                                                    <option value="important_notices">Avisos importantes</option>
+                                                    <option value="event">Eventos</option>
+                                                    <option value="news">News</option>
+                                                    <option value="new_collaborators">Novos colaboradores</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -180,9 +198,11 @@ function NewRhNews(){
                                     {
                                         data.map((index, i) => 
                                             <div key={i} className="line_last">
-                                                <p>{index?.title}</p>
-                                                <p>{index?.is_published === 0 ? "Rascunho" : "Publicado"}</p>
+                                                <div className="title-paragrahp">
+                                                    <p>{index?.title}</p>
+                                                </div>
                                                 <div className="date_div">
+                                                    <p>{index?.is_published === 0 ? "Rascunho" : "Publicado"}</p>
                                                     <a href="#" onClick={(e) => handleEditItem(e, index.id)}> <EditIcon /></a>
                                                     <a href="#" onClick={(e) => handleDeleteItem(e, index.id)}> <HighlightOffIcon /></a>
                                                     <p>{index?.created_at.slice(0, 10).split('-').reverse().join('/')}</p>

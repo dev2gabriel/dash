@@ -180,6 +180,7 @@ function NewCollaboratorRegister(){
     function submitFields(){ 
         let formData = new FormData()
         formData.append('name', userName)
+        formData.append('active', userSituation)
         formData.append('email', userEmail)
         formData.append('password', userPassword)
         formData.append('password_confirmation', userPasswordConfirmation)
@@ -195,7 +196,7 @@ function NewCollaboratorRegister(){
         formData.append('registration', userRegistration)
         formData.append('birth_date', userBirthDate)
         formData.append('level', userLevel)
-        formData.append('permission_id', arrayPermission)
+        formData.append('roles_id', arrayPermission)
         formData.append('salary', userSalary)
         formData.append('street', userStreet)
         formData.append('zip_code', userZipCode)
@@ -300,8 +301,8 @@ function NewCollaboratorRegister(){
                                         <div className="line_flex">
                                             <Legend value="Status"/>
                                             <select name="user-status" id="user-status" className="select_pers" onChange={(e) => setUserSituation(e.target.value)}>
-                                                <option value="Ativo">Ativo</option>
-                                                <option value="Desativado">Desativado</option>
+                                                <option value="1">Ativo</option>
+                                                <option value="0">Desativado</option>
                                             </select>
                                         </div>
                                     </div>
@@ -358,7 +359,7 @@ function NewCollaboratorRegister(){
                                             <select name="contract" id="contract" className="select_pers" onChange={(e) => setUserContract(e.target.value)}>
                                                 <option value="#" selected disabled>Tipo de contrato</option>
                                                 <option value="Efetivo">Efetivo</option>
-                                                <option value="Estágio">Estágio</option>
+                                                <option value="Estagio">Estágio</option>
                                                 <option value="Tercerizado PJ">Tercerizado PJ</option>
                                             </select>
                                         </div>

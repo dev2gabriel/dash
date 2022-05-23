@@ -130,7 +130,7 @@ function EditUser(){
     }
 
     const [userName, setUserName] = useState()
-    const [userImg, setUserImg] = useState()
+    const [userImg, setUserImg] = useState("")
     const [userPassword, setUserPassword] = useState()
     const [userPasswordConfirmation, setUserPasswordConfirmation] = useState()
     const [userCompany, setUserCompany] = useState()
@@ -160,6 +160,7 @@ function EditUser(){
     const [userEmergencyContactPhone, setUserEmergencyContactPhone] = useState()
     const [userEmergencyContactKinship, setUserEmergencyContactKinship] = useState()
     const [userSituation, setUserSituation] = useState()
+    const [userCurrentSalary, setUserCurrentSalary] = useState("")
     
     const { token } = useContext(AuthContext);
 
@@ -188,7 +189,14 @@ function EditUser(){
 
     function submitFields(){ 
         let formData = new FormData()
+        if(userImg === ""){
+            
+        } else if(setUserCurrentSalary === "") {
+            
+        }
+        console.log(userSituation)
         formData.append('name', userName)
+        formData.append('active', userSituation)
         formData.append('email', userEmail)
         formData.append('password', userPassword)
         formData.append('password_confirmation', userPasswordConfirmation)
@@ -205,13 +213,11 @@ function EditUser(){
         formData.append('birth_date', userBirthDate)
         formData.append('level', userLevel)
         formData.append('roles_id', arrayPermission)
-        formData.append('salary', userSalary)
         formData.append('street', userStreet)
         formData.append('zip_code', userZipCode)
         formData.append('city', userCity)
         formData.append('number', userNumber)
         formData.append('state', userState)
-        formData.append('photo_url', document.querySelector('input[type=file]').files[0])
         formData.append('country', userCountry)
         formData.append('emergency_contact_name', userEmergencyContactName)
         formData.append('emergency_contact_phone', userEmergencyContactPhone)
@@ -232,8 +238,8 @@ function EditUser(){
                 }
             })
             .then((response) => {
-                alert("Usuário Cadastrado com sucesso!")  
-               /*  window.location = window.location.href; */
+                alert("Usuário Atualizado com sucesso!")  
+                window.location = window.location.href;
             }).catch(function(error){ 
                 if (error.response) {
                     alert(error.response.data.message)
@@ -308,9 +314,7 @@ function EditUser(){
                 )
             }</>
         )
-        console.log(arrayPermission)
         setIsTrue(false)
-
     }, [arrayPermission, isTrue])
 
     useEffect(() => {
@@ -325,12 +329,13 @@ function EditUser(){
         setUserContract(userById?.user?.contract)
         setUserLevel(userById?.user?.level)
         setArrayPermissions(userById?.roles)
-        setUserDeparment(userById?.user?.department?.name)
+        setUserDeparment(userById?.user?.department_id)
         setUserManager(userById?.user?.manager_id)
-        setUserAdmissionDate(userById?.user?.admission_date)
-        setUserBirthDate(userById?.user?.birth_date)
+        setUserAdmissionDate(userById?.user?.admission_date.slice(0, 10))
+        setUserBirthDate(userById?.user?.birth_date.slice(0, 10))
         setUserSalary(userById?.user?.salaries?.map(index => index.salary))
         setUserZipCode(userById?.user?.zip_code)
+        setUserSituation(userById?.user?.active)
         setUserStreet(userById?.user?.street)
         setUserNumber(userById?.user?.number)
         setUserCountry(userById?.user?.country)
@@ -346,7 +351,7 @@ function EditUser(){
 
     function handleChange(e){
         setUserName(document.querySelector('#name').value)
-        setUserImg(document.querySelector('#file').files[0])
+        setUserImg(document.querySelector('#file').files[0] ? document.querySelector('#file').files[0] : "")
         setUserCompany(document.querySelector('#company').value)
         setUserCpf(document.querySelector('#cpf').value)
         setUserRg(document.querySelector('#rg').value)
@@ -356,12 +361,13 @@ function EditUser(){
         setUserContract(document.querySelector('#contract').value)
         setUserLevel(document.querySelector('#level').value)
         setUserPermission(arrayPermission)
-        setUserSituation(document.querySelector('#user-status').value)
+        setUserSituation(parseInt(document.querySelector('#user-status').value))
         setUserDeparment(document.querySelector('#department').value)
         setUserManager(document.querySelector('#manager').value)
         setUserAdmissionDate(document.querySelector('#date-admis').value)
         setUserBirthDate(document.querySelector('#date-birth').value)
         setUserSalary(document.querySelector('#salary').value)
+        setUserCurrentSalary(document.querySelector('#salary').value)
         setUserZipCode(document.querySelector('#cep').value)
         setUserStreet(document.querySelector('#address').value)
         setUserNumber(document.querySelector('#address-number').value)
@@ -400,8 +406,8 @@ function EditUser(){
                                         <div className="line_flex">
                                             <Legend value="Status"/>
                                             <select name="user-status" id="user-status" value={userSituation} className="select_pers" onChange={handleChange}>
-                                                <option value="Ativo">Ativo</option>
-                                                <option value="Desativado">Desativado</option>
+                                                <option value="1">Ativo</option>
+                                                <option value="0">Desativado</option>
                                             </select>
                                         </div>
                                     </div>
@@ -528,7 +534,7 @@ function EditUser(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" id="salary" value={userSalary} onChange={handleChange}/>
+                                            <Input type="text" name="salary" id="salary" onChange={handleChange}/>
                                             <div className="last_salaries">
                                                 <Legend value="Últimos Sálarios" />
                                                 <ul>

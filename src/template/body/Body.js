@@ -1,8 +1,6 @@
 import { Component } from 'react';
-import Ramais from '../ramais/Ramais';
 import ShowRhNews from '../rh_news/ShowRhNews';
 import Aniversario from '../births/Births';
-import OrgChart from '../../components/OrgChart';
 import './Body.css';
 
 class Body extends Component {

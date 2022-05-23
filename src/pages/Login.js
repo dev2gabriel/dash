@@ -47,13 +47,13 @@ function Login(){
                 <div className="login_right">
                     <h1>Entrar</h1>
                     <div className="form">
-                        <Legend value="Email"/>
-                        <Input type="email" name="email" id="email" placeholder="usuario@grupostra.com.br" onChange={(e) => setUserEmail(e.target.value)}/>
-                        <Legend value="Senha"/>
-                        <Input type="password" name="pass" id="pass" placeholder="Sua senha" onChange={(e) => setUserPassword(e.target.value)}/>
-                        <div>
-                            <Input type="checkbox" name="check" id="check" />
-                            <Legend for="check" value="Manter conectado" />
+                        <div className="credentials-line">
+                            <Legend value="Email"/>
+                            <Input type="email" name="email" id="email" placeholder="usuario@grupostra.com.br" onChange={(e) => setUserEmail(e.target.value)}/>
+                        </div>
+                        <div className="credentials-line">
+                            <Legend value="Senha"/>
+                            <Input type="password" name="pass" id="pass" placeholder="Sua senha" onChange={(e) => setUserPassword(e.target.value)}/>
                         </div>
                         <Button type="submit" value="Entrar" onClick={submitFields}/>
                     </div>

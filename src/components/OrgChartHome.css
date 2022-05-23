@@ -1,9 +1,11 @@
 .card-organiz{
     border: 1px solid var(--verde-grupo);
     display: flex;
+    padding: 10px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
 }
 
 .card-img{
@@ -20,8 +22,8 @@
 
 .card-img img{
     position: absolute;
-    top: -60px;
-    width: 300px;
+    top: -58px;
+    width: 200px;
 }
 
 .card-text h1{
@@ -31,4 +33,34 @@
 .card-text p:nth-child(2){
     font-size: 16px;
     color: rgb(48, 48, 48);
+}
+
+.card-text p{
+    margin-bottom: 5px;
+}
+
+.card-text p:nth-child(3){
+    text-decoration: underline;
+}
+
+.card-text p:nth-child(4) span{
+    font-weight: 500;
+}
+
+.css-oalq6z{
+    max-width: 230px;
+}
+
+.css-11x3ula{
+    display: flex;
+    justify-content: center;
+}
+
+.css-n4cq1w{
+    min-width: 100%;
+    max-width: 100%;
+}
+
+#tree svg{
+    background-color: rgb(249, 249, 249)!important;
 }

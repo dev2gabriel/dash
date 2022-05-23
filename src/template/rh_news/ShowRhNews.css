@@ -79,6 +79,25 @@
 
 .new-rh-container img{
     object-fit: cover;
-    width: 735px;
-    height: 382px;
+    width: 700px;
+    height: 500px;
+    object-position: 0% 30%;
+}
+
+.filter-news{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.filter-news p{
+    min-width: max-content;
+    margin-bottom: 0;
+    margin-right: 10px;
+}
+
+.filter-news .select_pers{
+    width: 20%!important;
 }

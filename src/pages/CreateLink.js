@@ -11,63 +11,108 @@ import { AuthContext } from '../Auth'
 import axios from 'axios';
 
 function CreateLink(){
-    
-    const [counter, setCounter] = useState(0)
-    
+       
     const [urlSelected, setUrlSelected] = useState()
-    const [optCategory, setOptCategory] = useState("")
-    const [optButton, setOptButton] = useState("")
-
-    const [categoryRender, setCategoryRender] = useState()
-    const [buttonRender, setButtonRender] = useState()
-    const [categoryName, setCategoryName] = useState()
-    const [categoryOrder, setCategoryOrder] = useState()
-    const [buttonName, setButtonName] = useState()
-    const [buttonUrl, setButtonUrl] = useState()
-    const [buttonOrder, setButtonOrder] = useState()
-    const [urlName, setUrlName] = useState()
+    const [categoryName, setCategoryName] = useState("")
+    const [categoryNewName, setCategoryNewName] = useState("")
+    const [categoryOrder, setCategoryOrder] = useState("")
+    const [categoryNewOrder, setCategoryNewOrder] = useState("")
+    const [buttonName, setButtonName] = useState("")
+    const [buttonNewName, setButtonNewName] = useState("")
+    const [buttonUrl, setButtonUrl] = useState("")
+    const [buttonNewUrl, setButtonNewUrl] = useState("")
+    const [buttonOrder, setButtonOrder] = useState("")
+    const [buttonNewOrder, setButtonNewOrder] = useState("")
+    const [urlName, setUrlName] = useState("")
     const [urlData, setUrlData] = useState([])
-    const [urlCategory, setUrlCategory] = useState([])
-    const [urlButton, setUrlButton] = useState([])
     const [buttonId, setButtonId] = useState()
     const [categoryId, setCategoryId] = useState()
-    const [renderUpdate, setRenderUpdate] = useState()
-    const [urlSelectedName, setUrlSelectedName] = useState()
+    const [urlNewName, setUrlNewName] = useState("")
+    const [positionCategoryCreate, setPositionCategoryCreate] = useState()
+
+    const [categoryData, setCategoryData] = useState([])
+    const [buttonData, setButtonData] = useState([])
+    const [buttonByIdData, setButtonByIdData] = useState([])
+
+    const [selectedButton, setSelectedButton] = useState("")
+    const [selectedPage, setSelectedPage] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState("")
+
+    const [pageText, setPageText] = useState("");
+    const [categoryText, setCategoryText] = useState("");
+    const [buttonText, setButtonText] = useState("");
 
     const { token } = useContext(AuthContext);
 
     function createCategory(){
-        const linkData = new FormData()
-        linkData.append('name', categoryName)
-        linkData.append('order', categoryOrder)
-        axios({
-            method: 'POST',
-            url: 'https://pedidos.grupostra.com/api/v1/category-link/store',
-            data: linkData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
-        })
-        .then((response) => {
-            alert("Categoria Cadastrada com sucesso!")
-            window.location = window.location.href;
-        }).catch(function(error){ 
-            if (error.response) {
-                alert(error.response.data.message)
-            }
-        })
+        if(selectedPage === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[4]
+            errorLog.innerHTML = "Você precisa selecionar uma página!"
+        } else if(categoryName === "" || categoryOrder === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[4]
+            errorLog.innerHTML = "Você precisa preencher todos os campos!"
+        } else {
+            const linkData = new FormData()
+            linkData.append('name', categoryName)
+            linkData.append('order', categoryOrder)
+            linkData.append('page_link_id', selectedPage)
+            axios({
+                method: 'POST',
+                url: 'https://pedidos.grupostra.com/api/v1/category-link/store',
+                data: linkData,
+                headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+            })
+            .then((response) => {
+                alert("Categoria Cadastrada com sucesso!")
+                window.location = window.location.href;
+            }).catch(function(error){ 
+                if (error.response) {
+                    alert(error.response.data.message)
+                }
+            })
+        }
     }
 
     function updateCategory(){
         const linkData = new FormData()
-        linkData.append('name', categoryName)
-        linkData.append('order', categoryOrder)
+        if(categoryName === ""){
+            setCategoryName(categoryText)
+            console.log(categoryName)
+            console.log(categoryText)
+        }
+
+        if(categoryNewName === "" || categoryNewOrder === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[3]
+            errorLog.innerHTML = "Você precisa preencher todos os campos"
+        } else {
+            linkData.append('name', categoryNewName)
+            linkData.append('order', categoryNewOrder)
+            axios({
+                method: 'POST',
+                url: `https://pedidos.grupostra.com/api/v1/page-link/update/${categoryId}`,
+                data: linkData,
+                headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
+            })
+            .then((response) => {
+                alert("Categoria Cadastrada com sucesso!")
+                window.location = window.location.href;
+            }).catch(function(error){ 
+                if (error.response) {
+                    alert(error.response.data.message)
+                }
+            })
+        }  
+    }
+
+    function deleteCategory(e, urlId){
+        e.preventDefault()
         axios({
-            method: 'POST',
-            url: `https://pedidos.grupostra.com/api/v1/page-link/update/${categoryId}`,
-            data: linkData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
+            method: 'DELETE',
+            url: `https://pedidos.grupostra.com/api/v1/category-link/delete/${urlId}`,
+            headers: {'Authorization' : `Bearer ${token}`}
         })
         .then((response) => {
-            alert("Categoria Cadastrada com sucesso!")
+            alert("Categoria Deletada com sucesso!")
             window.location = window.location.href;
         }).catch(function(error){ 
             if (error.response) {
@@ -77,39 +122,70 @@ function CreateLink(){
     }
 
     function createButton(){
-        const buttonData = new FormData()
-        buttonData.append('text', buttonName)
-        buttonData.append('url', buttonUrl)
-        buttonData.append('order', buttonOrder)
-        axios({
-            method: 'POST',
-            url: 'https://pedidos.grupostra.com/api/v1/item-link/store',
-            data: buttonData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
-        })
-        .then((response) => {
-            alert("Botão Cadastrado com sucesso!")
-            window.location = window.location.href;
-        }).catch(function(error){ 
-            if (error.response) {
-                alert(error.response.data.message)
-            }
-        })
+        if(selectedCategory === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[7]
+            errorLog.innerHTML = "Você precisa selecionar uma categoria!"
+        } else if(buttonName === "" || buttonUrl === "" || buttonOrder === "") {
+            let errorLog = document.querySelectorAll('.error-log p')[7]
+            errorLog.innerHTML = "Preencha todos os campos"
+        } else {
+            const buttonData = new FormData()
+            buttonData.append('text', buttonName)
+            buttonData.append('url', buttonUrl)
+            buttonData.append('order', buttonOrder)
+            buttonData.append('category_link_id', selectedCategory)
+            axios({
+                method: 'POST',
+                url: 'https://pedidos.grupostra.com/api/v1/item-link/store',
+                data: buttonData,
+                headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+            })
+            .then((response) => {
+                alert("Botão Cadastrado com sucesso!")
+                window.location = window.location.href;
+            }).catch(function(error){ 
+                if (error.response) {
+                    alert(error.response.data.message)
+                }
+            })
+        }  
     }
 
     function updateButton(){
         const buttonData = new FormData()
-        buttonData.append('text', buttonName)
-        buttonData.append('url', buttonUrl)
-        buttonData.append('order', buttonOrder)
+        if(buttonNewName === "" || buttonNewUrl === "" || buttonNewOrder === "") {
+            let errorLog = document.querySelectorAll('.error-log p')[6]
+            errorLog.innerHTML = "Preencha todos os campos"
+        } else {
+            buttonData.append('text', buttonNewName)
+            buttonData.append('url', buttonNewUrl)
+            buttonData.append('order', buttonNewOrder)
+            axios({
+                method: 'POST',
+                url: `https://pedidos.grupostra.com/api/v1/item-link/update/${buttonId}`,
+                data: buttonData,
+                headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
+            })
+            .then((response) => {
+                alert("Botão Atualizado com sucesso!")
+                window.location = window.location.href;
+            }).catch(function(error){ 
+                if (error.response) {
+                    alert(error.response.data.message)
+                }
+            })
+        }
+    }
+
+    function deleteButton(e, urlId){
+        e.preventDefault()
         axios({
-            method: 'POST',
-            url: `https://pedidos.grupostra.com/api/v1/item-link/update/${buttonId}`,
-            data: buttonData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
+            method: 'DELETE',
+            url: `https://pedidos.grupostra.com/api/v1/item-link/delete/${urlId}`,
+            headers: {'Authorization' : `Bearer ${token}`}
         })
         .then((response) => {
-            alert("Botão Atualizado com sucesso!")
+            alert("Botão Deletado com sucesso!")
             window.location = window.location.href;
         }).catch(function(error){ 
             if (error.response) {
@@ -118,18 +194,41 @@ function CreateLink(){
         })
     }
 
-    function createUrl(){
-        const urlData = new FormData()
-        urlData.append('name', urlName)
 
+    function createUrl(){
+        if(urlName === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[0]
+            errorLog.innerHTML = "Você precisa preencher o nome da página"
+        } else {
+            const urlData = new FormData()
+            urlData.append('name', urlName)
+    
+            axios({
+                method: 'POST',
+                url: 'https://pedidos.grupostra.com/api/v1/page-link/store',
+                data: urlData,
+                headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+            })
+            .then((response) => {
+                alert("Página Criada com sucesso!")
+                window.location = window.location.href;
+            }).catch(function(error){ 
+                if (error.response) {
+                    alert(error.response.data.message)
+                }
+            })
+        }  
+    }
+
+    function deletePage(e, urlId){
+        e.preventDefault()
         axios({
-            method: 'POST',
-            url: 'https://pedidos.grupostra.com/api/v1/page-link/store',
-            data: urlData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+            method: 'DELETE',
+            url: `https://pedidos.grupostra.com/api/v1/page-link/delete/${urlId}`,
+            headers: {'Authorization' : `Bearer ${token}`}
         })
         .then((response) => {
-            alert("Url Criada com sucesso!")
+            alert("Página Deletada com sucesso!")
             window.location = window.location.href;
         }).catch(function(error){ 
             if (error.response) {
@@ -140,36 +239,29 @@ function CreateLink(){
 
     function updateUrl(){
         const urlData = new FormData()
-        urlData.append('name', urlSelectedName)
-        urlData.append('_method', 'PUT')
-        axios({
-            method: 'POST',
-            url: `https://pedidos.grupostra.com/api/v1/page-link/update/${urlSelected}`,
-            data: urlData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
-        })
-        .then((response) => {
-            alert("Url Atualizada com sucesso!")
-            window.location = window.location.href;
-        }).catch(function(error){ 
-            if (error.response) {
-                alert(error.response.data.message)
-            }
-        })
+        if(urlNewName === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[1]
+            errorLog.innerHTML = "Você precisa preencher o campo"
+        } else {
+            urlData.append('name', urlNewName)
+            urlData.append('_method', 'PUT')
+            axios({
+                method: 'POST',
+                url: `https://pedidos.grupostra.com/api/v1/page-link/update/${urlSelected}`,
+                data: urlData,
+                headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
+            })
+            .then((response) => {
+                alert("Url Atualizada com sucesso!")
+                window.location = window.location.href;
+            }).catch(function(error){ 
+                if (error.response) {
+                    alert(error.response.data.message)
+                }
+            })
+        }
+        
     }
-
-    function handleEdit(e){
-        setUrlSelectedName(document.querySelector('#new-url').value)
-    }
-
-    useEffect(() => {
-        setRenderUpdate(
-            <>
-                <Input type="text" id="new-url" name="new-url" value={urlSelectedName} onChange={handleEdit}/>
-                <Button value="Atualizar" onClick={updateUrl}/>
-            </>
-        )
-    }, [urlSelectedName])
 
     const configB = {
         headers: { Authorization: `Bearer ${token}` }
@@ -186,127 +278,111 @@ function CreateLink(){
         })
     }, [])
 
-    useEffect(() => {
-        if(optCategory === "Editar categoria"){
-            setCategoryRender(
-                <>
-                    <Legend value="Editar Categoria" />
-                    <select name="url-option-select" id="url-option-select">
-                        <option value="#" selected disabled>Selecione a categoria</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                    <Legend value="Novo nome da categoria" />
-                    <Input type="text" id="category-new" name="category-new" />
-                    <Legend value="Posição da categoria" />
-                    <select name="url-option-select" id="url-option-select" onChange={(e) => setOptButton(e.target.value)}>
-                        <option value="#" selected disabled>Posição da categoria</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                    <Button onClick={saveButton} value="Salvar" />
-                    <select name="url-option-select" id="url-option-select" onChange={(e) => setOptButton(e.target.value)}>
-                        <option value="#" selected disabled>Opção botão</option>
-                        <option value="Editar botão">Editar botão</option>
-                        <option value="Criar novo botão">Criar novo botão</option>
-                        <option value="Excluir botão">Excluir botão</option>
-                    </select>
-                </>
-            )
-        } else if(optCategory === "Criar nova categoria"){
-            setCategoryRender(
-                <>
-                    <Legend value="Criar nova categoria" />
-                    <Input type="text" id="category-new" name="category-new" />
-                    <Legend value="Posição da categoria" />
-                    <select name="url-option-select" id="url-option-select" onChange={(e) => setOptButton(e.target.value)}>
-                        <option value="#" selected disabled>Posição da categoria</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                    <Button onClick={saveButton} value="Salvar" />
-                    <select name="url-option-select" id="url-option-select" onChange={(e) => setOptButton(e.target.value)}>
-                        <option value="#" selected disabled>Opção botão</option>
-                        <option value="Editar botão">Editar botão</option>
-                        <option value="Criar novo botão">Criar novo botão</option>
-                        <option value="Excluir botão">Excluir botão</option>
-                    </select>
-                </>
-            )
-        } else if(optCategory === "Excluir categoria"){
-            setCategoryRender(
-                <>
-                    <h1>Excluir Categoria</h1>
-                    <select name="url-option-select" id="url-option-select" onChange={(e) => setOptButton(e.target.value)}>
-                        <option value="#" selected disabled>Opção botão</option>
-                        <option value="Editar botão">Editar botão</option>
-                        <option value="Criar novo botão">Criar novo botão</option>
-                        <option value="Excluir botão">Excluir botão</option>
-                    </select>
-                </>
-            )
-        } else if(optCategory === ""){
-            setCategoryRender(<span>Selecione uma opção</span>)
-        }
-
-
-        if(optButton === "Editar botão"){
-            setButtonRender(
-                <>
-                    <Legend value="Editar botão" />
-                    <select name="url-option-select" id="url-option-select">
-                        <option value="#" selected disabled>Selecione o botão</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                    <Legend value="Novo nome do botão" />
-                    <Input type="text" id="category-new" name="category-new" />
-                    <Legend value="Posição do botão" />
-                    <select name="url-option-select" id="url-option-select" onChange={(e) => setOptButton(e.target.value)}>
-                        <option value="#" selected disabled>Posição da categoria</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                    <Button onClick={saveButton} value="Salvar" />
-                </>
-            )
-        } else if(optButton === "Criar novo botão"){
-            setButtonRender(
-                <>
-                    <Legend value="Nome do Botão" />
-                    <Input type="text" id="button-name" name="button-name" />
-                    <Legend value="Link do Botão" />
-                    <Input type="text" id="button-link" name="button-link" />
-                    <Legend value="Posição da categoria" />
-                    <select name="url-option-select" id="url-option-select" onChange={(e) => setOptButton(e.target.value)}>
-                        <option value="#" selected disabled>Posição do botão</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                    <Button onClick={saveButton} value="Salvar" />  
-                </>
-            )
-        } else if(optButton === "Excluir botão"){
-            setButtonRender(<h1>Excluir botão</h1>)
-        } else if(optButton === ""){
-            setButtonRender(<span>Selecione uma opção</span>)
-        }
-
-    }, [optCategory, optButton, counter])
-    
-    function addNewButton(e){
+    function editPage(e, urlId){
         e.preventDefault()
-        setCounter(counter + 1);
+        let errorLog = document.querySelectorAll('.error-log p')[0]
+        if(selectedPage === ""){
+            errorLog.innerHTML = "Você precisa selecionar uma página"
+        } else {
+            errorLog.innerHTML = ""
+            let lineEdit = document.querySelector('.line-opt-edit')
+            let cardLine = document.querySelector('.create-link:nth-child(1) .rh-news.container:nth-child(2)')
+            lineEdit.classList.add('edit-on')
+            cardLine.classList.add('edit-on')
+            let pageInput = document.querySelector('.line-opt-edit input')
+            pageInput.value = pageText
+        }
     }
 
-    function saveButton(){
-        console.log("asd")
+    function editCategory(e, urlId){
+        e.preventDefault()
+        if(selectedCategory === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[2]
+            errorLog.innerHTML = "Você precisa selecionar uma categoria"
+        } else {
+            let lineEdit = document.querySelector('.line-opt-edit-category')
+            lineEdit.classList.add('edit-on')
+            let pageInput = document.querySelector('.line-opt-edit-category input')
+            pageInput.value = categoryText
+        }
+    }
+
+    function editButton(e, urlId){
+        e.preventDefault()
+        if(selectedButton === ""){
+            let errorLog = document.querySelectorAll('.error-log p')[5]
+            errorLog.innerHTML = "Você precisa selecionar um botão"
+        } else {
+            let lineEdit = document.querySelector('.line-opt-edit-button')
+            lineEdit.classList.add('edit-on')
+            let pageInput = document.querySelector('.line-opt-edit-button input')
+            pageInput.value = buttonText
+        }
+    }
+
+    function setButtonSelected(e, urlId){
+        setButtonText(e.target.innerHTML)
+        setSelectedButton(urlId)
+        let errorLog = document.querySelectorAll('.error-log p')[5]
+        errorLog.innerHTML = ""
+        axios.get(`https://pedidos.grupostra.com/api/v1/links/items/${urlId}`, configB)
+        .then((response) => {
+            setButtonByIdData(response.data)
+            setButtonUrl(buttonByIdData?.url)
+        })
+        console.log(buttonByIdData)
+        console.log(buttonUrl)
+        let pageInput = document.querySelector('.line-opt-edit-button input:nth-child(3)')
+        pageInput.value = buttonUrl
+    }
+
+    function getCategories(e, urlId){
+        e.preventDefault()
+        setPageText(e.target.innerHTML)
+        let errorLog = document.querySelectorAll('.error-log p')[0]
+        errorLog.innerHTML = ""
+        setButtonData("")
+        setSelectedPage(urlId)
+        axios.get(`https://pedidos.grupostra.com/api/v1/links/categories/${urlId}`, configB)
+        .then((response) => {
+            setCategoryData(response.data)
+        })
+    }
+
+    function getButtons(e, urlId){
+        e.preventDefault()
+        setCategoryText(e.target.innerHTML)
+        let errorLog = document.querySelectorAll('.error-log p')[2]
+        errorLog.innerHTML = ""
+        setSelectedCategory(urlId)
+        axios.get(`https://pedidos.grupostra.com/api/v1/links/items/${urlId}`, configB)
+        .then((response) => {
+            setButtonData(response.data)
+        })
+    }
+    
+    function setSelectedColorPage(e){
+        let pagesButtons = document.querySelectorAll('.pages-buttons .line-opt button')
+        for(let i=0; i<pagesButtons.length; i++){
+            pagesButtons[i].style.backgroundColor = "gray"
+        }
+        e.target.style.backgroundColor = "var(--verde-grupo)"
+    }
+
+    function setSelectedColorCategory(e){
+        let pagesButtons = document.querySelectorAll('.categories-buttons .line-opt button')
+        for(let i=0; i<pagesButtons.length; i++){
+            pagesButtons[i].style.backgroundColor = "gray"
+        }
+        e.target.style.backgroundColor = "var(--verde-grupo)"
+    }
+
+    function setSelectedColorButton(e){
+        let pagesButtons = document.querySelectorAll('.buttons-buttons .line-opt button')
+        for(let i=0; i<pagesButtons.length; i++){
+            pagesButtons[i].style.backgroundColor = "gray"
+        }
+        e.target.style.backgroundColor = "var(--verde-grupo)"
     }
 
     return(
@@ -322,27 +398,33 @@ function CreateLink(){
                 <div className="create-link">
                     <div className="col-1">
                         <div className="rh-news container">
-                            <Legend value="Selecione a url para editar"/>
-                            <select name="url-select" id="url-select" onChange={(e) => {setUrlSelected(e.target.value); setUrlSelectedName(e.target.textContent)}}>
-                                <option value="#" selected disabled>Selecione a url</option>
-                                {
-                                    urlData.map((url, i) =>
-                                        <option key={i} value={url?.id}>{url?.name}</option>
-                                    )
-                                }
-                            </select>
+                            <p>Selecione a página para editar</p>
+                            <div className="error-log">
+                                <p></p>
+                            </div>
                             {
-                                renderUpdate
+                                urlData.map((url, i) =>
+                                <div className='pages-buttons'>
+                                    <div key={i} className="line-opt">
+                                        <Button value={url?.name} onClick={(e) => {getCategories(e, url.id); setSelectedColorPage(e)}}/>
+                                        <a href="#" onClick={(e) => editPage(e, url.id)}>Editar</a>
+                                        <a href="#" onClick={(e) => deletePage(e, url.id)}>Excluir</a>
+                                    </div>
+                                </div>
+                                )
                             }
-                            <Legend value="ou crie uma nova Url"/>
-                            <Input type="text" id="new-url" name="new-url" onChange={(e) => setUrlName(e.target.value)}/>
-                            <Button value="Cadastrar" onClick={createUrl}/>
-                            <select name="url-option-select" id="url-option-select" onChange={(e) => setOptCategory(e.target.value)}>
-                                <option value="#" selected disabled>Opção categoria</option>
-                                <option value="Editar categoria">Editar categoria</option>
-                                <option value="Criar nova categoria">Criar nova categoria</option>
-                                <option value="Excluir categoria">Excluir categoria</option>
-                            </select>
+                        </div>
+                        <div className="rh-news container">
+                            <div className="line-opt-edit">
+                                <p>Editar título da página</p>
+                                <div className="line-opt-inside">
+                                    <Input onChange={(e) => setUrlNewName(e.target.value)} />
+                                    <Button value="Salvar" onClick={(e) => updateUrl(e, selectedPage)}/>
+                                </div>
+                                <div className="error-log">
+                                    <p></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -350,9 +432,51 @@ function CreateLink(){
                     <div className="col-1">
                         <div className="rh-news container">
                             <div className="button-container">
-                                {
-                                    categoryRender
-                                }
+                                <p>Lista de categorias</p>
+                                <div className="error-log">
+                                    <p></p>
+                                </div>
+                            {
+                                categoryData.map((category, i) =>
+                                <div className='categories-buttons'>
+                                    <div key={i} className="line-opt">
+                                        <Button value={category?.name} onClick={(e) => {getButtons(e, category.id); setSelectedColorCategory(e)}}/>
+                                        <a href="#" onClick={(e) => editCategory(e, category.id)}>Editar</a>
+                                        <a href="#" onClick={(e) => deleteCategory(e, category.id)}>Excluir</a>
+                                    </div>
+                                </div>
+                                )
+                            }
+                            </div>
+                        </div>
+                        <div className="rh-news container">
+                            <div className="line-opt-edit-category">
+                                <p>Editar categoria</p>
+                                <div className="line-opt-inside">
+                                    <Input onChange={(e) => setCategoryNewName(e.target.value)}/>
+                                    <select name="order-category" id="order-category" onChange={(e) => setCategoryNewOrder(e.target.value)}>
+                                        <option value="#" selected disabled></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                                <Button value="Salvar" onClick={(e) => updateCategory(e)}/>
+                                <div className="error-log">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <p>Criar nova categoria</p>
+                            <div className="line-opt">
+                                <Input type="text" id="new-url" name="new-url" onChange={(e) => setCategoryName(e.target.value)}/>
+                                <select name="order-category" id="order-category" onChange={(e) => setCategoryOrder(e.target.value)}>
+                                    <option value="#" selected disabled></option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                            <Button value="Cadastrar" onClick={createCategory}/>
+                            <div className="error-log">
+                                <p></p>
                             </div>
                         </div>
                     </div>       
@@ -361,9 +485,56 @@ function CreateLink(){
                     <div className="col-1">
                         <div className="rh-news container">
                             <div className="button-container">
+                                <p>Lista de botões</p>
+                                <div className="error-log">
+                                    <p></p>
+                                </div>
                                 {
-                                    buttonRender
-                                }       
+                                    buttonData &&
+                                    buttonData?.map((button, i) =>
+                                        <div className='buttons-buttons'>
+                                            <div key={i} className="line-opt">
+                                                <Button value={button?.text} onClick={(e) => {setButtonSelected(e, button?.id); setSelectedColorButton(e)}}/>
+                                                <a href="#" onClick={(e) => editButton(e, button?.id)}>Editar</a>
+                                                <a href="#" onClick={(e) => deleteButton(e, button.id)}>Excluir</a>
+                                            </div>
+                                        </div>
+                                    )   
+                                }
+                            </div>
+                        </div>
+                        <div className="rh-news container">
+                            <div className="line-opt-edit-button">
+                                <p>Editar botão</p>
+                                <div className="line-opt-inside">
+                                    <Input onChange={(e) => setButtonNewName(e.target.value)}/>
+                                    <select name="order-category" id="order-category" onChange={(e) => setButtonNewOrder(e.target.value)}>
+                                        <option value="#" selected disabled></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                                <Input type="text" id="new-url" name="new-url" onChange={(e) => setButtonNewUrl(e.target.value)}/>
+                                <Button value="Salvar" onClick={updateButton}/>
+                                <div className="error-log">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <p>Criar novo botão</p>
+                            <Legend value="Titulo"/>
+                            <div className="line-opt">
+                                <Input type="text" id="new-text" name="new-text" onChange={(e) => setButtonName(e.target.value)}/>
+                                <select name="order-button" id="order-button" onChange={(e) => setButtonOrder(e.target.value)}>
+                                    <option value="#" selected disabled></option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                            </select>
+                            </div>
+                            <Legend value="Link"/>
+                            <Input type="text" id="new-url" name="new-url" onChange={(e) => setButtonUrl(e.target.value)}/>
+                            <Button value="Cadastrar" onClick={createButton}/>
+                            <div className="error-log">
+                                <p></p>
                             </div>
                         </div>
                     </div>

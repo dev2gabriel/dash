@@ -1,7 +1,7 @@
 import Header from '../template/header/Header';
 import NavMenu from '../template/nav_menu/NavMenu';
 import Body from '../template/body/Body';
-import OrgChart from '../components/OrgChart';
+import OrgChartHome from '../components/OrgChartHome';
 
 function OrgStructure(){
 
@@ -19,7 +19,7 @@ function OrgStructure(){
                     <div className="row">
                         <div className="col-2">
                             <div className="rh-news container">
-                                <OrgChart />                         
+                                <OrgChartHome />                         
                             </div>
                         </div>            
                     </div>

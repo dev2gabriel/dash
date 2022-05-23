@@ -20,9 +20,8 @@ function EditPost(){
     const [subTitle, setSubTitle] = useState()
     const [textBody, setTextBody] = useState()
     const [data, setData] = useState([])
-    const [newRhImage, setNewRhImage] = useState()
+    const [newRhImage, setNewRhImage] = useState("")
     const [flag, setFlag] = useState()
-    const [renderImg, setRenderImg] = useState()
     const { postId } = useParams();
 
     const { token } = useContext(AuthContext);
@@ -40,13 +39,22 @@ function EditPost(){
 
     function submitFields(){
         const photoData = new FormData()
-        photoData.append('title', title)
-        photoData.append('image', newRhImage)
-        photoData.append('body', textBody)
-        photoData.append('subtitle', subTitle)
-        photoData.append('tag', flag)
-        photoData.append('is_published', 1)
-        photoData.append('_method', 'PUT')
+        if(newRhImage === ""){
+            photoData.append('title', title)
+            photoData.append('body', textBody)
+            photoData.append('subtitle', subTitle)
+            photoData.append('tag', flag)
+            photoData.append('is_published', 1)
+            photoData.append('_method', 'PUT')
+        } else {
+            photoData.append('title', title)
+            photoData.append('body', textBody)
+            photoData.append('image', newRhImage)
+            photoData.append('subtitle', subTitle)
+            photoData.append('tag', flag)
+            photoData.append('is_published', 1)
+            photoData.append('_method', 'PUT')
+        }
 
         axios({
             method: 'POST',
@@ -79,22 +87,15 @@ function EditPost(){
         setFlag(data?.tag)
     }, [data])
 
-    /* function setEmptyImg(){
-        if(newRhImage === undefined){
-            setNewRhImage("")
-        }
-    } */
-    
-    useEffect(() => {
-
-    }, [])
+   
 
     function handleChange(e){
         setTitle(document.querySelector('#title-text').value)
         setSubTitle(document.querySelector('#sub-title').value)
-        setNewRhImage(document.querySelector('#file').files[0] ? rhImage : "")
+        setNewRhImage(document.querySelector('#file').files[0] ? document.querySelector('#file').files[0] : "")
         setTextBody(document.querySelector('.jodit-wysiwyg').innerHTML)
         setFlag(document.querySelector('#flag').value)
+        console.log(newRhImage)
     }
 
     return(
@@ -126,8 +127,8 @@ function EditPost(){
                                             <input type="file" name="file" id="file" onChange={handleChange} />
                                             <div className="images-show">
                                                 <Legend value="Imagem"/>
-                                                {/* {newRhImage ? <img src={URL.createObjectURL(newRhImage)} /> : <img src={rhImage} />} */}
-                                                {renderImg}
+                                                {newRhImage ? <img src={URL.createObjectURL(newRhImage)} /> : <img src={rhImage} />}
+                                                {/* {renderImg} */}
                                             </div>
                                         </div>
                                         <div className="line_flex">
@@ -144,6 +145,7 @@ function EditPost(){
                                             <div className="line_flex">
                                                 <Legend value="Tipo de news (Flag)" />
                                                 <select name="flag" id="flag" value={flag} onChange={handleChange}>
+                                                    <option value="#" selected disabled>Selecione uma categoria</option>
                                                     <option value="birthday_person">Aniversários</option>
                                                     <option value="article">Artigos</option>
                                                     <option value="important_notices">Avisos importantes</option>
