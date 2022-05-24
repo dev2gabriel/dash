@@ -33,7 +33,7 @@ function NewColaborator(){
   const { token } = useContext(AuthContext);
   
   useEffect(() =>{
-    axios.get("https://pedidos.grupostra.com/api/v1/user/show-all")
+    axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", configB)
         .then((response) => {
           setData(response.data)
           setSearchResults(response.data)

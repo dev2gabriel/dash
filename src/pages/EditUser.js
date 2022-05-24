@@ -131,20 +131,20 @@ function EditUser(){
 
     const [userName, setUserName] = useState()
     const [userImg, setUserImg] = useState("")
-    const [userPassword, setUserPassword] = useState()
-    const [userPasswordConfirmation, setUserPasswordConfirmation] = useState()
+    const [userPassword, setUserPassword] = useState("")
+    const [userPasswordConfirmation, setUserPasswordConfirmation] = useState("")
     const [userCompany, setUserCompany] = useState()
     const [userCpf, setUserCpf] = useState()
     const [userRg, setUserRg] = useState()
     const [userPosition, setUserPosition] = useState()
     const [userContract, setUserContract] = useState()
     const [userLevel, setUserLevel] = useState()
-    const [userDepartment, setUserDeparment] = useState()
+    const [userDepartment, setUserDeparment] = useState("")
     const [userPermission, setUserPermission] = useState([])
     const [userAdmissionDate, setUserAdmissionDate] = useState()
     const [userBirthDate, setUserBirthDate] = useState()
-    const [userSalary, setUserSalary] = useState()
-    const [userManager, setUserManager] = useState()
+    const [userSalary, setUserSalary] = useState("")
+    const [userManager, setUserManager] = useState("")
     const [userZipCode, setUserZipCode] = useState()
     const [userStreet, setUserStreet] = useState()
     const [userNumber, setUserNumber] = useState()
@@ -189,17 +189,30 @@ function EditUser(){
 
     function submitFields(){ 
         let formData = new FormData()
-        if(userImg === ""){
-            
-        } else if(setUserCurrentSalary === "") {
-            
+        if(userImg !== ""){
+            formData.append('photo_url', userImg)
         }
-        console.log(userSituation)
+        
+        if(userCurrentSalary !== "") {
+            formData.append('salary', userCurrentSalary)
+        }
+        
+        if(userManager !== "") {
+            formData.append('manager_id', userManager)
+        }
+
+        if(userImg !== "") {
+            formData.append('photo_url', userImg)
+        }
+
+        if(userPassword !== "" && userPasswordConfirmation !== "") {
+            formData.append('password', userPassword)
+            formData.append('password_confirmation', userPasswordConfirmation)
+        }
+
         formData.append('name', userName)
         formData.append('active', userSituation)
         formData.append('email', userEmail)
-        formData.append('password', userPassword)
-        formData.append('password_confirmation', userPasswordConfirmation)
         formData.append('cpf', userCpf)
         formData.append('rg', userRg)
         formData.append('company', userCompany)
@@ -207,7 +220,6 @@ function EditUser(){
         formData.append('contract', userContract)
         formData.append('admission_date', userAdmissionDate)
         formData.append('department_id', userDepartment)
-        formData.append('manager_id', userManager)
         formData.append('cbo', userCbo)
         formData.append('registration', userRegistration)
         formData.append('birth_date', userBirthDate)
@@ -273,7 +285,7 @@ function EditUser(){
 
     
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/department", config)
+        axios.get("https://pedidos.grupostra.com/api/v1/department/all", config)
         .then((response)  => {
             setDataDepartment(response.data)
         })
@@ -288,7 +300,7 @@ function EditUser(){
             setUserById(response.data)
         })
 
-        axios.get('https://pedidos.grupostra.com/api/v1/table/users', config)
+        axios.get('https://pedidos.grupostra.com/api/v1/user/show-all', config)
         .then((response)  => {
             setUsers(response.data)
         })
@@ -319,12 +331,11 @@ function EditUser(){
 
     useEffect(() => {
         setUserName(userById?.user?.name)
-        setUserImg(userById?.user?.photo_url)
         setUserCompany(userById?.user?.company)
-        setUserCpf(userById?.user?.cpf)
+        setUserCpf(userById?.user?.cpf ? userById?.user?.cpf : "")
         setUserRg(userById?.user?.rg)
-        setUserCbo(userById?.user?.cbo)
-        setUserRegistration(userById?.user?.registration)
+        setUserCbo(userById?.user?.cbo ? userById?.user?.cbo : "")
+        setUserRegistration(userById?.user?.registration ? userById?.user?.registration : "")
         setUserPosition(userById?.user?.position)
         setUserContract(userById?.user?.contract)
         setUserLevel(userById?.user?.level)
@@ -344,9 +355,9 @@ function EditUser(){
         setUserEmail(userById?.user?.email)
         setUserPersonalPhone(userById?.user?.personal_phone)
         setUserExtensionNumber(userById?.user?.extension_number)
-        setUserEmergencyContactName(userById?.user?.emergency_contact_kinship)
-        setUserEmergencyContactPhone(userById?.user?.emergency_contact_phone)
-        setUserEmergencyContactKinship(userById?.user?.emergency_contact_kinship)
+        setUserEmergencyContactName(userById?.user?.emergency_contact_name ? userById?.user?.emergency_contact_name : "")
+        setUserEmergencyContactPhone(userById?.user?.emergency_contact_phone ? userById?.user?.emergency_contact_phone : "")
+        setUserEmergencyContactKinship(userById?.user?.emergency_contact_kinship ? userById?.user?.emergency_contact_phone : "")
     }, [userById])
 
     function handleChange(e){
@@ -367,7 +378,6 @@ function EditUser(){
         setUserAdmissionDate(document.querySelector('#date-admis').value)
         setUserBirthDate(document.querySelector('#date-birth').value)
         setUserSalary(document.querySelector('#salary').value)
-        setUserCurrentSalary(document.querySelector('#salary').value)
         setUserZipCode(document.querySelector('#cep').value)
         setUserStreet(document.querySelector('#address').value)
         setUserNumber(document.querySelector('#address-number').value)
@@ -419,11 +429,11 @@ function EditUser(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Senha"/>
-                                            <Input type="password" name="password" id="password" onChange={handleChange}/>
+                                            <Input type="password" name="password" id="password" onChange={(e) => setUserPasswordConfirmation(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Confirmação de senha"/>
-                                            <Input type="password" name="password_comfirmation" id="password_comfirmation" onChange={handleChange}/>
+                                            <Input type="password" name="password_comfirmation" id="password_comfirmation" onChange={(e) => setUserPassword(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
@@ -463,7 +473,7 @@ function EditUser(){
                                             <Legend value="Contrato"/>
                                             <select name="contract" id="contract" value={userContract} className="select_pers" onChange={handleChange}>
                                                 <option value="#" selected disabled>Tipo de contrato</option>
-                                                <option value="Efetivo">Efetivo</option>
+                                                <option value="CLT">CLT</option>
                                                 <option value="Estágio">Estágio</option>
                                                 <option value="Tercerizado PJ">Tercerizado PJ</option>
                                             </select>
@@ -534,12 +544,12 @@ function EditUser(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" id="salary" onChange={handleChange}/>
+                                            <Input type="text" name="salary" id="salary" onChange={(e) => setUserCurrentSalary(e.target.value)}/>
                                             <div className="last_salaries">
                                                 <Legend value="Últimos Sálarios" />
                                                 <ul>
                                                     {userById?.user?.salaries?.map((salary, i) => 
-                                                        <li key={i}>{salary?.salary}</li>
+                                                        <li key={i}>{salary?.salary.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</li>
                                                     )}
                                                 </ul>
                                             </div>

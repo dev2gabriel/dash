@@ -432,7 +432,7 @@ function NewCollaboratorRegister(){
                                             <Legend value="Contrato"/>
                                             <select name="contract" id="contract" className="select_pers" onChange={(e) => setUserContract(e.target.value)}>
                                                 <option value="#" selected disabled>Tipo de contrato</option>
-                                                <option value="Efetivo">Efetivo</option>
+                                                <option value="CLT">CLT</option>
                                                 <option value="Estágio">Estágio</option>
                                                 <option value="Terceirizado PJ">Terceirizado PJ</option>
                                             </select>
