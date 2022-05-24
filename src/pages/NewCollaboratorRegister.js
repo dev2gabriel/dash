@@ -156,7 +156,7 @@ function NewCollaboratorRegister(){
     const [userEmergencyContactName, setUserEmergencyContactName] = useState()
     const [userEmergencyContactPhone, setUserEmergencyContactPhone] = useState()
     const [userEmergencyContactKinship, setUserEmergencyContactKinship] = useState()
-    const [userSituation, setUserSituation] = useState()
+    const [userSituation, setUserSituation] = useState(1)
     
     const { token } = useContext(AuthContext);
 
@@ -166,6 +166,9 @@ function NewCollaboratorRegister(){
     const [arrayPermission, setArrayPermissions] = useState([])
     const [findZipState, setFindZipState] = useState(false)
     const [zipData, setZipData] = useState([])
+
+    const [renderedPermissions, setRenderedPermissions] = useState()
+    const [isTrue, setIsTrue] = useState(false)
 
     function handleClearFields(e){
         window.location = window.location.href;
@@ -184,7 +187,7 @@ function NewCollaboratorRegister(){
         formData.append('email', userEmail)
         formData.append('password', userPassword)
         formData.append('password_confirmation', userPasswordConfirmation)
-        formData.append('cpf', userCpf)
+        formData.append('cpf', userCpf.replace(".", "").replace(".", "").replace("-", ""))
         formData.append('rg', userRg)
         formData.append('company', userCompany)
         formData.append('position', userPosition)
@@ -197,13 +200,15 @@ function NewCollaboratorRegister(){
         formData.append('birth_date', userBirthDate)
         formData.append('level', userLevel)
         formData.append('roles_id', arrayPermission)
-        formData.append('salary', userSalary)
+        formData.append('salary', userSalary.replace(",", "").replace(".", ""))
         formData.append('street', userStreet)
         formData.append('zip_code', userZipCode)
         formData.append('city', userCity)
         formData.append('number', userNumber)
         formData.append('state', userState)
-        formData.append('photo_url', document.querySelector('input[type=file]').files[0])
+        if(userImg){
+            formData.append('photo_url', userImg)
+        }
         formData.append('country', userCountry)
         formData.append('emergency_contact_name', userEmergencyContactName)
         formData.append('emergency_contact_phone', userEmergencyContactPhone)
@@ -221,7 +226,7 @@ function NewCollaboratorRegister(){
                     'Content-Type': 'multipart/form-data'
                 }
             })
-            .then((response) => {
+            .then(() => {
                 alert("Usuário Cadastrado com sucesso!")  
                 window.location = window.location.href;
             }).catch(function(error){ 
@@ -231,13 +236,31 @@ function NewCollaboratorRegister(){
             })
         } else {
             alert("As senhas não coincidem")
-        }   
+        } 
+    }
+
+    function removePermission(e){
+        e.preventDefault();
+        let removed = arrayPermission.indexOf(e.target.text)
+        arrayPermission.splice(removed, 1)
+        setIsTrue(true)
     }
     
     function findZipCode(e){
         e.preventDefault()
         setFindZipState(true)
     }
+
+    useEffect(() => {
+        setRenderedPermissions(
+            <>{
+                arrayPermission?.map((role, i) => 
+                    <li key={i}><a href="#" onClick={removePermission}>{role}</a></li>
+                )
+            }</>
+        )
+        setIsTrue(false)
+    }, [arrayPermission, isTrue])
 
     useEffect(() => {
         axios.get(`https://viacep.com.br/ws/${userZipCode}/json/`)
@@ -256,7 +279,7 @@ function NewCollaboratorRegister(){
     }, [findZipState])
 
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/department", config)
+        axios.get("https://pedidos.grupostra.com/api/v1/department/all", config)
         .then((response)  => {
             setDataDepartment(response.data)
         })
@@ -266,12 +289,63 @@ function NewCollaboratorRegister(){
             setRoles(response.data)
         })
 
-        axios.get("https://pedidos.grupostra.com/api/v1/table/users", config)
+        axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", config)
         .then((response)  => {
             setUsers(response.data)
         })
 
     }, [])
+
+    function cpf(v){
+        v=v?.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+        v=v?.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+        v=v?.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+                                                 //de novo (para o segundo bloco de números)
+        v=v?.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+        let cpf = document.querySelector("#cpf")
+        cpf.value = v
+        return v
+    }
+
+    function mask_admis(d){
+        let dateAdmis = document.querySelector("#date-admis")
+        var mydata = '';
+        mydata = mydata + d;
+        if (mydata.length == 2){
+          mydata = mydata + '-';
+          dateAdmis.value = mydata;
+        }
+        if (mydata.length == 5){
+          mydata = mydata + '-';
+          dateAdmis.value = mydata;
+        }
+    }
+
+    function mask_birth(d){
+        let dateBirth = document.querySelector("#date-birth")
+        var mydata = '';
+        mydata = mydata + d;
+        if (mydata.length == 2){
+          mydata = mydata + '-';
+          dateBirth.value = mydata;
+        }
+        if (mydata.length == 5){
+          mydata = mydata + '-';
+          dateBirth.value = mydata;
+        }
+      }
+
+    function mask_real(e) {
+        var v = e.target.value
+        var salary = document.querySelector('#salary');
+        v = salary.value.replace(/\D/g,'');
+        v = (v/100).toFixed(2) + '';
+        v = v.replace(".", ",");
+        v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+        v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+        salary.value = v;
+        setUserSalary(v)
+    }
     
     function handleSubmit(e){
         e.preventDefault()
@@ -332,7 +406,7 @@ function NewCollaboratorRegister(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="CPF"/>  
-                                            <Input type="text" name="cpf" id="cpf" onChange={(e) => setUserCpf(e.target.value)}/>  
+                                            <Input type="text" name="cpf" id="cpf" onBlur={userCpf ? cpf(userCpf) : ""} onChange={(e) => setUserCpf(e.target.value)}/>  
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="RG"/>
@@ -359,8 +433,8 @@ function NewCollaboratorRegister(){
                                             <select name="contract" id="contract" className="select_pers" onChange={(e) => setUserContract(e.target.value)}>
                                                 <option value="#" selected disabled>Tipo de contrato</option>
                                                 <option value="Efetivo">Efetivo</option>
-                                                <option value="Estagio">Estágio</option>
-                                                <option value="Tercerizado PJ">Tercerizado PJ</option>
+                                                <option value="Estágio">Estágio</option>
+                                                <option value="Terceirizado PJ">Terceirizado PJ</option>
                                             </select>
                                         </div>
                                         <div className="line_flex">
@@ -384,6 +458,14 @@ function NewCollaboratorRegister(){
                                                     )
                                                 }
                                             </select>
+                                            <div className="permissions_enabled">
+                                            <Legend value="Permissões Atribuídas" />
+                                                <ul>
+                                                    {
+                                                        renderedPermissions
+                                                    }
+                                                </ul>
+                                            </div>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Departamento"/>
@@ -411,17 +493,17 @@ function NewCollaboratorRegister(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Data de Admissão"/>
-                                            <Input type="date" name="date-admis" id="date-admis" onChange={(e) => setUserAdmissionDate(e.target.value)}/>
+                                            <Input type="text" name="date-admis" id="date-admis" onBlur={userAdmissionDate ? mask_admis(userAdmissionDate) : ""} onChange={(e) => setUserAdmissionDate(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Data de Nascimento"/>
-                                            <Input type="date" name="date-birth" id="date-birth" onChange={(e) => setUserBirthDate(e.target.value)}/>
+                                            <Input type="text" name="date-birth" id="date-birth" onBlur={userBirthDate ? mask_birth(userBirthDate) : ""} onChange={(e) => setUserBirthDate(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
                                             <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" id="salary" onChange={(e) => setUserSalary(e.target.value)}/>
+                                            <Input type="text" name="salary" id="salary" onChange={(e) => mask_real(e)}/>
                                         </div>
                                     </div>
                                     <div className="line">

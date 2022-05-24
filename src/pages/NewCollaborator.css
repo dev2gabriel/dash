@@ -123,3 +123,43 @@
     justify-content: space-between;
    /*  padding: 0 5px; */
 }
+
+.names-list{
+    width: 100%;
+}
+.opt-user-config{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.opt-user-config a svg{
+    margin-left: 3px!important;
+}
+
+.opt-user-config a{
+    display: flex;
+    align-items: center;
+}
+
+.add-collaborator-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.add-collaborator-btn a{
+    background-color: var(--verde-grupo);
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    transition: .3s;
+}
+
+.add-collaborator-btn a:hover{
+    transition: .3s;
+    background-color: var(--verde-grupo-hover);
+}

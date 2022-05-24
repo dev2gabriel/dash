@@ -19,6 +19,7 @@ const ShowRhNews = () => {
     axios.get("https://pedidos.grupostra.com/api/v1/post", config)
         .then((response) => {
           setData(response.data)  
+          setCurrentItems(response.data)
         })
   }, []);
 
@@ -26,8 +27,8 @@ const ShowRhNews = () => {
     const [pageCount, setPageCount] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(2);
     const [itemOffset, setItemOffset] = useState(0);
-    const [selectedFilter, setSelectedFilter] = useState("news");
-
+    const [selectedFilter, setSelectedFilter] = useState("#");
+    const [render, setRender] = useState();
     const [txtBody, setTxtBody] = useState();
   
     useEffect(() => {
@@ -43,34 +44,52 @@ const ShowRhNews = () => {
       setItemOffset(newOffset);
     }  
 
+    useEffect(() => {
+      if(selectedFilter != "#"){
+        setRender(
+          <>{
+            currentItems.filter(current => current.tag === selectedFilter).filter(current => current.is_published === 1).map((item, i) =>
+                <div className='new-rh-container' key={i}>
+                  <h1>{item.title}</h1>
+                  <div className="img-news">
+                    <img src={item.image} alt="" />
+                  </div>
+                  <h3>{item.subtitle}</h3>
+                  <div className="text-body">
+                    {
+                      <li dangerouslySetInnerHTML={{ __html: item.body }} />
+                    }
+                  </div>
+                </div>
+              )
+          }</>
+        )
+      } else {
+        setRender(
+          <>{
+            currentItems.filter(current => current.is_published === 1).map((item, i) =>
+                <div className='new-rh-container' key={i}>
+                  <h1>{item.title}</h1>
+                  <div className="img-news">
+                    <img src={item.image} alt="" />
+                  </div>
+                  <h3>{item.subtitle}</h3>
+                  <div className="text-body">
+                    {
+                      <li dangerouslySetInnerHTML={{ __html: item.body }} />
+                    }
+                  </div>
+                </div>
+            )
+          }</>
+        )
+      }
+    }, [selectedFilter, currentItems])
+
     function Items({ currentItems }) {
       return (
         <>
-          {
-            selectedFilter ? currentItems.filter(current => current.tag === selectedFilter).filter(current => current.is_published === 1).map((item, i) =>
-              <div className='new-rh-container' key={i}>
-                <h1>{item.title}</h1>
-                <img src={item.image} alt="" />
-                <div className="text-body">
-                  {
-                    <li dangerouslySetInnerHTML={{ __html: item.body }} />
-                  }
-                </div>
-              </div>
-            )
-              :
-              currentItems.filter(current => current.is_published === 1).map((item, i) =>
-              <div className='new-rh-container' key={i}>
-                <h1>{item.title}</h1>
-                <img src={item.image} alt="" />
-                <div className="text-body">
-                  {
-                    <li dangerouslySetInnerHTML={{ __html: item.body }} />
-                  }
-                </div>
-              </div>
-          )
-        }
+          {render}
         </>
       );
     }
@@ -84,8 +103,9 @@ const ShowRhNews = () => {
           <option value="article">Artigos</option>
           <option value="important_notices">Avisos importantes</option>
           <option value="event">Eventos</option>
-          <option value="news" selected>News</option>
+          <option value="news">News</option>
           <option value="new_collaborators">Novos colaboradores</option>
+          <option value="#" selected>Todos</option>
         </select>
       </div>
       <Items currentItems={currentItems} />

@@ -17,19 +17,16 @@ render(){
                     </div>
                 </div>
                 <div className="col-1">
-                    <div className="ramais container">
-                        <h3>Ramais e E-mails</h3>
-                        <div className="ramais-body">
-                             <a href="/estrutura-organizacao">Hierarquia Organizacional</a>
-                        </div>
-                    </div>                  
-                </div>
-                <div className="col-1">
                     <div className="suporte container">
                         <h3>Suporte TI</h3>
                         <div className="suporte-body">
                             <a href="https://forms.clickup.com/f/2yd14-12083/VEP0XG9JCRGMGDDRNX" target="_blank"><button>Abrir chamado</button></a>
                         </div>
+                    </div>
+                    <div className="ramais container">
+                        <div className="ramais-body">
+                             <a href="/estrutura-organizacao">Ramais e E-mails</a>
+                        </div>                
                     </div>
                     <div className="aniversariantes container">
                         <h3>Aniversariantes do Mês</h3>

@@ -193,21 +193,23 @@ function LinksComercial(){
                 <div className="col-2">
                     <div className="rh-news container">
                         <div className="ramais-body">
-                        <div className="title-rh-news">
-                          <select name="url-links" id="url-links" onChange={(e) => setUrlSelected(e.target.value)}>       
-                            <option value="0" >Links úteis</option>        
-                            {
-                              urlData.map((item, i) => 
-                                <option key={i} value={item?.id}>{item?.name}</option>                              
-                              )
-                            }
-                          </select>
-                          <Link to="/cadastrar-link">Cadastrar Link <AddCircleOutlineIcon /></Link>
-                        </div>
-                            <div className="content">
-                              { rendered }
+                          <div className="links-categories">
+                            <div className="title-rh-news">
+                              <select name="url-links" id="url-links" onChange={(e) => setUrlSelected(e.target.value)}>       
+                                <option value="0" >Links úteis</option>        
+                                {
+                                  urlData.map((item, i) => 
+                                    <option key={i} value={item?.id}>{item?.name}</option>                              
+                                  )
+                                }
+                              </select>
+                              <Link to="/cadastrar-link">Cadastrar Link <AddCircleOutlineIcon /></Link>
                             </div>
-                        </div>
+                                <div className="content">
+                                  { rendered }
+                                </div>
+                            </div>
+                          </div>
                     </div>
                 </div>         
             </div>

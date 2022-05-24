@@ -77,7 +77,7 @@
     padding:20px;
     font-size:18px;
     font-weight:400;
-    color:#cdcdcd;
+    color:#5a5a5a;
     cursor:pointer;
     position:relative;
   }
@@ -87,7 +87,8 @@
   }
 
   .item-menu-hover{
-    background-color:#f5f4f9;
+    background-color: var(--verde-grupo);
+    opacity: .3;
     position:absolute;
     left:0;
     top:0;

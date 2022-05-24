@@ -44,11 +44,11 @@
 .aniversariantes.container{
     margin-top:20px;
     overflow: hidden;
-    max-width: 400px;
 }
 
 .suporte.container h3, .aniversariantes.container h3, .ramais.container h3, .rh-news.container h3{
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .rh-news-title{
@@ -102,4 +102,34 @@
 .ramais-body a:hover{
     transition: .3s;
     color: rgb(102, 102, 102);
+}
+
+.ramais.container{
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.ramais-body{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.ramais.container a{
+    background-color: var(--verde-grupo);
+    padding: 10px 15px;
+    border-radius: 25px;
+    margin: 10px;
+    transition: 0.5s;
+    color: white;
+    width: 80%;
+    text-align: center;
+}
+
+.ramais.container a:hover{
+    background-color: var(--verde-grupo-hover);
 }

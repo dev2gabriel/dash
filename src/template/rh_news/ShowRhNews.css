@@ -1,8 +1,3 @@
-.container-posts{
-    max-width: 865px;
-    min-width: 720px;
-}
-
 .img-header{
     width: 100%;
     background-color: #2EA27D;
@@ -100,4 +95,11 @@
 
 .filter-news .select_pers{
     width: 20%!important;
+}
+
+.img-news{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

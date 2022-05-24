@@ -127,8 +127,9 @@ function EditPost(){
                                             <input type="file" name="file" id="file" onChange={handleChange} />
                                             <div className="images-show">
                                                 <Legend value="Imagem"/>
-                                                {newRhImage ? <img src={URL.createObjectURL(newRhImage)} /> : <img src={rhImage} />}
-                                                {/* {renderImg} */}
+                                                <div className="img-news">
+                                                    {newRhImage ? <img src={URL.createObjectURL(newRhImage)} /> : <img src={rhImage} />}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="line_flex">

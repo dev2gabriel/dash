@@ -33,7 +33,7 @@ function NewColaborator(){
   const { token } = useContext(AuthContext);
   
   useEffect(() =>{
-    axios.get("https://pedidos.grupostra.com/api/v1/table/users")
+    axios.get("https://pedidos.grupostra.com/api/v1/user/show-all")
         .then((response) => {
           setData(response.data)
           setSearchResults(response.data)
@@ -93,9 +93,11 @@ function NewColaborator(){
           <div key={i} className="col-line">
             <p>{item.name}</p> 
             <div className="line-opt">
-              <a href="#" onClick={(e) => userProfile(e, item.id)}>Ver Perfil <PersonIcon /></a>
-              <a href="#" onClick={(e) => handleEditItem(e, item.id)}>Editar <EditIcon /></a>
-              <a href="#" onClick={(e) => handleDeleteItem(e, item.id)}>Excluir <HighlightOffIcon /></a>
+              <div className="opt-user-config">
+                <a href="#" onClick={(e) => userProfile(e, item.id)}>Ver Perfil <PersonIcon /></a>
+                <a href="#" onClick={(e) => handleEditItem(e, item.id)}>Editar <EditIcon /></a>
+                <a href="#" onClick={(e) => handleDeleteItem(e, item.id)}>Excluir <HighlightOffIcon /></a>
+              </div>
             </div>
           </div>
         )
@@ -118,25 +120,29 @@ function NewColaborator(){
               <div className="rh-news container">
                 <div className="title-rh-news">
                   <h3>Colaboradores</h3>
-                  <Link to="/cadastrar-colaborador">Cadastrar novo colaborador <AddCircleOutlineIcon /></Link>
+                  <div className="add-collaborator-btn">
+                    <Link to="/cadastrar-colaborador">Cadastrar novo colaborador <AddCircleOutlineIcon /></Link>
+                  </div>
                 </div>
                 <div className="search-name">
                   <Legend value="Buscar por nome:"/>
                   <Input type="text" name="search" id="search" onChange={(e) => setSearchTerm(e.target.value)}/>
                 </div>
                 <div className="ramais-body">
-                  <Items currentItems={currentItems} />
-                  <div className="pagination-col">
-                  <ReactPaginate
-                    className='list-pagination'
-                    breakLabel="..."
-                    nextLabel={<NavigateNextIcon />}
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel={<NavigateBeforeIcon />}
-                    renderOnZeroPageCount={null}
-                  />
+                  <div className='names-list'>
+                    <Items currentItems={currentItems} />
+                    <div className="pagination-col">
+                      <ReactPaginate
+                        className='list-pagination'
+                        breakLabel="..."
+                        nextLabel={<NavigateNextIcon />}
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel={<NavigateBeforeIcon />}
+                        renderOnZeroPageCount={null}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

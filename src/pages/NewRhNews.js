@@ -22,6 +22,7 @@ function NewRhNews(){
     const [textBody, setTextBody] = useState(content)
     const [data, setData] = useState([])
     const [flag, setFlag] = useState()
+    const [deleteConfirmation, setDeleteConfirmation] = useState()
     
     const { token } = useContext(AuthContext);
 
@@ -122,6 +123,12 @@ function NewRhNews(){
         })
       }
 
+    function openConfirmationModal(e, id){
+        setDeleteConfirmation(id)
+        let confirmationModal = document.querySelector('.confirmation-modal')
+        confirmationModal.classList.toggle("on-conf")
+    }
+
     return(
         <div id="body-main" className="body-main home open">
             <Header />
@@ -149,7 +156,9 @@ function NewRhNews(){
                                         <div className="line_flex">
                                             <label htmlFor="file" className="input_img">Enviar Imagem <FileUploadIcon /></label>
                                             <input type="file" name="file" id="file" onChange={(e) => setRhImage(e.target.files[0])} />
-                                            {rhImage ? <img src={URL.createObjectURL(rhImage)} /> : <img src="" />}
+                                            <div className="img-news">
+                                                {rhImage ? <img src={URL.createObjectURL(rhImage)} /> : <img src="" />}
+                                            </div>
                                         </div>
                                         <div className="line_flex">
                                             <JoditEditor
@@ -204,7 +213,7 @@ function NewRhNews(){
                                                 <div className="date_div">
                                                     <p>{index?.is_published === 0 ? "Rascunho" : "Publicado"}</p>
                                                     <a href="#" onClick={(e) => handleEditItem(e, index.id)}> <EditIcon /></a>
-                                                    <a href="#" onClick={(e) => handleDeleteItem(e, index.id)}> <HighlightOffIcon /></a>
+                                                    <button onClick={(e) => openConfirmationModal(e, index.id)}> <HighlightOffIcon /></button>
                                                     <p>{index?.created_at.slice(0, 10).split('-').reverse().join('/')}</p>
                                                 </div>
                                             </div>
@@ -215,7 +224,16 @@ function NewRhNews(){
                             </div>
                         </div>
                     </div>
-                </div>         
+                </div>      
+                <div className="confirmation-modal">
+                    <div className="modal-container">
+                        <p>Você tem certeza que deseja deletar esse post?</p>
+                        <div className="line-confirmation">
+                            <a href="#" onClick={document.querySelector('.confirmation-modal') ? document.querySelector('.confirmation-modal').classList.remove('on-conf') : ""}>Cancelar</a>
+                            <a href="#" onClick={(e) => handleDeleteItem(deleteConfirmation)}>Confirmar</a>
+                        </div>
+                    </div>
+                </div>   
             </div>
         
     )
