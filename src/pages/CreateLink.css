@@ -179,3 +179,36 @@
 .create-link:nth-child(1) .rh-news.container:nth-child(2) .line-opt-edit.edit-on{
     width: 100%;
 }
+
+.handle-drag{
+    background-color: rgb(238, 238, 238);
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.categories-buttons .line-opt a:nth-child(3),
+.buttons-buttons .line-opt a:nth-child(3){
+    background-color: var(--azul-grupo);
+    transition: .3s;
+}
+
+.categories-buttons .line-opt a:nth-child(3):hover,
+.buttons-buttons .line-opt a:nth-child(3):hover{
+    background-color: var(--azul-grupo-hover);
+    transition: .3s;
+}
+
+.categories-buttons .line-opt a:nth-child(4),
+.buttons-buttons .line-opt a:nth-child(4){
+    background-color: rgb(212, 66, 66);
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: white;
+    transition: .3s;
+}
+
+.categories-buttons .line-opt a:nth-child(4):hover,
+.buttons-buttons .line-opt a:nth-child(4):hover{
+    transition: .3s;
+    background-color: rgb(221, 111, 111);
+}

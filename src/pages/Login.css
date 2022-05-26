@@ -9,7 +9,7 @@
 
 .login_screen{
     width: 100%;
-    padding: 50px 300px;
+    padding: 50px 200px;
     background-image: url("../assets/bg_texture.png");
     height: 100vh;
 }
@@ -121,4 +121,15 @@
 .credentials-line{
     flex-direction: column;
     text-align: left!important;
+}
+
+@media(max-width: 1280px){
+    .container_login{
+        overflow: hidden;
+    }
+
+    .left_bottom{
+        position: absolute;
+        bottom: 20px;
+    }
 }

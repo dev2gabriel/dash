@@ -29,6 +29,8 @@ function NewColaborator(){
   const [pageCount, setPageCount] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const [itemOffset, setItemOffset] = useState(0);
+  var deleteConfirmation;
+  const [modal, setModal] = useState(document.querySelector('.confirmation-modal'))
 
   const { token } = useContext(AuthContext);
   
@@ -39,6 +41,7 @@ function NewColaborator(){
           setSearchResults(response.data)
           setIsRendered(true)     
         })
+      setModal(document.querySelector('.confirmation-modal'))
   }, [isRendered])
 
   function userProfile(e, id){
@@ -66,7 +69,7 @@ function NewColaborator(){
 
   useEffect(() => {
     const results = data.filter(searchNameFilter =>
-      searchNameFilter.name.toLowerCase().includes(searchTerm)  
+      searchNameFilter.name.toUpperCase().includes(searchTerm)  
     );
 
     setSearchResults(results)
@@ -85,18 +88,28 @@ function NewColaborator(){
     setItemOffset(newOffset);
   }
 
+  function openConfirmationModal(e){
+    e.preventDefault()
+    if(e.target.id === ""){
+        deleteConfirmation = e.target.parentNode.parentNode.id
+    } else {
+        deleteConfirmation = e.target.id
+    }
+    modal.classList.add("on-conf")
+}
+
   function Items({ currentItems }) {
     return (
       <>
         {
         currentItems.map((item, i) => 
           <div key={i} className="col-line">
-            <p>{item.name}</p> 
+            <p>{item.name.toUpperCase()}</p> 
             <div className="line-opt">
               <div className="opt-user-config">
                 <a href="#" onClick={(e) => userProfile(e, item.id)}>Ver Perfil <PersonIcon /></a>
                 <a href="#" onClick={(e) => handleEditItem(e, item.id)}>Editar <EditIcon /></a>
-                <a href="#" onClick={(e) => handleDeleteItem(e, item.id)}>Excluir <HighlightOffIcon /></a>
+                <a href="#" onClick={openConfirmationModal}>Excluir <HighlightOffIcon /></a>
               </div>
             </div>
           </div>
@@ -149,7 +162,16 @@ function NewColaborator(){
             </div>         
           </div>
         </div>
-        </div>
+        <div className="confirmation-modal">
+          <div className="modal-container">
+            <p>Você tem certeza que deseja deletar esse colaborador?</p>
+            <div className="line-confirmation">
+              <a href="#" onClick={document.querySelector('.confirmation-modal') ? document.querySelector('.confirmation-modal').classList.remove('on-conf') : ""}>Cancelar</a>
+              <a href="#" onClick={(e) => handleDeleteItem(e, deleteConfirmation)}>Confirmar</a>
+            </div>
+          </div>
+        </div>   
+      </div>
   )
 }
 

@@ -22,7 +22,8 @@ function NewRhNews(){
     const [textBody, setTextBody] = useState(content)
     const [data, setData] = useState([])
     const [flag, setFlag] = useState()
-    const [deleteConfirmation, setDeleteConfirmation] = useState()
+    var deleteConfirmation;
+    const [modal, setModal] = useState(document.querySelector('.confirmation-modal'))
     
     const { token } = useContext(AuthContext);
 
@@ -107,6 +108,7 @@ function NewRhNews(){
             .then((response) => {
               setData(response.data)  
         })
+        setModal(document.querySelector('.confirmation-modal'))
       }, []);
 
       function handleEditItem(e, id){
@@ -114,19 +116,32 @@ function NewRhNews(){
         window.location = `/editar-post/${id}`
       }
 
-      function handleDeleteItem(e, id){
+      function handleDeleteItem(e, deleteConfirmation){
         e.preventDefault()
-        axios.delete(`https://pedidos.grupostra.com/api/v1/post/delete/${id}`, configB)
-        .then((response) => {
-          alert("News deletado com sucesso")
+        axios({
+            method: 'DELETE',
+            url: `https://pedidos.grupostra.com/api/v1/post/delete/${deleteConfirmation}`,
+            headers: {
+                'Authorization' : `Bearer ${token}`
+            }
+        })
+        .then(() => {
+            alert("News deletado com sucesso")
             window.location = window.location.href
+        }).catch(function(error){ 
+            if (error.response) {
+                alert(error.response.data.message)
+            }
         })
       }
 
-    function openConfirmationModal(e, id){
-        setDeleteConfirmation(id)
-        let confirmationModal = document.querySelector('.confirmation-modal')
-        confirmationModal.classList.toggle("on-conf")
+    function openConfirmationModal(e){
+        if(e.target.id === ""){
+            deleteConfirmation = e.target.parentNode.parentNode.id
+        } else {
+            deleteConfirmation = e.target.id
+        }
+        modal.classList.add("on-conf")
     }
 
     return(
@@ -213,7 +228,7 @@ function NewRhNews(){
                                                 <div className="date_div">
                                                     <p>{index?.is_published === 0 ? "Rascunho" : "Publicado"}</p>
                                                     <a href="#" onClick={(e) => handleEditItem(e, index.id)}> <EditIcon /></a>
-                                                    <button onClick={(e) => openConfirmationModal(e, index.id)}> <HighlightOffIcon /></button>
+                                                    <button id={index.id} onClick={openConfirmationModal}> <HighlightOffIcon /></button>
                                                     <p>{index?.created_at.slice(0, 10).split('-').reverse().join('/')}</p>
                                                 </div>
                                             </div>
@@ -230,7 +245,7 @@ function NewRhNews(){
                         <p>Você tem certeza que deseja deletar esse post?</p>
                         <div className="line-confirmation">
                             <a href="#" onClick={document.querySelector('.confirmation-modal') ? document.querySelector('.confirmation-modal').classList.remove('on-conf') : ""}>Cancelar</a>
-                            <a href="#" onClick={(e) => handleDeleteItem(deleteConfirmation)}>Confirmar</a>
+                            <a href="#" onClick={(e) => handleDeleteItem(e, deleteConfirmation)}>Confirmar</a>
                         </div>
                     </div>
                 </div>   

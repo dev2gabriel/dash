@@ -162,7 +162,7 @@ function LinksComercial(){
       )
     }
 
-    if(urlSelected === "19"){
+    if(urlSelected === "1"){
       setRendered(
         <>{
           urlByIdData.map((page, i) => (
@@ -203,7 +203,9 @@ function LinksComercial(){
                                   )
                                 }
                               </select>
-                              <Link to="/cadastrar-link">Cadastrar Link <AddCircleOutlineIcon /></Link>
+                              <div className="add-collaborator-btn">
+                                <Link to="/cadastrar-link">Editar Links <AddCircleOutlineIcon /></Link>
+                              </div>
                             </div>
                                 <div className="content">
                                   { rendered }

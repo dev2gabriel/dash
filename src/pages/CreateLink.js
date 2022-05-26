@@ -4,11 +4,13 @@ import NavMenu from '../template/nav_menu/NavMenu';
 import './CreateLink.css'
 import Input from '../components/Input';
 import Legend from '../components/Legend';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { useContext } from 'react'; 
 import { AuthContext } from '../Auth' 
 import axios from 'axios';
+import { Draggable } from "react-drag-reorder";
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 function CreateLink(){
        
@@ -352,9 +354,10 @@ function CreateLink(){
     function getButtons(e, urlId){
         e.preventDefault()
         setCategoryText(e.target.innerHTML)
+        setSelectedCategory(urlId)
         let errorLog = document.querySelectorAll('.error-log p')[2]
         errorLog.innerHTML = ""
-        setSelectedCategory(urlId)
+        console.log(urlId)
         axios.get(`https://pedidos.grupostra.com/api/v1/links/items/${urlId}`, configB)
         .then((response) => {
             setButtonData(response.data)
@@ -384,6 +387,58 @@ function CreateLink(){
         }
         e.target.style.backgroundColor = "var(--verde-grupo)"
     }
+
+    const getChangedPos = (currentPos, newPos) => {
+        setCategoryOrder(currentPos)
+        setCategoryNewOrder(newPos)
+    };
+
+    const DraggableRenderCategory = useCallback(() => {
+        if (categoryData && categoryData.length) {
+          return (
+            <Draggable onPosChange={getChangedPos}>
+              {categoryData.map((value, index) => (
+                <div className='categories-buttons'>
+                    <div key={index} className="line-opt">
+                        <div className="handle-drag">
+                            <DragHandleIcon />
+                        </div>
+                        <Button value={value?.name} onClick={(e) => {getButtons(e, value.id); setSelectedColorCategory(e); setSelectedCategory(value.id)}}/>
+                        <a href="#" onClick={(e) => editCategory(e, value.id)}>Editar</a>
+                        <a href="#" onClick={(e) => deleteCategory(e, value.id)}>Excluir</a>
+                    </div>
+                </div>
+               ))}
+            </Draggable>
+          );
+        }
+        return null;
+      }, [categoryData]);
+
+      const DraggableRenderButton = useCallback(() => {
+        if (buttonData && buttonData.length) {
+          return (
+            <Draggable>
+              {
+                buttonData?.map((button, i) =>
+                    <div className='buttons-buttons'>
+                        <div key={i} className="line-opt">
+                            <div className="handle-drag">
+                                <DragHandleIcon />
+                            </div>
+                            <Button value={button?.text} onClick={(e) => {setButtonSelected(e, button?.id); setSelectedColorButton(e)}}/>
+                            <a href="#" onClick={(e) => editButton(e, button?.id)}>Editar</a>
+                            <a href="#" onClick={(e) => deleteButton(e, button.id)}>Excluir</a>
+                        </div>
+                    </div>
+                )   
+            }
+            </Draggable>
+          );
+        }
+        return null;
+      }, [buttonData]);
+
 
     return(
     <div id="body-main" className="body-main home open">
@@ -436,17 +491,7 @@ function CreateLink(){
                                 <div className="error-log">
                                     <p></p>
                                 </div>
-                            {
-                                categoryData.map((category, i) =>
-                                <div className='categories-buttons'>
-                                    <div key={i} className="line-opt">
-                                        <Button value={category?.name} onClick={(e) => {getButtons(e, category.id); setSelectedColorCategory(e)}}/>
-                                        <a href="#" onClick={(e) => editCategory(e, category.id)}>Editar</a>
-                                        <a href="#" onClick={(e) => deleteCategory(e, category.id)}>Excluir</a>
-                                    </div>
-                                </div>
-                                )
-                            }
+                                <DraggableRenderCategory />
                             </div>
                         </div>
                         <div className="rh-news container">
@@ -454,11 +499,6 @@ function CreateLink(){
                                 <p>Editar categoria</p>
                                 <div className="line-opt-inside">
                                     <Input onChange={(e) => setCategoryNewName(e.target.value)}/>
-                                    <select name="order-category" id="order-category" onChange={(e) => setCategoryNewOrder(e.target.value)}>
-                                        <option value="#" selected disabled></option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                    </select>
                                 </div>
                                 <Button value="Salvar" onClick={(e) => updateCategory(e)}/>
                                 <div className="error-log">
@@ -468,11 +508,6 @@ function CreateLink(){
                             <p>Criar nova categoria</p>
                             <div className="line-opt">
                                 <Input type="text" id="new-url" name="new-url" onChange={(e) => setCategoryName(e.target.value)}/>
-                                <select name="order-category" id="order-category" onChange={(e) => setCategoryOrder(e.target.value)}>
-                                    <option value="#" selected disabled></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                </select>
                             </div>
                             <Button value="Cadastrar" onClick={createCategory}/>
                             <div className="error-log">
@@ -489,18 +524,7 @@ function CreateLink(){
                                 <div className="error-log">
                                     <p></p>
                                 </div>
-                                {
-                                    buttonData &&
-                                    buttonData?.map((button, i) =>
-                                        <div className='buttons-buttons'>
-                                            <div key={i} className="line-opt">
-                                                <Button value={button?.text} onClick={(e) => {setButtonSelected(e, button?.id); setSelectedColorButton(e)}}/>
-                                                <a href="#" onClick={(e) => editButton(e, button?.id)}>Editar</a>
-                                                <a href="#" onClick={(e) => deleteButton(e, button.id)}>Excluir</a>
-                                            </div>
-                                        </div>
-                                    )   
-                                }
+                                <DraggableRenderButton />
                             </div>
                         </div>
                         <div className="rh-news container">
@@ -508,11 +532,6 @@ function CreateLink(){
                                 <p>Editar botão</p>
                                 <div className="line-opt-inside">
                                     <Input onChange={(e) => setButtonNewName(e.target.value)}/>
-                                    <select name="order-category" id="order-category" onChange={(e) => setButtonNewOrder(e.target.value)}>
-                                        <option value="#" selected disabled></option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                    </select>
                                 </div>
                                 <Input type="text" id="new-url" name="new-url" onChange={(e) => setButtonNewUrl(e.target.value)}/>
                                 <Button value="Salvar" onClick={updateButton}/>
@@ -524,11 +543,6 @@ function CreateLink(){
                             <Legend value="Titulo"/>
                             <div className="line-opt">
                                 <Input type="text" id="new-text" name="new-text" onChange={(e) => setButtonName(e.target.value)}/>
-                                <select name="order-button" id="order-button" onChange={(e) => setButtonOrder(e.target.value)}>
-                                    <option value="#" selected disabled></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                            </select>
                             </div>
                             <Legend value="Link"/>
                             <Input type="text" id="new-url" name="new-url" onChange={(e) => setButtonUrl(e.target.value)}/>

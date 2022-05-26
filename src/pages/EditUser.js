@@ -392,6 +392,18 @@ function EditUser(){
         setUserEmergencyContactKinship(document.querySelector('#parent').value)
     }
 
+    function mask_real(e) {
+        var v = e.target.value
+        var salary = document.querySelector('#salary');
+        v = salary.value.replace(/\D/g,'');
+        v = (v/100).toFixed(2) + '';
+        v = v.replace(".", ",");
+        v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+        v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+        salary.value = v;
+        setUserCurrentSalary(v)
+    }
+
     return(
         <div id="body-main" className="body-main home open">
             <Header />
@@ -544,7 +556,7 @@ function EditUser(){
                                         </div>
                                         <div className="line_flex">
                                             <Legend value="Salário Atual"/>
-                                            <Input type="text" name="salary" id="salary" onChange={(e) => setUserCurrentSalary(e.target.value)}/>
+                                            <Input type="text" name="salary" id="salary" onChange={(e) => mask_real(e)}/>
                                             <div className="last_salaries">
                                                 <Legend value="Últimos Sálarios" />
                                                 <ul>

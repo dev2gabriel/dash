@@ -4,24 +4,33 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { useContext } from 'react'; 
+import { AuthContext } from '../../Auth' 
 
 function Births(){
 
+    const { token } = useContext(AuthContext);
     const [data, setData] = useState([])
     const date = new Date();
     const currentMonth = date.getMonth() + 1; 
     const arrBirthFilter = [];
 
+    const config = {
+      headers : {
+          'Authorization' : `Bearer ${token}`
+        }
+  };
+
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/table/users")
+        axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", config)
         .then((response) => {
             setData(response.data)  
         })
       }, []);
 
       useEffect(() =>{
-        data.filter(month => parseInt(month.birth_date.slice(5, 7)) === currentMonth).map((filteredBirth) => (
-          arrBirthFilter.push(filteredBirth)
+        data.filter(month => parseInt(month?.birth_date?.slice(5, 7)) === currentMonth).map((filteredBirth) => (
+          arrBirthFilter?.push(filteredBirth)
         ))
       }, [data])
       
@@ -33,7 +42,7 @@ function Births(){
       useEffect(() => {
         const endOffset = itemOffset + itemsPerPage;
         setCurrentItems(arrBirthFilter.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(arrBirthFilter.length / itemsPerPage));
+        setPageCount(Math.ceil(arrBirthFilter?.length / itemsPerPage));
       }, [itemOffset, itemsPerPage, data]);
     
 
@@ -50,7 +59,7 @@ function Births(){
                     <div className="birthday-photo">
                       <img src={item?.photo_url} alt="" />
                     </div>
-                    <div className="birthday-name">{item?.name.split(" ", 1)}, nosso(a) {item?.position}, faz {2022 - item?.birth_date.slice(0, 4)} anos neste mês, no dia {item?.birth_date.slice(5, 7)}.</div>
+                    <div className="birthday-name">{item?.name.split(" ", 1)}, nosso(a) {item?.position}, faz {2022 - item?.birth_date?.slice(0, 4)} anos neste mês, no dia {item?.birth_date?.slice(5, 7)}.</div>
                 </div>
             ))}
           </>
