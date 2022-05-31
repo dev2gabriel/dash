@@ -17,7 +17,7 @@ import { AuthContext } from '../Auth'
 import { useContext } from 'react'; 
 
 function NewColaborator(){
-  document.title = "Grupo Stra - Communication"
+  document.title = "Grupo Stra - Colaboradores"
   
   const [data, setData] = useState([])
   const [isRendered, setIsRendered] = useState(false);

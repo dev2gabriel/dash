@@ -15,6 +15,8 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 function NewRhNews(){
 
+    document.title = "Grupo Stra - RH News"
+
     const [content, setContent] = useState()
     const [rhImage, setRhImage] = useState()
     const [title, setTitle] = useState()

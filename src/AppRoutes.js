@@ -15,6 +15,7 @@ import EditPost from './pages/EditPost';
 import UserProfile from './pages/UserProfile';
 import CreateLink from './pages/CreateLink';
 import OrgStructure from './pages/OrgStructure';
+import LinksUteis from './pages/LinksUteis';
 
 const AppRoutes = () =>{
 
@@ -58,6 +59,9 @@ const AppRoutes = () =>{
                 </Routes>
                 <Routes>
                     <Route exact path="/links-comercial" element={<Private><LinksComercial /></Private>} />
+                </Routes>
+                <Routes>
+                    <Route exact path="/links-uteis" element={<Private><LinksUteis /></Private>} />
                 </Routes>
                 <Routes>
                     <Route exact path="/editar-usuario/:userId" element={<Private><EditUser /></Private>} />

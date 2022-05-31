@@ -61,8 +61,10 @@ function UserProfile(){
 
     useEffect(() => {
         axios.get(`https://pedidos.grupostra.com/api/v1/user/show/${userId}`, configB)
-            .then((response) => {
-              setData(response.data)
+        .then((response) => {
+            setData(response.data)
+        }).catch(function(err){
+            window.location = "/";
         })
     }, []);
 

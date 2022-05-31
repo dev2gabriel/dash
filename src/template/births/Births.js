@@ -13,15 +13,15 @@ function Births(){
     const [data, setData] = useState([])
     const date = new Date();
     const currentMonth = date.getMonth() + 1; 
-    const arrBirthFilter = [];
+    var arrBirthFilter = [];
 
     const config = {
       headers : {
           'Authorization' : `Bearer ${token}`
         }
-  };
+    };
 
-    useEffect(() => {
+      useEffect(() => {
         axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", config)
         .then((response) => {
             setData(response.data)  
@@ -29,37 +29,37 @@ function Births(){
       }, []);
 
       useEffect(() =>{
-        data.filter(month => parseInt(month?.birth_date?.slice(5, 7)) === currentMonth).map((filteredBirth) => (
-          arrBirthFilter?.push(filteredBirth)
+        data.filter(month => parseInt(month.birth_date.slice(5, 7)) === currentMonth).map((filteredBirth) => (
+          arrBirthFilter.push(filteredBirth)
         ))
-      }, [data])
+      }, [arrBirthFilter])
       
       const [currentItems, setCurrentItems] = useState([]);
       const [pageCount, setPageCount] = useState(0);
       const [itemsPerPage, setItemsPerPage] = useState(1);
       const [itemOffset, setItemOffset] = useState(0);
-      
+
       useEffect(() => {
-        const endOffset = itemOffset + itemsPerPage;
-        setCurrentItems(arrBirthFilter.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(arrBirthFilter?.length / itemsPerPage));
+          const endOffset = itemOffset + itemsPerPage;
+          setCurrentItems(arrBirthFilter.slice(itemOffset, endOffset));
+          setPageCount(Math.ceil(arrBirthFilter.length / itemsPerPage));
       }, [itemOffset, itemsPerPage, data]);
-    
 
       const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % arrBirthFilter.length;
-        setItemOffset(newOffset);
-      }  
+          const newOffset = (event.selected * itemsPerPage) % arrBirthFilter.length;
+          setItemOffset(newOffset);
+      }
   
       function Items({ currentItems }) {
         return (
           <>
-            {currentItems.map((item, index) => (
+            {
+            currentItems.map((item, index) => (
                 <div key={index} className="aniversario-container">
                     <div className="birthday-photo">
                       <img src={item?.photo_url} alt="" />
                     </div>
-                    <div className="birthday-name">{item?.name.split(" ", 1)}, nosso(a) {item?.position}, faz {2022 - item?.birth_date?.slice(0, 4)} anos neste mês, no dia {item?.birth_date?.slice(5, 7)}.</div>
+                    <div className="birthday-name">{item?.name.split(" ", 1)}, nosso(a) {item?.position}, faz {2022 - item?.birth_date.slice(0, 4)} anos neste mês, no dia {item.birth_date?.slice(5, 7)}.</div>
                 </div>
             ))}
           </>

@@ -6,7 +6,7 @@ import Body from '../template/body/Body';
 class Home extends Component {
 
 render(){
-  document.title = "Grupo Stra - Communication"
+  document.title = "Grupo Stra - Dashboard"
 
   return(
     <div className="App">
