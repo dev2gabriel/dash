@@ -16,43 +16,18 @@ function MyTree2() {
     }
 
     useEffect(() =>{
-        axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", configB)
+        axios.get("http://api-dash.grupostra.com/api/v1/user/show-all", configB)
         .then((response) => {
           setData(response.data) 
         })
       }, [])
 
-      function getPid(level){
-        console.log(level)
-        let pid;
-
-        if(level === "CEO"){
-          pid = 1
-        }
-
-        if(level === "Gerente"){
-          pid = 2
-        }
-
-        if(level === "Supervisor"){
-          pid = 3
-        }
-
-        if(level === "Colaborador"){
-          pid = 4
-        }
-
-        if(level === "Estagiario"){
-          pid = 5
-        }
-        console.log(pid)
-
-        return pid
-      }
-
     useEffect(() => {
+        OrgChart.SEARCH_PLACEHOLDER = "Buscar";
         chart = new OrgChart(document.getElementById("tree"), {
-            mouseScrool: OrgChart.action.none,
+            showXScroll: OrgChart.scroll.none,
+            showYScroll: OrgChart.scroll.none,
+            mouseScrool: OrgChart.action.zoom,
             template: "rony",
             //scaleInitial:OrgChart.match.width,
             nodeBinding: {
@@ -65,9 +40,9 @@ function MyTree2() {
     }, [data])
 
     useEffect(() => {
-      data.slice(1).map((user, i) => {
+      data.map((user, i) => {
         chart
-          .add({ id: user?.id, pid: user?.manager_id, name: user?.name, email: user?.email, ramal: "Ramal: " + user?.extension_number, img: user?.photo_url })        
+          .add({ id: user?.id, pid: user?.manager_id, name: user?.name, email: user?.email, ramal: user?.extension_number ? "Ramal: " + user?.extension_number : "Sem ramal", img: user?.photo_url })        
         chart.draw(OrgChart.action.init);
       })
     }, [data])

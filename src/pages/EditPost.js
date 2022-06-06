@@ -39,26 +39,19 @@ function EditPost(){
 
     function submitFields(){
         const photoData = new FormData()
-        if(newRhImage === ""){
-            photoData.append('title', title)
-            photoData.append('body', textBody)
-            photoData.append('subtitle', subTitle)
-            photoData.append('tag', flag)
-            photoData.append('is_published', 1)
-            photoData.append('_method', 'PUT')
-        } else {
-            photoData.append('title', title)
-            photoData.append('body', textBody)
+        if(newRhImage !== ""){
             photoData.append('image', newRhImage)
-            photoData.append('subtitle', subTitle)
-            photoData.append('tag', flag)
-            photoData.append('is_published', 1)
-            photoData.append('_method', 'PUT')
-        }
+        } 
+        photoData.append('title', title)
+        photoData.append('body', textBody)
+        photoData.append('subtitle', subTitle)
+        photoData.append('tag', flag)
+        photoData.append('is_published', 1)
+        photoData.append('_method', 'PUT')
 
         axios({
             method: 'POST',
-            url: `https://pedidos.grupostra.com/api/v1/post/update/${postId}`,
+            url: `http://api-dash.grupostra.com/api/v1/post/update/${postId}`,
             data: photoData,
             headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'PUT'}
         })
@@ -73,7 +66,7 @@ function EditPost(){
     }
 
     useEffect(() => {
-        axios.get(`https://pedidos.grupostra.com/api/v1/post/${postId}`, configB)
+        axios.get(`http://api-dash.grupostra.com/api/v1/post/${postId}`, configB)
             .then((response) => {
               setData(response.data)  
         })
@@ -95,7 +88,6 @@ function EditPost(){
         setNewRhImage(document.querySelector('#file').files[0] ? document.querySelector('#file').files[0] : "")
         setTextBody(document.querySelector('.jodit-wysiwyg').innerHTML)
         setFlag(document.querySelector('#flag').value)
-        console.log(newRhImage)
     }
 
     return(

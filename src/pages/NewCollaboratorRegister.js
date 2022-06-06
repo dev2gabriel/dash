@@ -180,8 +180,37 @@ function NewCollaboratorRegister(){
           }
     };
 
-    function submitFields(){ 
+    function submitFields(){
         let formData = new FormData()
+
+        if(userCbo){
+            formData.append('cbo', userCbo)
+        }
+
+        if(userRegistration){
+            formData.append('registration', userRegistration)
+        }
+        
+        if(userImg){
+            formData.append('photo_url', userImg)
+        }
+
+        if(userExtensionNumber){
+            formData.append('extension_number', userExtensionNumber)
+        }
+
+        if(userEmergencyContactName){
+            formData.append('emergency_contact_name', userEmergencyContactName)
+        }
+
+        if(userEmergencyContactPhone){
+            formData.append('emergency_contact_phone', userEmergencyContactPhone)
+        }
+
+        if(userEmergencyContactKinship){
+            formData.append('emergency_contact_kinship', userEmergencyContactKinship)
+        }
+
         formData.append('name', userName)
         formData.append('active', userSituation)
         formData.append('email', userEmail)
@@ -195,35 +224,28 @@ function NewCollaboratorRegister(){
         formData.append('admission_date', userAdmissionDate)
         formData.append('department_id', userDepartment)
         formData.append('manager_id', userManager)
-        formData.append('cbo', userCbo)
-        formData.append('registration', userRegistration)
         formData.append('birth_date', userBirthDate)
         formData.append('level', userLevel)
         formData.append('roles_id', arrayPermission)
-        formData.append('salary', userSalary.replace(",", "").replace(".", ""))
+        formData.append('salary', parseInt(userSalary.replace(".", "").replace(",", "")))
         formData.append('street', userStreet)
         formData.append('zip_code', userZipCode)
+        formData.append('country', userCountry)
         formData.append('city', userCity)
         formData.append('number', userNumber)
         formData.append('state', userState)
-        if(userImg){
-            formData.append('photo_url', userImg)
-        }
-        formData.append('country', userCountry)
-        formData.append('emergency_contact_name', userEmergencyContactName)
-        formData.append('emergency_contact_phone', userEmergencyContactPhone)
-        formData.append('emergency_contact_kinship', userEmergencyContactKinship)
         formData.append('personal_phone', userPersonalPhone)
-        formData.append('extension_number', userExtensionNumber)
+        formData.append('_method', 'POST') 
 
         if(userPassword === userPasswordConfirmation){
             axios({
                 method: 'POST',
-                url: 'https://pedidos.grupostra.com/api/v1/user/register',
+                url: 'http://api-dash.grupostra.com/api/v1/user/register',
                 data: formData,
                 headers: {
                     'Authorization' : `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    '_method': 'POST'
                 }
             })
             .then(() => {
@@ -236,7 +258,7 @@ function NewCollaboratorRegister(){
             })
         } else {
             alert("As senhas não coincidem")
-        } 
+        }
     }
 
     function removePermission(e){
@@ -279,17 +301,17 @@ function NewCollaboratorRegister(){
     }, [findZipState])
 
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/department/all", config)
+        axios.get("http://api-dash.grupostra.com/api/v1/department/all", config)
         .then((response)  => {
             setDataDepartment(response.data)
         })
 
-        axios.get("https://pedidos.grupostra.com/api/v1/roles", config)
+        axios.get("http://api-dash.grupostra.com/api/v1/roles", config)
         .then((response)  => {
             setRoles(response.data)
         })
 
-        axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", config)
+        axios.get("http://api-dash.grupostra.com/api/v1/user/show-all", config)
         .then((response)  => {
             setUsers(response.data)
         })
@@ -369,7 +391,7 @@ function NewCollaboratorRegister(){
                                 <div className="form-register">
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Nome Completo"/>
+                                            <Legend value="Nome Completo *"/>
                                             <Input type="text" name="name" id="name" onChange={(e) => setUserName(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
@@ -387,17 +409,17 @@ function NewCollaboratorRegister(){
                                             <Input type="file" name="file" id="file" onChange={(e) => setUserImg(e.target.files[0])}/>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Senha"/>
+                                            <Legend value="Senha *"/>
                                             <Input type="password" name="password" id="password" onChange={(e) => setUserPassword(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Confirmação de senha"/>
+                                            <Legend value="Confirmação de senha *"/>
                                             <Input type="password" name="password_comfirmation" id="password_comfirmation" onChange={(e) => setUserPasswordConfirmation(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Empresa"/>
+                                            <Legend value="Empresa *"/>
                                             <select name="company" id="company" className="select_pers" onChange={(e) => setUserCompany(e.target.value)}>
                                                 <option value="#" selected disabled>Selecione a empresa</option>
                                                 <option value="stra">stra</option>
@@ -405,7 +427,7 @@ function NewCollaboratorRegister(){
                                             </select>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="CPF"/>  
+                                            <Legend value="CPF *"/>  
                                             <Input type="text" name="cpf" id="cpf" onBlur={userCpf ? cpf(userCpf) : ""} onChange={(e) => setUserCpf(e.target.value)}/>  
                                         </div>
                                         <div className="line_flex">
@@ -423,13 +445,13 @@ function NewCollaboratorRegister(){
                                             <Input type="text" name="matricula" id="matricula" onChange={(e) => setUserRegistration(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Cargo"/>
+                                            <Legend value="Cargo *"/>
                                             <Input type="text" name="position" id="position" onChange={(e) => setUserPosition(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Contrato"/>
+                                            <Legend value="Contrato *"/>
                                             <select name="contract" id="contract" className="select_pers" onChange={(e) => setUserContract(e.target.value)}>
                                                 <option value="#" selected disabled>Tipo de contrato</option>
                                                 <option value="CLT">CLT</option>
@@ -438,7 +460,7 @@ function NewCollaboratorRegister(){
                                             </select>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Level"/>
+                                            <Legend value="Level *"/>
                                             <select name="level" id="level" className="select_pers" onChange={(e) => setUserLevel(e.target.value)}>
                                                 <option value="#" selected disabled>Posição</option>
                                                 <option value="CEO">CEO</option>
@@ -449,7 +471,7 @@ function NewCollaboratorRegister(){
                                             </select>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Permissões"/>
+                                            <Legend value="Permissões *"/>
                                             <select name="permissions" id="permissions" className="select_pers" onChange={(e) => setArrayPermissions(arrayPermission => [...arrayPermission, e.target.value])}>
                                                 <option value="#" selected disabled>Permissões</option>
                                                 {
@@ -468,7 +490,7 @@ function NewCollaboratorRegister(){
                                             </div>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Departamento"/>
+                                            <Legend value="Departamento *"/>
                                             <select name="department" id="department" className="select_pers" onChange={(e) => setUserDeparment(e.target.value)}>
                                                 <option value="#" selected disabled>Departamento</option>
                                                 {
@@ -481,7 +503,7 @@ function NewCollaboratorRegister(){
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Gestor"/>
+                                            <Legend value="Gestor *"/>
                                             <select name="manager" id="manager" className="select_pers" onChange={(e) => setUserManager(e.target.value)}>
                                                 <option value="#" selected disabled>Gestor</option>
                                                 {
@@ -492,48 +514,48 @@ function NewCollaboratorRegister(){
                                             </select>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Data de Admissão"/>
+                                            <Legend value="Data de Admissão *"/>
                                             <Input type="text" name="date-admis" id="date-admis" onBlur={userAdmissionDate ? mask_admis(userAdmissionDate) : ""} onChange={(e) => setUserAdmissionDate(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Data de Nascimento"/>
+                                            <Legend value="Data de Nascimento *"/>
                                             <Input type="text" name="date-birth" id="date-birth" onBlur={userBirthDate ? mask_birth(userBirthDate) : ""} onChange={(e) => setUserBirthDate(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Salário Atual"/>
+                                            <Legend value="Salário Atual *"/>
                                             <Input type="text" name="salary" id="salary" onChange={(e) => mask_real(e)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="CEP"/>
+                                            <Legend value="CEP *"/>
                                             <div className="line_icon">
                                                 <Input type="text" name="cep" id="cep" onChange={(e) => setUserZipCode(e.target.value)}/>
                                                 <a href="#" onClick={findZipCode}><SearchIcon /></a>
                                             </div>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Endereço"/>
+                                            <Legend value="Endereço *"/>
                                             <Input type="text" name="address" id="address" onChange={(e) => setUserStreet(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Número"/>
+                                            <Legend value="Número *"/>
                                             <Input type="number" name="address-number" id="address-number" onChange={(e) => setUserNumber(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Bairro"/>
+                                            <Legend value="Bairro *"/>
                                             <Input type="text" name="district" id="district" onChange={(e) => setUserCountry(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Cidade"/>
+                                            <Legend value="Cidade *"/>
                                             <Input type="text" name="city" id="city" onChange={(e) => setUserCity(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">
-                                            <Legend value="Estado"/>
+                                            <Legend value="Estado *"/>
                                             <select name="state" id="state" className="select_pers" onChange={(e) => setUserState(e.target.value)}>
                                                 <option value="#" selected disabled>Estado</option>
                                                 {
@@ -546,13 +568,13 @@ function NewCollaboratorRegister(){
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Email Empresarial"/>
+                                            <Legend value="Email Empresarial *"/>
                                             <Input type="email" name="email" id="email" onChange={(e) => setUserEmail(e.target.value)}/>
                                         </div>
                                     </div>
                                     <div className="line">
                                         <div className="line_flex">
-                                            <Legend value="Telefone Pessoal"/>
+                                            <Legend value="Telefone Pessoal *"/>
                                             <Input type="text" name="phone" id="phone" onChange={(e) => setUserPersonalPhone(e.target.value)}/>
                                         </div>
                                         <div className="line_flex">

@@ -218,10 +218,6 @@ input[type="file"]{
     max-width: 1000px;
 }
 
-.new-rh-news{
-    width: 530px;
-}
-
 .title-paragrahp{
     max-width: 200px;
 }
@@ -286,6 +282,10 @@ input[type="file"]{
     gap: 20px;
 }
 
+.new-rh-news{
+    width: 35%;
+}
+
 .confirmation-modal .modal-container .line-confirmation a:nth-child(1){
     background-color: var(--azul-grupo);
     color: white;
@@ -306,4 +306,14 @@ input[type="file"]{
 .confirmation-modal .modal-container .line-confirmation a:nth-child(2):hover{
     background-color: var(--verde-grupo-hover);
     transition: .3s;
+}
+
+@media(max-width: 1280px){
+    .new-rh-news .col-1{
+        width: 400px;
+    }
+
+    #col-1-min{
+        width: 100%;
+    }
 }

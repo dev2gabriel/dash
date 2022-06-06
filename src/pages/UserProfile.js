@@ -45,7 +45,7 @@ function UserProfile(){
         console.log(photoData)
         axios({
             method: 'post',
-            url: 'https://pedidos.grupostra.com/api/v1/post/create',
+            url: 'http://api-dash.grupostra.com/api/v1/post/create',
             data: photoData,
             headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
         })
@@ -60,7 +60,7 @@ function UserProfile(){
     }
 
     useEffect(() => {
-        axios.get(`https://pedidos.grupostra.com/api/v1/user/show/${userId}`, configB)
+        axios.get(`http://api-dash.grupostra.com/api/v1/user/show/${userId}`, configB)
         .then((response) => {
             setData(response.data)
         }).catch(function(err){
@@ -88,12 +88,6 @@ function UserProfile(){
                                         <th>Data de Solicitação</th>
                                         <th>Status</th>
                                     </tr>
-                                    <tr>
-                                        <td>23/05/2021</td>
-                                        <td>23/05/2022</td>
-                                        <td>23/05/2022</td>
-                                        <td>Em análise</td>
-                                    </tr>
                                 </table>
                             </div>
                             <div className="attests-container">
@@ -105,18 +99,6 @@ function UserProfile(){
                                         <th>Entrega do Atestado</th>
                                         <th>Status</th>
                                     </tr>
-                                    <tr>
-                                        <td>23/05/2021</td>
-                                        <td>Consulta</td>
-                                        <td>23/05/2022</td>
-                                        <td>Registrado</td>
-                                    </tr>
-                                    <tr>
-                                        <td>23/05/2021</td>
-                                        <td>Consulta</td>
-                                        <td>23/05/2022</td>
-                                        <td>Registrado</td>
-                                    </tr>
                                 </table>
                             </div>
                             <div className="refounds-container">
@@ -127,26 +109,7 @@ function UserProfile(){
                                         <th>Data Retorno</th>
                                         <th>Data de Solicitação</th>
                                         <th>Status</th>
-                                    </tr>
-                                    <tr>
-                                        <td>23/05/2021</td>
-                                        <td>23/05/2022</td>
-                                        <td>23/05/2022</td>
-                                        <td>Em análise</td>
-                                    </tr>
-                                    <tr>
-                                        <td>23/05/2021</td>
-                                        <td>Consulta</td>
-                                        <td>23/05/2022</td>
-                                        <td>Registrado</td>
-                                    </tr>
-                                    <tr>
-                                        <td>23/05/2021</td>
-                                        <td>Consulta</td>
-                                        <td>23/05/2022</td>
-                                        <td>Registrado</td>
-                                    </tr>
-                                    
+                                    </tr>                                    
                                 </table>
                             </div>
                         </div>
@@ -203,31 +166,6 @@ function UserProfile(){
                                     <th>Item</th>
                                     <th>Número do Patrimônio</th>
                                     <th>Estado</th>
-                                </tr>
-                                <tr>
-                                    <td>Notebook</td>
-                                    <td>01010201</td>
-                                    <td>Novo</td>
-                                </tr>
-                                <tr>
-                                    <td>Monitor Dell 23</td>
-                                    <td>01010222</td>
-                                    <td>Novo</td>
-                                </tr>
-                                <tr>
-                                    <td>Monitor Dell 23</td>
-                                    <td>01010211</td>
-                                    <td>Novo</td>
-                                </tr>
-                                <tr>
-                                    <td>Teclado</td>
-                                    <td></td>
-                                    <td>Novo</td>
-                                </tr>
-                                <tr>
-                                    <td>Mouse</td>
-                                    <td></td>
-                                    <td>Novo</td>
                                 </tr>
                             </table>
                         </div>

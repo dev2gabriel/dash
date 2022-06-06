@@ -43,6 +43,11 @@
 }
 
 .line-icon svg,
+.line-icon object{
+    width: 100%;
+}
+
+.line-icon svg,
 .line-icon object svg{
     color: rgb(153, 153, 153);
 }
@@ -139,6 +144,4 @@
 .requests-table tr td:nth-child(4){
     border-right: 1px solid lightgray;
 }
-
-
 

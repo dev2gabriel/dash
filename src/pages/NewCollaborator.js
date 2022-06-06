@@ -35,7 +35,7 @@ function NewColaborator(){
   const { token } = useContext(AuthContext);
   
   useEffect(() =>{
-    axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", configB)
+    axios.get("http://api-dash.grupostra.com/api/v1/user/show-all", configB)
         .then((response) => {
           setData(response.data)
           setSearchResults(response.data)
@@ -60,7 +60,7 @@ function NewColaborator(){
 
   function handleDeleteItem(e, id){
     e.preventDefault()
-    axios.delete(`https://pedidos.grupostra.com/api/v1/user/delete/${id}`, configB)
+    axios.delete(`http://api-dash.grupostra.com/api/v1/user/delete/${id}`, configB)
     .then((response) => {
         alert("Usuário deletado com sucesso")
         window.location = window.location.href
@@ -69,7 +69,7 @@ function NewColaborator(){
 
   useEffect(() => {
     const results = data.filter(searchNameFilter =>
-      searchNameFilter.name.toUpperCase().includes(searchTerm)  
+      searchNameFilter.name.toLowerCase().includes(searchTerm)  
     );
 
     setSearchResults(results)

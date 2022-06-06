@@ -17,7 +17,7 @@ function RequestHolidays(){
     function submitFields(){
         axios({
             method: 'post',
-            url: 'https://pedidos.grupostra.com/api/v1/post/create',
+            url: 'http://api-dash.grupostra.com/api/v1/post/create',
             /* data:{
                 title: title,
                 body: textBody,

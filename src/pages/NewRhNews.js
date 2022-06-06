@@ -42,25 +42,24 @@ function NewRhNews(){
 
     function submitDraft(){
         const photoData = new FormData()
-        if(rhImage === ""){
-            photoData.append('title', title)
-            photoData.append('body', textBody)
-            photoData.append('subtitle', subTitle)
-            photoData.append('tag', flag)
-            photoData.append('is_published', 0)
-        } else {
-            photoData.append('title', title)
-            photoData.append('body', textBody)
+        
+        if(rhImage){
             photoData.append('image', rhImage)
-            photoData.append('subtitle', subTitle)
-            photoData.append('tag', flag)
-            photoData.append('is_published', 0)
         }
+
+        photoData.append('title', title)
+        photoData.append('body', textBody)
+        photoData.append('subtitle', subTitle)
+        photoData.append('tag', flag)
+        photoData.append('is_published', 1)
+        photoData.append('_method', 'POST')
+
+        photoData.append('_method', 'POST')
         axios({
-            method: 'post',
-            url: 'https://pedidos.grupostra.com/api/v1/post/create',
+            method: 'POST',
+            url: 'http://api-dash.grupostra.com/api/v1/post/create',
             data: photoData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'POST'}
         })
         .then((response) => {
             alert("Rascunho salvo com sucesso!")
@@ -74,26 +73,22 @@ function NewRhNews(){
 
     function submitFields(){
         const photoData = new FormData()
-        if(rhImage === ""){
-            photoData.append('title', title)
-            photoData.append('body', textBody)
-            photoData.append('subtitle', subTitle)
-            photoData.append('tag', flag)
-            photoData.append('is_published', 1)
-        } else {
-            photoData.append('title', title)
-            photoData.append('body', textBody)
+        if(rhImage){
             photoData.append('image', rhImage)
-            photoData.append('subtitle', subTitle)
-            photoData.append('tag', flag)
-            photoData.append('is_published', 1)
         }
 
+        photoData.append('title', title)
+        photoData.append('body', textBody)
+        photoData.append('subtitle', subTitle)
+        photoData.append('tag', flag)
+        photoData.append('is_published', 1)
+        photoData.append('_method', 'POST')
+
         axios({
-            method: 'post',
-            url: 'https://pedidos.grupostra.com/api/v1/post/create',
+            method: 'POST',
+            url: 'http://api-dash.grupostra.com/api/v1/post/create',
             data: photoData,
-            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data'}
+            headers: {'Authorization' : `Bearer ${token}`, 'Content-Type': 'multipart/form-data', '_method': 'POST'}
         })
         .then((response) => {
             alert("News Cadastrado com sucesso!")
@@ -106,7 +101,7 @@ function NewRhNews(){
     }
 
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/post", configB)
+        axios.get("http://api-dash.grupostra.com/api/v1/post", configB)
             .then((response) => {
               setData(response.data)  
         })
@@ -122,9 +117,9 @@ function NewRhNews(){
         e.preventDefault()
         axios({
             method: 'DELETE',
-            url: `https://pedidos.grupostra.com/api/v1/post/delete/${deleteConfirmation}`,
+            url: `http://api-dash.grupostra.com/api/v1/post/delete/${deleteConfirmation}`,
             headers: {
-                'Authorization' : `Bearer ${token}`
+                'Authorization' : `Bearer ${token}`, '_method' : 'DELETE'
             }
         })
         .then(() => {
@@ -190,7 +185,7 @@ function NewRhNews(){
                                         <div className="line">
                                             <div className="line_flex">
                                                 <Legend value="Tipo de news (Flag)" />
-                                                <select name="flag" id="falg" onChange={(e) => setFlag(e.target.value)}>
+                                                <select name="flag" id="flag" onChange={(e) => setFlag(e.target.value)}>
                                                     <option value="#" selected disabled>Selecione uma categoria</option>
                                                     <option value="birthday_person">Aniversários</option>
                                                     <option value="article">Artigos</option>

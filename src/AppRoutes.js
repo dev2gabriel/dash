@@ -16,6 +16,7 @@ import UserProfile from './pages/UserProfile';
 import CreateLink from './pages/CreateLink';
 import OrgStructure from './pages/OrgStructure';
 import LinksUteis from './pages/LinksUteis';
+import PowerBi from './pages/PowerBi';
 
 const AppRoutes = () =>{
 
@@ -77,6 +78,9 @@ const AppRoutes = () =>{
                 </Routes>
                 <Routes>
                     <Route exact path="/estrutura-organizacao" element={<Private><OrgStructure /></Private>} />
+                </Routes>
+                <Routes>
+                    <Route exact path="/power-bi" element={<Private><PowerBi /></Private>} />
                 </Routes>
             </AuthProvider>
         </Router>

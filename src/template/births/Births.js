@@ -22,7 +22,7 @@ function Births(){
     };
 
       useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/user/show-all", config)
+        axios.get("http://api-dash.grupostra.com/api/v1/user/show-all", config)
         .then((response) => {
             setData(response.data)  
         })
@@ -59,7 +59,7 @@ function Births(){
                     <div className="birthday-photo">
                       <img src={item?.photo_url} alt="" />
                     </div>
-                    <div className="birthday-name">{item?.name.split(" ", 1)}, nosso(a) {item?.position}, faz {2022 - item?.birth_date.slice(0, 4)} anos neste mês, no dia {item.birth_date?.slice(5, 7)}.</div>
+                    <div className="birthday-name">{item?.name.split(" ", 1)}, nosso(a) {item?.position}, faz {2022 - item?.birth_date.slice(0, 4)} anos neste mês, no dia {item.birth_date?.slice(8, 10)}.</div>
                 </div>
             ))}
           </>

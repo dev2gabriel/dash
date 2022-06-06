@@ -16,7 +16,7 @@ const ShowRhNews = () => {
   };
   
   useEffect(() => {
-    axios.get("https://pedidos.grupostra.com/api/v1/post", config)
+    axios.get("http://api-dash.grupostra.com/api/v1/post", config)
         .then((response) => {
           setData(response.data)  
           setCurrentItems(response.data)

@@ -169,7 +169,8 @@
 }
 
 .rh-news.container p{
-    margin-bottom: 10px;
+    align-items: center;
+    display: flex;
 }
 
 .create-link:nth-child(1) .rh-news.container:nth-child(2){
@@ -271,4 +272,10 @@
 
 .on-conf{
     display: flex;
+}
+
+@media(max-width: 1280px){
+    .create-link .col-1{
+        width: 100%;
+    }
 }

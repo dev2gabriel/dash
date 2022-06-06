@@ -14,12 +14,13 @@
 
 .birthday-photo img{
     width: 160px;
+    position: relative;
+    top: 29px;
 }
 
 .aniversario-container{
     text-align:center;
     padding:10px 0 20px;
-    min-width: 360px;
 }
 
 .birthday-name{
@@ -28,4 +29,22 @@
     max-width:300px;
     margin:30px auto 0;
     border-top: 2px solid #ececec;
+}
+
+.btn-info{
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
+.btn-info-div{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.btn-info-div a{
+    width: 100%;
 }

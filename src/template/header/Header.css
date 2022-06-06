@@ -10,21 +10,22 @@
 }
 
 .nav-container{
-    margin:auto;
-    padding:20px;
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: auto;
+    padding: 20px;
+    justify-content: space-between;
 }
 
 .nav-logo{
     text-align:center;
-    width:70%;
+    width:auto;
 }
 
 .nav-person{
     text-align:right;
-    width:15%;
+    width:auto;
     display:flex;
     flex-direction:row;
     justify-content:flex-end;
@@ -65,7 +66,7 @@
 }
 
 .burger-container.open{
-    margin-left:250px;
+    margin-left:108px;
 }
 
 .burger-container.open  .burger:nth-child(1){

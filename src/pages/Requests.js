@@ -1,9 +1,7 @@
-import { Component, useState } from 'react';
+import { useState } from 'react';
 import './Requests.css'
 import Header from '../template/header/Header';
 import NavMenu from '../template/nav_menu/NavMenu';
-import { Link } from 'react-router-dom';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Legend from '../components/Legend'
 import Input from '../components/Input'
 

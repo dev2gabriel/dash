@@ -25,7 +25,16 @@ render(){
                     </div>
                     <div className="ramais container">
                         <div className="ramais-body">
-                             <a href="/estrutura-organizacao">Ramais e E-mails</a>
+                            <div className="btn-info">
+                                <div className="btn-info-div">
+                                    <h3>Organograma</h3>
+                                    <a href="/estrutura-organizacao">Ramais e E-mails</a>
+                                </div>
+                                <div className="btn-info-div">
+                                    <h3>Conteúdos</h3>
+                                    <a href="https://doc.clickup.com/d/h/2yd14-4023/a745019179b2528" target="_blank">Biblioteca Stra</a>
+                                </div>
+                            </div>
                         </div>                
                     </div>
                     <div className="aniversariantes container">

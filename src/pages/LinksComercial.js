@@ -24,14 +24,14 @@ function LinksComercial(){
 }
 
   useEffect(() => {
-    axios.get('https://pedidos.grupostra.com/api/v1/links', configB)
+    axios.get('http://api-dash.grupostra.com/api/v1/links', configB)
     .then((response) => {
         setUrlData(response.data)
     })
   }, [])
 
   useEffect(() =>{
-    axios.get(`https://pedidos.grupostra.com/api/v1/links/categories/${urlSelected}`, configB)
+    axios.get(`http://api-dash.grupostra.com/api/v1/links/categories/${urlSelected}`, configB)
     .then((response) => {
         setUrlByIdData(response.data)
     })

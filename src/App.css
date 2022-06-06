@@ -9,7 +9,7 @@ body{
 }
 
 #body-main.open{
-  padding:30px 30px 30px 330px;
+  padding:30px 30px 30px 250px;
 }
 
 #body-main{
@@ -18,7 +18,7 @@ body{
 }
 
 #side-bar{
-  width:300px;
+  width:226px;
   background-color:#fff;
   top: 85px;
   left:-300px;

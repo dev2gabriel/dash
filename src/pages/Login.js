@@ -20,8 +20,21 @@ function Login(){
         password: userPassword
     }
 
-    function submitFields(){
-        axios.post("https://pedidos.grupostra.com/api/v1/login", body)
+    function submitFields(e){
+        if(e.key === "Enter"){
+            axios.post("http://api-dash.grupostra.com/api/v1/login", body)
+            .then((response) => {
+                login(response.data);
+            }).catch(function(error){ 
+                if (error.response) {
+                    alert(error.response.data.message)
+                }
+            })
+        }
+    }
+
+    function submitFieldsLogin(e){
+        axios.post("http://api-dash.grupostra.com/api/v1/login", body)
         .then((response) => {
             login(response.data);
         }).catch(function(error){ 
@@ -57,9 +70,9 @@ function Login(){
                         </div>
                         <div className="credentials-line">
                             <Legend value="Senha"/>
-                            <Input type="password" name="pass" id="pass" placeholder="Sua senha" onChange={(e) => setUserPassword(e.target.value)}/>
+                            <Input type="password" name="pass" id="pass" placeholder="Sua senha" onChange={(e) => setUserPassword(e.target.value)} onKeyPress={submitFields}/>
                         </div>
-                        <Button type="submit" value="Entrar" onClick={submitFields}/>
+                        <Button type="submit" value="Entrar" onClick={submitFieldsLogin}/>
                     </div>
                 </div>
             </div>

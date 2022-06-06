@@ -189,20 +189,17 @@ function EditUser(){
 
     function submitFields(){ 
         let formData = new FormData()
+        
         if(userImg !== ""){
             formData.append('photo_url', userImg)
         }
         
         if(userCurrentSalary !== "") {
-            formData.append('salary', userCurrentSalary)
+            formData.append('salary', parseInt(userCurrentSalary.replace(".", "").replace(",", ""))/100)
         }
         
         if(userManager !== "") {
             formData.append('manager_id', userManager)
-        }
-
-        if(userImg !== "") {
-            formData.append('photo_url', userImg)
         }
 
         if(userPassword !== "" && userPasswordConfirmation !== "") {
@@ -241,7 +238,7 @@ function EditUser(){
         if(userPassword === userPasswordConfirmation){
             axios({
                 method: 'POST',
-                url: `https://pedidos.grupostra.com/api/v1/user/update/${userId}`,
+                url: `http://api-dash.grupostra.com/api/v1/user/update/${userId}`,
                 data: formData,
                 headers: {
                     'Authorization' : `Bearer ${token}`,
@@ -285,22 +282,22 @@ function EditUser(){
 
     
     useEffect(() => {
-        axios.get("https://pedidos.grupostra.com/api/v1/department/all", config)
+        axios.get("http://api-dash.grupostra.com/api/v1/department/all", config)
         .then((response)  => {
             setDataDepartment(response.data)
         })
 
-        axios.get("https://pedidos.grupostra.com/api/v1/roles", config)
+        axios.get("http://api-dash.grupostra.com/api/v1/roles", config)
         .then((response)  => {
             setRoles(response.data)
         })
 
-        axios.get(`https://pedidos.grupostra.com/api/v1/user/show/${userId}`, config)
+        axios.get(`http://api-dash.grupostra.com/api/v1/user/show/${userId}`, config)
         .then((response)  => {
             setUserById(response.data)
         })
 
-        axios.get('https://pedidos.grupostra.com/api/v1/user/show-all', config)
+        axios.get('http://api-dash.grupostra.com/api/v1/user/show-all', config)
         .then((response)  => {
             setUsers(response.data)
         })
@@ -487,7 +484,7 @@ function EditUser(){
                                                 <option value="#" selected disabled>Tipo de contrato</option>
                                                 <option value="CLT">CLT</option>
                                                 <option value="Estágio">Estágio</option>
-                                                <option value="Tercerizado PJ">Tercerizado PJ</option>
+                                                <option value="Terceirizado PJ">Tercerizado PJ</option>
                                             </select>
                                         </div>
                                         <div className="line_flex">
@@ -561,7 +558,7 @@ function EditUser(){
                                                 <Legend value="Últimos Sálarios" />
                                                 <ul>
                                                     {userById?.user?.salaries?.map((salary, i) => 
-                                                        <li key={i}>{salary?.salary.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</li>
+                                                        <li key={i}>{(salary?.salary / 100).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</li>
                                                     )}
                                                 </ul>
                                             </div>
